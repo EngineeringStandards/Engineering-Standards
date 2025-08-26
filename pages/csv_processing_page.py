@@ -21,3 +21,4 @@ if uploaded_file is not None:
         st.info("File preview is only available for text files.")
 else:
     st.warning("Please upload a file to proceed.")
+    st.write("You can upload documents such as text files, PDFs, Word documents, or Excel files for processing.")
