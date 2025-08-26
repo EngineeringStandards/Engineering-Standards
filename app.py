@@ -8,6 +8,9 @@ import pandas as pd
 assert os.getenv('DATABRICKS_WAREHOUSE_ID')
 
 
+
+
+
 # Use as sql query runner
 def sqlQuery(query: str) -> pd.DataFrame:
     cfg = Config() # Pull environment variables for auth
