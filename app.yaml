@@ -5,9 +5,8 @@ command: [
   "git"
 ]
 
-env:
-  - name: "DATABRICKS_WAREHOUSE_ID"
-    valueFrom:
-      secretKeyRef:
-        name: databricks-secrets
-        key: warehouse-id
+env: 
+- name: "DATABRICKS_WAREHOUSE_ID" 
+valueFrom: "f50df4c3b0b8cb91" 
+- name: STREAMLIT_BROWSER_GATHER_USAGE_STATS 
+value: "false"
