@@ -6,7 +6,6 @@ command: [
 ]
 
 env:
-  - name: "DATABRICKS_WAREHOUSE_ID"
-    valueFrom: "f50df4c3b0b8cb91"
-  - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS 
-    value: "false"
+  "DATABRICKS_WAREHOUSE_ID": "f50df4c3b0b8cb91"
+  STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
+
