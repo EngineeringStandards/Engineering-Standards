@@ -5,7 +5,7 @@ import streamlit as st
 import pandas as pd
 
 # Ensure environment variable is set correctly
-warehouse_id = os.getenv('DATABRICKS_WAREHOUSE_ID')
+warehouse_id = "f50df4c3b0b8cb91" #os.getenv("DATABRICKS_WAREHOUSE_ID")
 assert warehouse_id, "DATABRICKS_WAREHOUSE_ID environment variable not set"
 
 
