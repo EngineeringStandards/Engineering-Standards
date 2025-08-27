@@ -9,9 +9,9 @@ warehouse_id = "f50df4c3b0b8cb91" #os.getenv("DATABRICKS_WAREHOUSE_ID")
 assert warehouse_id, "DATABRICKS_WAREHOUSE_ID environment variable not set"
 
 
+
 # Initialize Config once for efficiency
 # Removed unused Config() instantiation
-
 # Use as sql query runner
 def sqlQuery(query: str) -> pd.DataFrame:
     with sql.connect(
