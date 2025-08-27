@@ -58,7 +58,7 @@ record_ids_input = st.text_input("Search Record IDs:")
 if record_ids_input:
     # Replace commas with spaces, split by whitespace, strip each item
     record_ids = [rid.strip().upper() for rid in record_ids_input.replace(",", " ").split() if rid.strip()]
-    record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
+
 
     if record_ids:
         # Build SQL-friendly string
