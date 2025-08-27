@@ -38,8 +38,8 @@ data = getData()
 
 st.header("Engineering Standards GMW Tracking Sheet")
 
- analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
-    st.write(f"Looking at {analyst}'s view")
+analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
+st.write(f"Looking at {analyst}'s view")
 col2, = st.columns(1)
 with col2:
     st.subheader("Select desired information")
