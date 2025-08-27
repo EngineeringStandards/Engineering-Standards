@@ -4,6 +4,12 @@ import pandas as pd
 st.title("This is the page to create reports for GMW's.")
 st.sidebar.success("You are currently viewing the Reports page")
 
+text_contents = '''
+Foo, Bar
+123, 456
+789, 000
+'''
+
 # File uploader widget
 uploaded_file = st.file_uploader("Upload your document", type=["txt", "pdf", "docx", "xlsx"])
 
@@ -16,6 +22,7 @@ if uploaded_file is not None:
         st.text_area("File Content", content, height=300)
     elif uploaded_file.type == "xlsx":
         df = pd.read_excel(uploaded_file)
+        st.download_button('Download CSV', text_contents, 'text/csv')
         st.write(df)
     else:
         st.info("File preview is only available for text files.")
