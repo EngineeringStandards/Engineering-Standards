@@ -89,7 +89,7 @@ else:
             WHERE analyst = '{analyst}';
         """)
 
-    st.dataframe(data=analyst_data, height=600, use_container_width=True)
+
 
 
 
