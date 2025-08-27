@@ -60,4 +60,4 @@ else:
     # Default view for other analysts
     analyst_data = sqlQuery(f"SELECT * FROM maxis_sandbox.engineering_standards.all_data_cleaned WHERE analyst = '{analyst}';")
 
-st.dataframe(data=analyst_data, height=600, use_container_width=True)
+st.dataframe(data=analyst_data, height=600, width='stretch)
