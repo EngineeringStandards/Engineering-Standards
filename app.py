@@ -10,7 +10,7 @@ assert warehouse_id, "DATABRICKS_WAREHOUSE_ID environment variable not set"
 
 
 # Initialize Config once for efficiency
-cfg = Config()  # Pull environment variables for auth
+# Removed unused Config() instantiation
 
 # Use as sql query runner
 def sqlQuery(query: str) -> pd.DataFrame:
