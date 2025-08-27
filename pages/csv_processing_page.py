@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
+from ./csv_proccessing import process_csv
 
-st.title("This is the page to create reports for GMW's.")
+st.title("Create Monthly CSV Reports to be shared")
 st.sidebar.success("You are currently viewing the Reports page")
 
 text_contents = '''
@@ -22,6 +23,7 @@ if uploaded_file is not None:
         st.text_area("File Content", content, height=300)
     elif uploaded_file.type == "xlsx":
         df = pd.read_excel(uploaded_file)
+        process_csv(uploaded_file)
         st.write(df)
     else:
         st.info("File preview is only available for text files.")
