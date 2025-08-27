@@ -5,7 +5,11 @@ command: [
   "git" ] 
   
 env: 
-  - name: "DATABRICKS_WAREHOUSE_ID" 
+  - name: DATABRICKS_HOST
+    value: "https://adb-4151713458336319.19.azuredatabricks.net"
+  - name: DATABRICKS_TOKEN
+    value: "dapiac52506013cf879fafaafba43a2aa89a-3"
+  - name: DATABRICKS_WAREHOUSE_ID
     value: "f50df4c3b0b8cb91" 
   - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS 
     value: "false"
