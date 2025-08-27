@@ -54,7 +54,7 @@ with col2:
     st.write(f"Looking at {analyst}'s view")
 
 
-if analyst == "Lisa Smith" and data_view == "WIP":
+if analyst == "Lisa Coppola" and data_view == "WIP":
     # Lisa's restricted WIP view
     analyst_data = sqlQuery("""
         SELECT * 
