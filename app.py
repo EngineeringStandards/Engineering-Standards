@@ -63,16 +63,15 @@ if record_ids_input:
         # Build SQL-friendly string
         record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
 
-        search_query = f"""
+        # Search query
+        analyst_data = sqlQuery(f"""
             SELECT * 
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE record_id IN ({record_ids_str})
-        """
-
-        analyst_data = sqlQuery(search_query)
-        st.dataframe(data=analyst_data, height=600, use_container_width=True)
+        """)
     else:
         st.warning("Please enter at least one valid record_id.")
+        analyst_data = pd.DataFrame()  # empty dataframe to avoid errors
 
 else:
     # Only run analyst/data_view logic if no search input
@@ -89,8 +88,5 @@ else:
             WHERE analyst = '{analyst}';
         """)
 
-
-
-
-
+# Show **only one table** after all logic
 st.dataframe(data=analyst_data, height=600, use_container_width=True)
