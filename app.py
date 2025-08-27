@@ -68,7 +68,7 @@ if record_ids_input:
         analyst_data = sqlQuery(f"""
             SELECT * 
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
-            WHERE record_id IN ({record_ids_str})
+            WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
         """)
     else:
         st.warning("Please enter at least one valid record_id.")
