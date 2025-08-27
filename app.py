@@ -52,13 +52,11 @@ with col2:
 
     analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
     st.write(f"Looking at {analyst}'s view")
-
 record_ids_input = st.text_input("Search Record IDs:")
 
 if record_ids_input:
-    # Replace commas with spaces, split by whitespace, strip each item
-    record_ids = [rid.strip().upper() for rid in record_ids_input.replace(",", " ").split() if rid.strip()]
-
+    # Split on commas only, strip spaces
+    record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()]
 
     if record_ids:
         # Build SQL-friendly string
@@ -75,7 +73,7 @@ if record_ids_input:
         analyst_data = pd.DataFrame()  # empty dataframe to avoid errors
 
 else:
-    # Only run analyst/data_view logic if no search input
+    # Default analyst/data_view logic
     if analyst == "Lisa Coppola" and data_view == "WIP":
         analyst_data = sqlQuery("""
             SELECT * 
@@ -89,5 +87,4 @@ else:
             WHERE analyst = '{analyst}';
         """)
 
-# Show **only one table** after all logic
 st.dataframe(data=analyst_data, height=600, use_container_width=True)
