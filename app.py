@@ -55,38 +55,41 @@ with col2:
 
 record_ids_input = st.text_input("Search Record IDs:")
 
-record_ids = [rid.strip() for rid in record_ids_input.split(",") if rid.strip()]
+if record_ids_input:
+    # Replace commas with spaces, split by whitespace, strip each item
+    record_ids = [rid.strip() for rid in record_ids_input.replace(",", " ").split() if rid.strip()]
 
-if record_ids:
-    # Build safe SQL query
-    record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
+    if record_ids:
+        # Build SQL-friendly string
+        record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
 
-    search_query = f"""
-        SELECT * 
-        FROM maxis_sandbox.engineering_standards.all_data_cleaned
-        WHERE record_id IN ({record_ids_str})
-    """
+        search_query = f"""
+            SELECT * 
+            FROM maxis_sandbox.engineering_standards.all_data_cleaned
+            WHERE record_id IN ({record_ids_str})
+        """
 
-    analyst_data = sqlQuery(search_query)
+        analyst_data = sqlQuery(search_query)
+        st.dataframe(data=analyst_data, height=600, use_container_width=True)
+    else:
+        st.warning("Please enter at least one valid record_id.")
+
+else:
+    # Only run analyst/data_view logic if no search input
+    if analyst == "Lisa Coppola" and data_view == "WIP":
+        analyst_data = sqlQuery("""
+            SELECT * 
+            FROM maxis_sandbox.engineering_standards.all_data_cleaned
+            WHERE wip_tab = TRUE
+        """)
+    else:
+        analyst_data = sqlQuery(f"""
+            SELECT * 
+            FROM maxis_sandbox.engineering_standards.all_data_cleaned 
+            WHERE analyst = '{analyst}';
+        """)
+
     st.dataframe(data=analyst_data, height=600, use_container_width=True)
-else:
-    st.warning("Please enter at least one valid record_id.")
-
-
-
-
-if analyst == "Lisa Coppola" and data_view == "WIP":
-    # Lisa's restricted WIP view
-    analyst_data = sqlQuery("""
-        SELECT * 
-        FROM maxis_sandbox.engineering_standards.all_data_cleaned
-        WHERE wip_tab = TRUE
-    """)
-
-   
-else:
-    # Default view for other analysts
-    analyst_data = sqlQuery(f"SELECT * FROM maxis_sandbox.engineering_standards.all_data_cleaned WHERE analyst = '{analyst}';")
 
 
 
