@@ -37,6 +37,9 @@ data = getData()
 # test
 
 st.header("Engineering Standards GMW Tracking Sheet")
+
+ analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
+    st.write(f"Looking at {analyst}'s view")
 col2, = st.columns(1)
 with col2:
     st.subheader("Select desired information")
@@ -50,8 +53,7 @@ with col2:
     elif data_view == 'Both':
         st.success("Both")
 
-    analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
-    st.write(f"Looking at {analyst}'s view")
+   
 
 
 record_ids_input = st.text_input("Search Record IDs:")
