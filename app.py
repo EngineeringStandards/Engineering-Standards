@@ -64,7 +64,7 @@ if record_ids_input:
 
         # Search query
         analyst_data = sqlQuery(f"""
-            SELECT * 
+            SELECT record_id, wip_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab  
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
         """)
@@ -76,7 +76,7 @@ else:
     # Default analyst/data_view logic
     if analyst == "Lisa Coppola" and data_view == "WIP":
         analyst_data = sqlQuery("""
-            SELECT wip_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab  
+            SELECT * 
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE wip_tab = TRUE
         """)
