@@ -5,7 +5,7 @@ command: [
   "git" ] 
   
 env: 
-  - name: "DATABRICKS_WAREHOUSE_ID" 
+  - name: DATABRICKS_WAREHOUSE_ID
     value: "f50df4c3b0b8cb91" 
   - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS 
     value: "false"

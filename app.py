@@ -9,9 +9,11 @@ warehouse_id = os.getenv('DATABRICKS_WAREHOUSE_ID')
 assert warehouse_id, "DATABRICKS_WAREHOUSE_ID environment variable not set"
 
 
+# Initialize Config once for efficiency
+cfg = Config()  # Pull environment variables for auth
+
 # Use as sql query runner
 def sqlQuery(query: str) -> pd.DataFrame:
-    cfg = Config() # Pull environment variables for auth
     with sql.connect(
         server_hostname = "adb-4151713458336319.19.azuredatabricks.net",
         http_path = f"/sql/1.0/warehouses/{warehouse_id}",
