@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from ./csv_proccessing import process_csv
+from scripts.csv_processing import process_csv
 
 st.title("Create Monthly CSV Reports to be shared")
 st.sidebar.success("You are currently viewing the Reports page")
