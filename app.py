@@ -76,7 +76,7 @@ if record_ids_input:
             """)
         else:
             analyst_data = sqlQuery(f"""
-                SELECT * 
+                SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history 
                 FROM maxis_sandbox.engineering_standards.all_data_cleaned
                 WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
             """)
@@ -88,13 +88,13 @@ else:
     # No search input, default analyst/data_view logic
     if analyst == "Lisa Coppola" and data_view == "WIP":
         analyst_data = sqlQuery("""
-            SELECT * 
+            SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history 
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE wip_tab = TRUE
         """)
     else:
         analyst_data = sqlQuery(f"""
-            SELECT * 
+            SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history 
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE analyst = '{analyst}';
         """)
@@ -105,7 +105,8 @@ if not analyst_data.empty:
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
     gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True)
-    
+    gb.configure_column("wip_title", width=400)
+    gb.configure_column("key_contact", width=200)
     gb.configure_grid_options(domLayout='normal')
     gridOptions = gb.build()
 
