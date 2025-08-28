@@ -105,7 +105,8 @@ if not analyst_data.empty:
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
     gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True)
-
+    
+    gb.configure_grid_options(domLayout='normal')
     gridOptions = gb.build()
 
     AgGrid(
