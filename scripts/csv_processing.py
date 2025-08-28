@@ -1,8 +1,8 @@
-import pandas as pd
+'''import pandas as pd
 from pathlib import Path
 from openpyxl import load_workbook
 
-'''
+
 def autosize_excel_columns(file_path: Path):
     wb = load_workbook(file_path)
     ws = wb.active
