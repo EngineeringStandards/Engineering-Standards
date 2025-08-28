@@ -2,3 +2,5 @@ databricks-sql-connector
 databricks.sdk
 streamlit
 pandas
+openpyxl
+pathlib
