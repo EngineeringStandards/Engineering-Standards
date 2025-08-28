@@ -99,7 +99,7 @@ else:
             WHERE analyst = '{analyst}';
         """)
 
-st.dataframe(data=analyst_data, height=600, use_container_width=True)
+
 if not analyst_data.empty:
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
