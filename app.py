@@ -109,6 +109,7 @@ if not analyst_data.empty:
     gb.configure_grid_options(domLayout='normal')
     gridOptions = gb.build()
 
+
     AgGrid(
         analyst_data,
         gridOptions=gridOptions,
