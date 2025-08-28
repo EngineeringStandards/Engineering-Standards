@@ -21,7 +21,7 @@ if uploaded_file is not None:
     st.dataframe(df.head())
 
     # Process the Excel file
-    output_files = process_excel(temp_file)
+    #output_files = process_excel(temp_file)
 
     st.success("Reports created successfully:")
     for f in output_files:
