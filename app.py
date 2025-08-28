@@ -3,6 +3,7 @@ from databricks import sql
 from databricks.sdk.core import Config
 import streamlit as st
 import pandas as pd
+from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 
 # Ensure environment variable is set correctly
 warehouse_id = "f50df4c3b0b8cb91" #os.getenv("DATABRICKS_WAREHOUSE_ID")
@@ -99,3 +100,22 @@ else:
         """)
 
 st.dataframe(data=analyst_data, height=600, use_container_width=True)
+if not analyst_data.empty:
+    gb = GridOptionsBuilder.from_dataframe(analyst_data)
+    gb.configure_pagination(paginationAutoPageSize=True)  # pagination
+    gb.configure_side_bar()  # enable columns panel
+    gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True)
+
+    gridOptions = gb.build()
+
+    AgGrid(
+        analyst_data,
+        gridOptions=gridOptions,
+        enable_enterprise_modules=False,
+        update_mode=GridUpdateMode.SELECTION_CHANGED,
+        theme="balham",  # themes: "streamlit", "light", "dark", "blue", "fresh", "balham"
+        height=600,
+        fit_columns_on_grid_load=True
+    )
+else:
+    st.warning("No data to display")
