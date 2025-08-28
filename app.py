@@ -55,8 +55,6 @@ with col2:
         st.success("Both")
 
    
-
-
 record_ids_input = st.text_input("Search Record IDs:")
 
 if record_ids_input:
