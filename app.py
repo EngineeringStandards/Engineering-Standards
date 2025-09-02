@@ -186,8 +186,8 @@ if not analyst_data.empty:
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
     gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True)
-    gb.configure_column("wip_title", width=600)
-    gb.configure_column("key_contact", width=200)
+    gb.configure_column("WIP Tab", width=600)
+    gb.configure_column("Key Contact", width=200)
     gb.configure_grid_options(domLayout='normal')
     gridOptions = gb.build()
     
