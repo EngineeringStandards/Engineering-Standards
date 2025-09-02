@@ -243,7 +243,6 @@ if not analyst_data.empty:
         update_mode=GridUpdateMode.SELECTION_CHANGED,
         theme="balham",  # themes: "streamlit", "light", "dark", "blue", "fresh", "balham"
         height=600,
-        fit_columns_on_grid_load=True,
         custom_css=custom_css
     )
 else:
