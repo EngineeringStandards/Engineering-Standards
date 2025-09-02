@@ -212,7 +212,7 @@ if not analyst_data.empty:
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
-    gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True)
+    gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True, headerClass="custom-header")
     gb.configure_column("WIP Title", width=700)
     gb.configure_column("Key Contact", width=400)
     gb.configure_column("Process Step", width=600)
