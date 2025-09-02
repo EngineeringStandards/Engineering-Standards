@@ -119,10 +119,10 @@ with col2:
    
 record_ids_input = st.text_input("Search Record IDs:")
 
-if record_ids_input:
-    # Split on commas only, strip spaces
-    record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
+# Always define record_ids, even if input is empty
+record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
 
+# Now safe to call get_analyst_data
 analyst_data = get_analyst_data(analyst, data_view, record_ids)
 
 
