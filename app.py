@@ -197,7 +197,7 @@ if not analyst_data.empty:
             metric_box("Published Records", published_count, "#dff0d8")
         with col3:
             metric_box("Total Records", wip_count + published_count, "#fcf8e3")
-        st.markdown("<br><br>", unsafe_allow_html=True)  # Adds space below the row
+        st.markdown("<br>", unsafe_allow_html=True)  # Adds space below the row
     else:
         col = st.columns(1)[0]
         with col:
@@ -205,7 +205,7 @@ if not analyst_data.empty:
                 metric_box(f"WIP Records for {analyst}", wip_count, "#d9edf7")
             elif data_view == "Published":
                 metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
-        st.markdown("<br><br>", unsafe_allow_html=True)  # Space below
+        st.markdown("<br>", unsafe_allow_html=True)  # Space below
 
 
 
