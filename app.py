@@ -68,35 +68,48 @@ if record_ids_input:
         # Use different queries depending on analyst
         if analyst == "Lisa Coppola" and data_view == "WIP":
             analyst_data = sqlQuery(f"""
-                SELECT record_id AS "Record ID", wip_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab  
-                FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
-            """)
-        else:
-            analyst_data = sqlQuery(f"""
-                SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history
+                SELECT record_id, wip_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab  
                 FROM maxis_sandbox.engineering_standards.all_data_cleaned
                 WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
             """)
             analyst_data = analyst_data.rename(columns={
-    "record_id": "Record ID",
-    "wip_title": "WIP Title",
-    "project": "Project Name",
-    "submit_date": "Submission Date",
-    "days_in_process": "Days In Process",
-    "key_contact": "Key Contact",
-    "action": "Action Taken",
-    "local_standards_replaced": "Local Standards Replaced",
-    "replaced_by": "Replaced By",
-    "ownership": "Ownership",
-    "process_step": "Process Step",
-    "location": "Location",
-    "current_step_date": "Current Step Date",
-    "days_in_step": "Days in Step",
-    "num_pages": "Number of Pages",
-    "history": "History Notes"
-})
+                "record_id": "Record ID",
+                "wip_tab": "WIP Tab",
+                "final_disposition_action": "Final Disposition Action",
+                "final_date": "Final Date",
+                "distribution_year": "Distribution Year",
+                "update_csv": "Update CSV",
+                "ils_published": "ILS Published",
+                "ils_submit_date": "ILS Submit Date",
+                "published_tab": "Published Tab"
+            })
 
+        else:
+            analyst_data = sqlQuery(f"""
+                SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, 
+                       local_standards_replaced, replaced_by, ownership, process_step, location, 
+                       current_step_date, days_in_step, num_pages, history
+                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
+            """)
+            analyst_data = analyst_data.rename(columns={
+                "record_id": "Record ID",
+                "wip_title": "WIP Title",
+                "project": "Project",
+                "submit_date": "Submit Date",
+                "days_in_process": "Days In Process",
+                "key_contact": "Key Contact",
+                "action": "Action",
+                "local_standards_replaced": "Local Standards Replaced",
+                "replaced_by": "Replaced By",
+                "ownership": "Ownership",
+                "process_step": "Process Step",
+                "location": "Location",
+                "current_step_date": "Current Step Date",
+                "days_in_step": "Days in Step",
+                "num_pages": "Pages",
+                "history": "History"
+            })
     else:
         st.warning("Please enter at least one valid record_id.")
         analyst_data = pd.DataFrame()  # empty dataframe to avoid errors
@@ -109,12 +122,50 @@ else:
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE wip_tab = TRUE
         """)
+
+        analyst_data = analyst_data.rename(columns={
+    "record_id": "Record ID",
+    "wip_title": "WIP Title",
+    "project": "Project",
+    "submit_date": "Submit Date",
+    "days_in_process": "Days In Process",
+    "key_contact": "Key Contact",
+    "action": "Action",
+    "local_standards_replaced": "Local Standards Replaced",
+    "replaced_by": "Replaced By",
+    "ownership": "Ownership",
+    "process_step": "Process Step",
+    "location": "Location",
+    "current_step_date": "Current Step Date",
+    "days_in_step": "Days in Step",
+    "num_pages": "Pages",
+    "history": "History"
+})
+
     else:
         analyst_data = sqlQuery(f"""
            SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history 
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE analyst = '{analyst}';
         """)
+        analyst_data = analyst_data.rename(columns={
+    "record_id": "Record ID",
+    "wip_title": "WIP Title",
+    "project": "Project",
+    "submit_date": "Submit Date",
+    "days_in_process": "Days In Process",
+    "key_contact": "Key Contact",
+    "action": "Action",
+    "local_standards_replaced": "Local Standards Replaced",
+    "replaced_by": "Replaced By",
+    "ownership": "Ownership",
+    "process_step": "Process Step",
+    "location": "Location",
+    "current_step_date": "Current Step Date",
+    "days_in_step": "Days in Step",
+    "num_pages": "Pages",
+    "history": "History"
+})
 
 
 
