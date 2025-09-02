@@ -219,29 +219,18 @@ if not analyst_data.empty:
     gb.configure_column("History", width=400)
     gb.configure_column("Record ID", width=300)
    
-    st.markdown("""
-        <style>
-        .ag-header-cell-label {
-            font-size: 16px !important;
-            font-weight: bold !important;
-        }
-        .ag-theme-balham .ag-header {
-            background-color: #3B82F6 !important;
-            color: white !important;
-        }
-        /* Row headers (index column) */
-        .ag-theme-balham .ag-row-number-cell {
-            background-color: #E6F2FF !important;  /* light blue */
-            color: #000 !important;                /* black text */
-            font-weight: bold;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-   
     
     gridOptions = gb.build()
     
+    
+    custom_css = {
+    ".custom-header": {
+        "background-color": "#3B82F6",
+        "color": "white",
+        "font-weight": "bold",
+        "font-size": "16px"
+    }
+}
 
     AgGrid(
         analyst_data,
@@ -250,7 +239,8 @@ if not analyst_data.empty:
         update_mode=GridUpdateMode.SELECTION_CHANGED,
         theme="balham",  # themes: "streamlit", "light", "dark", "blue", "fresh", "balham"
         height=600,
-        fit_columns_on_grid_load=True
+        fit_columns_on_grid_load=True,
+        custom_css=custom_css
     )
 else:
     st.warning("No data to display")
