@@ -207,8 +207,18 @@ if not analyst_data.empty:
                 metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
         st.markdown("<br>", unsafe_allow_html=True)
 
+    
+    
     header_class = "custom-header"
-   
+    # Increase row height
+    row_height_js = JsCode("""
+function(params) {
+    return 40;  // height in pixels, default is ~25
+}
+""")
+
+
+
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
@@ -222,7 +232,7 @@ if not analyst_data.empty:
     gb.configure_column("Days In Process", headerClass=header_class)
     gb.configure_column("Days in Step", headerClass=header_class)
     gb.configure_column("Pages", headerClass=header_class)
-   
+    gb.configure_grid_options(getRowHeight=row_height_js)
     
     gridOptions = gb.build()
     
