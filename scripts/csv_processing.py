@@ -1,4 +1,4 @@
-'''import pandas as pd
+import pandas as pd
 from pathlib import Path
 from openpyxl import load_workbook
 
@@ -62,4 +62,3 @@ def process_excel(file_path: Path):
     autosize_excel_columns(copy4_file)
 
     return [copy1_file, copy2_file, copy3_file, copy4_file]
-'''

@@ -1,12 +1,12 @@
 import streamlit as st
 import pandas as pd
 from pathlib import Path
-'''from scripts.csv_processing import process_excel'''
+from scripts.csv_processing import process_excel
 
 st.title("Create Monthly Excel Reports to be Shared")
 st.sidebar.success("You are currently viewing the Reports page")
 
-'''uploaded_file = st.file_uploader("Upload your Excel document", type=["xlsx"])
+uploaded_file = st.file_uploader("Upload your Excel document", type=["xlsx"])
 
 if uploaded_file is not None:
     st.write(f"Uploaded file: {uploaded_file.name}")
@@ -34,4 +34,4 @@ if uploaded_file is not None:
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 else:
-    st.warning("Please upload an Excel file to proceed.")'''
+    st.warning("Please upload an Excel file to proceed.")
