@@ -90,7 +90,7 @@ def get_metrics(df):
     published_count = df[df["published_tab"] == True].shape[0] if "published_tab" in df.columns else 0
     return wip_count, published_count
 
-wip_count, published_count = get_metrics(analyst_data)
+
 
 st.set_page_config(layout="wide")
 
