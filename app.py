@@ -192,17 +192,17 @@ if not analyst_data.empty:
     if data_view == "Both":
         col1, col2, col3 = st.columns(3)
         with col1:
-            metric_box("WIP Records", wip_count, "#d9edf7")
+            metric_box("WIP Records", wip_count,  "#fcf8e3" )
         with col2:
             metric_box("Published Records", published_count, "#dff0d8")
         with col3:
-            metric_box("Total Records", wip_count + published_count, "#fcf8e3")
+            metric_box("Total Records", wip_count + published_count, "#d9edf7")
         st.markdown("<br>", unsafe_allow_html=True)  # Adds space below the row
     else:
         col = st.columns(1)[0]
         with col:
             if data_view == "WIP":
-                metric_box(f"WIP Records for {analyst}", wip_count, "#d9edf7")
+                metric_box(f"WIP Records for {analyst}", wip_count, "#fcf8e3")
             elif data_view == "Published":
                 metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
         st.markdown("<br>", unsafe_allow_html=True)  # Space below
