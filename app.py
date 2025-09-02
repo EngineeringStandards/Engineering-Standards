@@ -85,6 +85,13 @@ def get_analyst_data(analyst, data_view, record_ids=None):
 
     return df
 
+def get_metrics(df):
+    wip_count = df[df["wip_tab"] == True].shape[0] if "wip_tab" in df.columns else 0
+    published_count = df[df["published_tab"] == True].shape[0] if "published_tab" in df.columns else 0
+    return wip_count, published_count
+
+wip_count, published_count = get_metrics(analyst_data)
+
 st.set_page_config(layout="wide")
 
 @st.cache_data(ttl=30)  # only re-query if it's been 30 seconds
@@ -119,35 +126,28 @@ with col2:
    
 record_ids_input = st.text_input("Search Record IDs:")
 
-# Always define record_ids, even if input is empty
+# 1. Get the record IDs from input
 record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
 
-# Now safe to call get_analyst_data
+# 2. Fetch the analyst data
 analyst_data = get_analyst_data(analyst, data_view, record_ids)
+
+# 3. Calculate metrics
+wip_count, published_count = get_metrics(analyst_data)
 
 
 if not analyst_data.empty:
-    # --- Add metrics here ---
-    col1, col2 = st.columns(2)
-
-    # WIP count
-    if "wip_tab" in analyst_data.columns:
-        wip_count = analyst_data[analyst_data["wip_tab"] == True].shape[0]
-    else:
-        wip_count = 0
-
-    # Published count
-    if "published_tab" in analyst_data.columns:
-        published_count = analyst_data[analyst_data["published_tab"] == True].shape[0]
-    else:
-        published_count = 0
-
-    with col1:
-        if data_view in ["WIP", "Both"]:
+    if data_view == "Both":
+        col1, col2 = st.columns(2)
+        with col1:
             st.metric(label=f"WIP Records for {analyst}", value=wip_count)
-
-    with col2:
-        if data_view in ["Published", "Both"]:
+        with col2:
+            st.metric(label=f"Published Records for {analyst}", value=published_count)
+    else:
+        col1 = st.columns(1)[0]
+        if data_view == "WIP":
+            st.metric(label=f"WIP Records for {analyst}", value=wip_count)
+        elif data_view == "Published":
             st.metric(label=f"Published Records for {analyst}", value=published_count)
    
    
