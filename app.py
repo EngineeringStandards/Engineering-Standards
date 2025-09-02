@@ -47,11 +47,24 @@ def get_analyst_data(analyst, data_view, record_ids=None):
                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
                        WHERE wip_tab = TRUE"""
         else:
-            query = f"""SELECT record_id,analyst, wip_title, wip_tab,published_tab,  project, submit_date, days_in_process, key_contact, action,
-                               local_standards_replaced, replaced_by, ownership, process_step, location,
-                               current_step_date, days_in_step, num_pages, history
-                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                        WHERE analyst = '{analyst}'"""
+            if data_view == "WIP":
+             query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
+                           local_standards_replaced, replaced_by, ownership, process_step, location,
+                           current_step_date, days_in_step, num_pages, history
+                    FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                    WHERE analyst = '{analyst}' AND wip_tab = TRUE"""
+            elif data_view == "Published":
+             query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
+                           local_standards_replaced, replaced_by, ownership, process_step, location,
+                           current_step_date, days_in_step, num_pages, history
+                    FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                    WHERE analyst = '{analyst}' AND published_tab = TRUE"""
+            else:  # Both
+             query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
+                           local_standards_replaced, replaced_by, ownership, process_step, location,
+                           current_step_date, days_in_step, num_pages, history
+                    FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                    WHERE analyst = '{analyst}'"""
 
     df = sqlQuery(query)
 
