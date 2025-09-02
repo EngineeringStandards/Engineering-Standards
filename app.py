@@ -132,18 +132,26 @@ data = getData()
 
 st.header("Engineering Standards GMW Tracking Sheet")
 
-# Sidebar filters
-st.sidebar.header("Filters")
-analyst = st.sidebar.selectbox("Select Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
-st.sidebar.write(f"Viewing data for {analyst}")
-
-data_view = st.sidebar.radio("Select View:", ['WIP', 'Published', 'Both'])
-record_ids_input = st.sidebar.text_input("Search Record IDs:")
+analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
+st.write(f"Looking at {analyst}'s view")
 
 
+
+col2, = st.columns(1)
+with col2:
+    st.subheader("Select desired information")
+    data_view = st.radio("Select View:", ['WIP', 'Published', 'Both'])
+
+    # Display the selected option using success message
+    if data_view == 'WIP':
+        st.success("WIP")
+    elif data_view == 'Published':
+        st.success("Published")
+    elif data_view == 'Both':
+        st.success("Both")
 
    
-#record_ids_input = st.text_input("Search Record IDs:")
+record_ids_input = st.text_input("Search Record IDs:")
 
 # 1. Get the record IDs from input
 record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
