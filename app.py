@@ -217,7 +217,7 @@ if not analyst_data.empty:
     gb.configure_column("Key Contact", width=400)
     gb.configure_column("Process Step", width=600)
     gb.configure_column("History", width=400)
-    gb.configure_column("Record ID", width=200)
+    gb.configure_column("Record ID", width=300)
    
    
     
