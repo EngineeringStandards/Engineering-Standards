@@ -122,7 +122,7 @@ def get_metrics(df):
 st.set_page_config(layout="wide")
 st.markdown("<h1 style='color:#1F2937;'>Engineering Standards Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<hr style='border:2px solid #F97316'>", unsafe_allow_html=True)
-st.image("gm-logo-solid-blue-sm.png", width=150)
+#st.image("gm-logo-solid-blue-sm.png", width=150)
 
 @st.cache_data(ttl=30)  # only re-query if it's been 30 seconds
 def getData():
@@ -172,17 +172,16 @@ wip_count, published_count = get_metrics(analyst_data)
 
 if not analyst_data.empty:
     if data_view == "Both":
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric(label=f"WIP Records for {analyst}", value=wip_count)
-        with col2:
-            st.metric(label=f"Published Records for {analyst}", value=published_count)
+        col1, col2, col3 = st.columns(3)
+        col1.metric("WIP Records", wip_count, "✅")
+        col2.metric("Published Records", published_count, "📄")
+        col3.metric("Total Records", wip_count + published_count, "🔢")
     else:
         col1 = st.columns(1)[0]
         if data_view == "WIP":
-            st.metric(label=f"WIP Records for {analyst}", value=wip_count)
+            col1.metric(f"WIP Records for {analyst}", wip_count, "✅")
         elif data_view == "Published":
-            st.metric(label=f"Published Records for {analyst}", value=published_count)
+            col1.metric(f"Published Records for {analyst}", published_count, "📄")
    
    
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
