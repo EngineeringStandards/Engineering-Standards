@@ -218,32 +218,7 @@ if not analyst_data.empty:
     gb.configure_column("Process Step", width=600)
     gb.configure_column("History", width=400)
    
-    # Header styling
-    gb.configure_grid_options(
-    rowHeight=40,
-    headerHeight=50,
-    getRowStyle=JsCode("""
-        function(params) {
-            return { fontSize: '16px' }
-        }
-    """)
-
-)
-
-# Inject custom CSS for header
-    st.markdown("""
-<style>
-.ag-header-cell-label {
-    font-size: 16px !important;
-    font-weight: bold !important;
-}
-.ag-theme-balham .ag-header {
-    background-color: #3B82F6 !important;  /* blue header */
-    color: white !important;
-}
-</style>
-""", unsafe_allow_html=True)
-    
+   
     
     gridOptions = gb.build()
     
