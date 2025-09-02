@@ -210,7 +210,12 @@ if not analyst_data.empty:
     
     
     header_class = "custom-header"
-   
+        # Increase row height
+    row_height_js = JsCode("""
+function(params) {
+    return 40;  // height in pixels, default is ~25
+}
+""")
 
 
 
@@ -219,14 +224,15 @@ if not analyst_data.empty:
     gb.configure_side_bar()  # enable columns panel
 
     gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True, headerClass=header_class)
-    gb.configure_column("WIP Title", width=700, headerClass=header_class)
-    gb.configure_column("Key Contact", width=400, headerClass=header_class)
-    gb.configure_column("Process Step", width=600, headerClass=header_class)
-    gb.configure_column("History", width=400, headerClass=header_class)
-    gb.configure_column("Record ID", width=300, headerClass=header_class)
-    gb.configure_column("Days In Process", headerClass=header_class)
-    gb.configure_column("Days in Step", headerClass=header_class)
-    gb.configure_column("Pages", headerClass=header_class)
+    # Configure each column explicitly
+columns_to_configure = [
+    "WIP Title", "Key Contact", "Process Step", "History", 
+    "Record ID", "Days In Process", "Days in Step", "Pages"
+]
+for col in columns_to_configure:
+    gb.configure_column(col, headerClass=header_class)
+
+# Add row height AFTER defining JS
     gb.configure_grid_options(getRowHeight=row_height_js)
     
     gridOptions = gb.build()
@@ -241,12 +247,7 @@ if not analyst_data.empty:
     }
 }
     
-     # Increase row height
-    row_height_js = JsCode("""
-function(params) {
-    return 40;  // height in pixels, default is ~25
-}
-""")
+
 
     AgGrid(
         analyst_data,
