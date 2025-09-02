@@ -219,6 +219,9 @@ if not analyst_data.empty:
     gb.configure_column("Process Step", width=600, headerClass=header_class)
     gb.configure_column("History", width=400, headerClass=header_class)
     gb.configure_column("Record ID", width=300, headerClass=header_class)
+    gb.configure_column("Days In Process", headerClass=header_class)
+    gb.configure_column("Days in Step", headerClass=header_class)
+    gb.configure_column("Pages", headerClass=header_class)
    
     
     gridOptions = gb.build()
