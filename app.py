@@ -220,16 +220,13 @@ if not analyst_data.empty:
     gb.configure_grid_options(rowHeight=40)
     # Header styling
     gb.configure_grid_options(
-    headerHeight=50,  # taller header
+    rowHeight=40,
+    headerHeight=50,
     getRowStyle=JsCode("""
         function(params) {
-            return { 'font-size': '16px' }
+            return { fontSize: '16px' }
         }
-    """)
-)
-
-# Apply a header background color using CSS via gridOptions
-    gb.configure_grid_options(
+    """),
     defaultColDef={"headerClass": "custom-header"}
 )
 
