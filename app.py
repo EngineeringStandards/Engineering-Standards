@@ -30,24 +30,24 @@ def get_analyst_data(analyst, data_view, record_ids=None):
     if record_ids:
         record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
         if analyst == "Lisa Coppola" and data_view == "WIP":
-            query = f"""SELECT record_id, wip_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab
+            query = f"""SELECT record_id, wip_tab, published_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab
                         FROM maxis_sandbox.engineering_standards.all_data_cleaned
                         WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
         else:
-            query = f"""SELECT record_id, wip_title,wip_tab, project, submit_date, days_in_process, key_contact, action, 
+            query = f"""SELECT record_id, wip_title,wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action, 
                                local_standards_replaced, replaced_by, ownership, process_step, location, 
                                current_step_date, days_in_step, num_pages, history
                         FROM maxis_sandbox.engineering_standards.all_data_cleaned
                         WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
     else:
         if analyst == "Lisa Coppola" and data_view == "WIP":
-            query = """SELECT record_id, wip_tab, wip_title, project, submit_date, days_in_process, key_contact, action,
+            query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
                               local_standards_replaced, replaced_by, ownership, process_step, location, 
                               current_step_date, days_in_step, num_pages, history
                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
                        WHERE wip_tab = TRUE"""
         else:
-            query = f"""SELECT record_id, wip_tab, wip_title, project, submit_date, days_in_process, key_contact, action,
+            query = f"""SELECT record_id, wip_title, wip_tab,published_tab,  project, submit_date, days_in_process, key_contact, action,
                                local_standards_replaced, replaced_by, ownership, process_step, location,
                                current_step_date, days_in_step, num_pages, history
                         FROM maxis_sandbox.engineering_standards.all_data_cleaned
