@@ -25,6 +25,65 @@ def sqlQuery(query: str) -> pd.DataFrame:
         with connection.cursor() as cursor:
             cursor.execute(query)
             return cursor.fetchall_arrow().to_pandas()
+        
+def get_analyst_data(analyst, data_view, record_ids=None):
+    if record_ids:
+        record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
+        if analyst == "Lisa Coppola" and data_view == "WIP":
+            query = f"""SELECT record_id, wip_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab
+                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                        WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
+        else:
+            query = f"""SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, 
+                               local_standards_replaced, replaced_by, ownership, process_step, location, 
+                               current_step_date, days_in_step, num_pages, history
+                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                        WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
+    else:
+        if analyst == "Lisa Coppola" and data_view == "WIP":
+            query = """SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action,
+                              local_standards_replaced, replaced_by, ownership, process_step, location, 
+                              current_step_date, days_in_step, num_pages, history
+                       FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                       WHERE wip_tab = TRUE"""
+        else:
+            query = f"""SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action,
+                               local_standards_replaced, replaced_by, ownership, process_step, location,
+                               current_step_date, days_in_step, num_pages, history
+                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                        WHERE analyst = '{analyst}'"""
+
+    df = sqlQuery(query)
+
+    # rename columns
+    df = df.rename(columns={
+        "record_id": "Record ID",
+        "wip_title": "WIP Title",
+        "project": "Project",
+        "submit_date": "Submit Date",
+        "days_in_process": "Days In Process",
+        "key_contact": "Key Contact",
+        "action": "Action",
+        "local_standards_replaced": "Local Standards Replaced",
+        "replaced_by": "Replaced By",
+        "ownership": "Ownership",
+        "process_step": "Process Step",
+        "location": "Location",
+        "current_step_date": "Current Step Date",
+        "days_in_step": "Days in Step",
+        "num_pages": "Pages",
+        "history": "History",
+        "wip_tab": "WIP Tab",
+        "published_tab": "Published Tab",
+        "final_disposition_action": "Final Disposition Action",
+        "final_date": "Final Date",
+        "distribution_year": "Distribution Year",
+        "update_csv": "Update CSV",
+        "ils_published": "ILS Published",
+        "ils_submit_date": "ILS Submit Date"
+    })
+
+    return df
 
 st.set_page_config(layout="wide")
 
@@ -62,114 +121,9 @@ record_ids_input = st.text_input("Search Record IDs:")
 
 if record_ids_input:
     # Split on commas only, strip spaces
-    record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()]
+    record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
 
-    if record_ids:
-        # Build SQL-friendly string
-        record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
-
-        # Use different queries depending on analyst
-        if analyst == "Lisa Coppola" and data_view == "WIP":
-            analyst_data = sqlQuery(f"""
-                SELECT record_id, wip_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab  
-                FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
-            """)
-            analyst_data = analyst_data.rename(columns={
-                "record_id": "Record ID",
-                "wip_tab": "WIP Tab",
-                "final_disposition_action": "Final Disposition Action",
-                "final_date": "Final Date",
-                "distribution_year": "Distribution Year",
-                "update_csv": "Update CSV",
-                "ils_published": "ILS Published",
-                "ils_submit_date": "ILS Submit Date",
-                "published_tab": "Published Tab"
-            })
-
-        else:
-            analyst_data = sqlQuery(f"""
-                SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, 
-                       local_standards_replaced, replaced_by, ownership, process_step, location, 
-                       current_step_date, days_in_step, num_pages, history
-                FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
-            """)
-            analyst_data = analyst_data.rename(columns={
-                "record_id": "Record ID",
-                "wip_title": "WIP Title",
-                "project": "Project",
-                "submit_date": "Submit Date",
-                "days_in_process": "Days In Process",
-                "key_contact": "Key Contact",
-                "action": "Action",
-                "local_standards_replaced": "Local Standards Replaced",
-                "replaced_by": "Replaced By",
-                "ownership": "Ownership",
-                "process_step": "Process Step",
-                "location": "Location",
-                "current_step_date": "Current Step Date",
-                "days_in_step": "Days in Step",
-                "num_pages": "Pages",
-                "history": "History"
-            })
-    else:
-        st.warning("Please enter at least one valid record_id.")
-        analyst_data = pd.DataFrame()  # empty dataframe to avoid errors
-
-else:
-    # No search input, default analyst/data_view logic
-    if analyst == "Lisa Coppola" and data_view == "WIP":
-        analyst_data = sqlQuery("""
-           SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history
-            FROM maxis_sandbox.engineering_standards.all_data_cleaned
-            WHERE wip_tab = TRUE
-        """)
-
-        analyst_data = analyst_data.rename(columns={
-    "record_id": "Record ID",
-    "wip_title": "WIP Title",
-    "project": "Project",
-    "submit_date": "Submit Date",
-    "days_in_process": "Days In Process",
-    "key_contact": "Key Contact",
-    "action": "Action",
-    "local_standards_replaced": "Local Standards Replaced",
-    "replaced_by": "Replaced By",
-    "ownership": "Ownership",
-    "process_step": "Process Step",
-    "location": "Location",
-    "current_step_date": "Current Step Date",
-    "days_in_step": "Days in Step",
-    "num_pages": "Pages",
-    "history": "History"
-})
-
-    else:
-        analyst_data = sqlQuery(f"""
-           SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history 
-            FROM maxis_sandbox.engineering_standards.all_data_cleaned
-            WHERE analyst = '{analyst}';
-        """)
-        analyst_data = analyst_data.rename(columns={
-    "record_id": "Record ID",
-    "wip_title": "WIP Title",
-    "project": "Project",
-    "submit_date": "Submit Date",
-    "days_in_process": "Days In Process",
-    "key_contact": "Key Contact",
-    "action": "Action",
-    "local_standards_replaced": "Local Standards Replaced",
-    "replaced_by": "Replaced By",
-    "ownership": "Ownership",
-    "process_step": "Process Step",
-    "location": "Location",
-    "current_step_date": "Current Step Date",
-    "days_in_step": "Days in Step",
-    "num_pages": "Pages",
-    "history": "History"
-})
-
+analyst_data = get_analyst_data(analyst, data_view, record_ids)
 
 
 if not analyst_data.empty:
