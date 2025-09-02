@@ -170,18 +170,18 @@ if record_ids:
 wip_count, published_count = get_metrics(analyst_data)
 
 
-def metric_box(label, value, background_color="#f0f2f6", value_color="#333"):
+def metric_box(label, value, bg_color="#f0f2f6", label_color="#333", value_color="#333"):
     st.markdown(
         f"""
         <div style="
-            background-color: {background_color};
+            background-color: {bg_color};
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             font-size: 24px;
             font-weight: bold;
         ">
-            {label}<br>
+            <span style="color: {label_color};">{label}</span><br>
             <span style="font-size: 32px; color: {value_color};">{value}</span>
         </div>
         """,
@@ -192,20 +192,21 @@ if not analyst_data.empty:
     if data_view == "Both":
         col1, col2, col3 = st.columns(3)
         with col1:
-            metric_box("WIP Records", wip_count, "#fcf8e3", "#d9534f")  # Red value
+            metric_box("WIP Records", wip_count, "#fcf8e3", label_color="#d9534f", value_color="#d9534f")
         with col2:
-            metric_box("Published Records", published_count, "#dff0d8", "#333")
+            metric_box("Published Records", published_count, "#dff0d8")
         with col3:
-            metric_box("Total Records", wip_count + published_count, "#d9edf7", "#333")
-        st.markdown("<br>", unsafe_allow_html=True)  # Adds space below the row
+            metric_box("Total Records", wip_count + published_count, "#d9edf7")
+        st.markdown("<br>", unsafe_allow_html=True)
     else:
         col = st.columns(1)[0]
         with col:
             if data_view == "WIP":
-                metric_box(f"WIP Records for {analyst}", wip_count, "#fcf8e3", "#d9534f")  # Red value
+                metric_box(f"WIP Records for {analyst}", wip_count, "#fcf8e3", label_color="#d9534f", value_color="#d9534f")
             elif data_view == "Published":
-                metric_box(f"Published Records for {analyst}", published_count, "#dff0d8", "#333")
-        st.markdown("<br>", unsafe_allow_html=True)  # Space below
+                metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
+        st.markdown("<br>", unsafe_allow_html=True)
+
 
 
 
