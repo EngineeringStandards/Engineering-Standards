@@ -16,10 +16,6 @@ if uploaded_file is not None:
     with open(temp_file, "wb") as f:
         f.write(uploaded_file.getbuffer())
 
-    # Preview uploaded data
-    df = pd.read_excel(temp_file)
-    st.dataframe(df.head())
-
     # Process the Excel file
     output_files = process_excel(temp_file)
 
