@@ -122,6 +122,7 @@ def get_metrics(df):
 st.set_page_config(layout="wide")
 st.markdown("<h1 style='color:#1F2937;'>Engineering Standards Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<hr style='border:2px solid #F97316'>", unsafe_allow_html=True)
+st.image("gm-logo-solid-blue-sm.png", width=150)
 
 @st.cache_data(ttl=30)  # only re-query if it's been 30 seconds
 def getData():
