@@ -230,7 +230,7 @@ if not analyst_data.empty:
     custom_css = {
     ".custom-header": {
         "background-color":"#d9edf7",
-        "color": "white",
+        "color": "black",
         "font-weight": "bold",
         "font-size": "16px"
     }
