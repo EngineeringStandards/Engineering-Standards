@@ -68,28 +68,13 @@ if record_ids_input:
         # Use different queries depending on analyst
         if analyst == "Lisa Coppola" and data_view == "WIP":
             analyst_data = sqlQuery(f"""
-                SELECT record_id AS 'Record ID', wip_tab, final_disposition_action AS 'Final Disposition Action', final_date AS 'Final Date', distribution_year AS 'Distribution Year', update_csv AS 'Update CSV', ils_published AS 'ILS Published', ils_submit_date AS 'ILS Submit Date', published_tab AS 'Published'  
+                SELECT record_id, wip_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab  
                 FROM maxis_sandbox.engineering_standards.all_data_cleaned
                 WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
             """)
         else:
             analyst_data = sqlQuery(f"""
-                SELECT record_id AS `Record ID`,
-    wip_title AS `Title`,
-    project AS `Project`,
-    submit_date AS `Submit Date`,
-    days_in_process AS `Days in Process`,
-    key_contact AS `Key Contact`,
-    action AS `Action`,
-    local_standards_replaced AS `Local Standards Replaced`,g
-    replaced_by AS `Replaced By`,
-    ownership AS `Ownership`,
-    process_step AS `Process Step`,
-    location AS `Location`,
-    current_step_date AS `Current Step Date`,
-    days_in_step AS `Days in Step`,
-    num_pages AS `Pages`,
-    history AS `History
+                SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history
                 FROM maxis_sandbox.engineering_standards.all_data_cleaned
                 WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
             """)
@@ -101,43 +86,13 @@ else:
     # No search input, default analyst/data_view logic
     if analyst == "Lisa Coppola" and data_view == "WIP":
         analyst_data = sqlQuery("""
-           SELECT record_id AS `Record ID`,
-    wip_title AS `Title`,
-    project AS `Project`,
-    submit_date AS `Submit Date`,
-    days_in_process AS `Days in Process`,
-    key_contact AS `Key Contact`,
-    action AS `Action`,
-    local_standards_replaced AS `Local Standards Replaced`,
-    replaced_by AS `Replaced By`,
-    ownership AS `Ownership`,
-    process_step AS `Process Step`,
-    location AS `Location`,
-    current_step_date AS `Current Step Date`,
-    days_in_step AS `Days in Step`,
-    num_pages AS `Pages`,
-    history AS `History
+           SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE wip_tab = TRUE
         """)
     else:
         analyst_data = sqlQuery(f"""
-            SELECT record_id AS `Record ID`,
-    wip_title AS `Title`,
-    project AS `Project`,
-    submit_date AS `Submit Date`,
-    days_in_process AS `Days in Process`,
-    key_contact AS `Key Contact`,
-    action AS `Action`,
-    local_standards_replaced AS `Local Standards Replaced`,
-    replaced_by AS `Replaced By`,
-    ownership AS `Ownership`,
-    process_step AS `Process Step`,
-    location AS `Location`,
-    current_step_date AS `Current Step Date`,
-    days_in_step AS `Days in Step`,
-    num_pages AS `Pages`,
-    history AS `History 
+           SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, local_standards_replaced,replaced_by, ownership, process_step,location, current_step_date, days_in_step, num_pages, history 
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE analyst = '{analyst}';
         """)
