@@ -170,18 +170,41 @@ if record_ids:
 wip_count, published_count = get_metrics(analyst_data)
 
 
+def metric_box(label, value, color="#f0f2f6"):
+    st.markdown(
+        f"""
+        <div style="
+            background-color: {color};
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        ">
+            {label}<br>
+            <span style="font-size: 32px; color: #333;">{value}</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 if not analyst_data.empty:
     if data_view == "Both":
         col1, col2, col3 = st.columns(3)
-        col1.metric("WIP Records", wip_count, "✅")
-        col2.metric("Published Records", published_count, "📄")
-        col3.metric("Total Records", wip_count + published_count, "🔢")
+        with col1:
+            metric_box("WIP Records", wip_count, "#d9edf7")
+        with col2:
+            metric_box("Published Records", published_count, "#dff0d8")
+        with col3:
+            metric_box("Total Records", wip_count + published_count, "#fcf8e3")
     else:
-        col1 = st.columns(1)[0]
-        if data_view == "WIP":
-            col1.metric(f"WIP Records for {analyst}", wip_count, "✅")
-        elif data_view == "Published":
-            col1.metric(f"Published Records for {analyst}", published_count, "📄")
+        col = st.columns(1)[0]
+        with col:
+            if data_view == "WIP":
+                metric_box(f"WIP Records for {analyst}", wip_count, "#d9edf7")
+            elif data_view == "Published":
+                metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
+
    
    
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
