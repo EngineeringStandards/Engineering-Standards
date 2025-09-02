@@ -47,7 +47,7 @@ def get_analyst_data(analyst, data_view, record_ids=None):
                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
                        WHERE wip_tab = TRUE"""
         else:
-            query = f"""SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action,
+            query = f"""SELECT record_id, wip_tab, wip_title, project, submit_date, days_in_process, key_contact, action,
                                local_standards_replaced, replaced_by, ownership, process_step, location,
                                current_step_date, days_in_step, num_pages, history
                         FROM maxis_sandbox.engineering_standards.all_data_cleaned
@@ -86,10 +86,9 @@ def get_analyst_data(analyst, data_view, record_ids=None):
     return df
 
 def get_metrics(df):
-    wip_count = df[df["WIP Tab"].astype(bool)].shape[0] if "WIP Tab" in df.columns else 0
-    published_count = df[df["Published Tab"].astype(bool)].shape[0] if "Published Tab" in df.columns else 0
+    wip_count = df[df["WIP Tab"] == True].shape[0] if "WIP Tab" in df.columns else 0
+    published_count = df[df["Published Tab"] == True].shape[0] if "Published Tab" in df.columns else 0
     return wip_count, published_count
-
 
 
 
