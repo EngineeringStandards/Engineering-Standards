@@ -207,17 +207,18 @@ if not analyst_data.empty:
                 metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
         st.markdown("<br>", unsafe_allow_html=True)
 
-
+    header_class = "custom-header"
    
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
-    gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True, headerClass="custom-header")
-    gb.configure_column("WIP Title", width=700)
-    gb.configure_column("Key Contact", width=400)
-    gb.configure_column("Process Step", width=600)
-    gb.configure_column("History", width=400)
-    gb.configure_column("Record ID", width=300)
+
+    gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True, headerClass=header_class)
+    gb.configure_column("WIP Title", width=700, headerClass=header_class)
+    gb.configure_column("Key Contact", width=400, headerClass=header_class)
+    gb.configure_column("Process Step", width=600, headerClass=header_class)
+    gb.configure_column("History", width=400, headerClass=header_class)
+    gb.configure_column("Record ID", width=300, headerClass=header_class)
    
     
     gridOptions = gb.build()
@@ -225,7 +226,7 @@ if not analyst_data.empty:
     
     custom_css = {
     ".custom-header": {
-        "background-color": "#3B82F6",
+        "background-color":"#d9edf7",
         "color": "white",
         "font-weight": "bold",
         "font-size": "16px"
