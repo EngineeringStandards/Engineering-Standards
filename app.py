@@ -219,6 +219,25 @@ if not analyst_data.empty:
     gb.configure_column("History", width=400)
     gb.configure_column("Record ID", width=300)
    
+    st.markdown("""
+        <style>
+        .ag-header-cell-label {
+            font-size: 16px !important;
+            font-weight: bold !important;
+        }
+        .ag-theme-balham .ag-header {
+            background-color: #3B82F6 !important;
+            color: white !important;
+        }
+        /* Row headers (index column) */
+        .ag-theme-balham .ag-row-number-cell {
+            background-color: #E6F2FF !important;  /* light blue */
+            color: #000 !important;                /* black text */
+            font-weight: bold;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
    
     
     gridOptions = gb.build()
