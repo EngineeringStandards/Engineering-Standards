@@ -226,8 +226,8 @@ if not analyst_data.empty:
         function(params) {
             return { fontSize: '16px' }
         }
-    """),
-    defaultColDef={"headerClass": "custom-header"}
+    """)
+
 )
 
 # Inject custom CSS for header
