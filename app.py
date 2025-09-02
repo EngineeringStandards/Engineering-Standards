@@ -210,12 +210,7 @@ if not analyst_data.empty:
     
     
     header_class = "custom-header"
-    # Increase row height
-    row_height_js = JsCode("""
-function(params) {
-    return 40;  // height in pixels, default is ~25
-}
-""")
+   
 
 
 
@@ -245,6 +240,13 @@ function(params) {
         "font-size": "16px"
     }
 }
+    
+     # Increase row height
+    row_height_js = JsCode("""
+function(params) {
+    return 40;  // height in pixels, default is ~25
+}
+""")
 
     AgGrid(
         analyst_data,
