@@ -78,6 +78,25 @@ if record_ids_input:
                 FROM maxis_sandbox.engineering_standards.all_data_cleaned
                 WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
             """)
+            analyst_data = analyst_data.rename(columns={
+    "record_id": "Record ID",
+    "wip_title": "WIP Title",
+    "project": "Project Name",
+    "submit_date": "Submission Date",
+    "days_in_process": "Days In Process",
+    "key_contact": "Key Contact",
+    "action": "Action Taken",
+    "local_standards_replaced": "Local Standards Replaced",
+    "replaced_by": "Replaced By",
+    "ownership": "Ownership",
+    "process_step": "Process Step",
+    "location": "Location",
+    "current_step_date": "Current Step Date",
+    "days_in_step": "Days in Step",
+    "num_pages": "Number of Pages",
+    "history": "History Notes"
+})
+
     else:
         st.warning("Please enter at least one valid record_id.")
         analyst_data = pd.DataFrame()  # empty dataframe to avoid errors
@@ -96,6 +115,7 @@ else:
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
             WHERE analyst = '{analyst}';
         """)
+
 
 
 if not analyst_data.empty:
