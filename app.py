@@ -41,6 +41,9 @@ st.header("Engineering Standards GMW Tracking Sheet")
 
 analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
 st.write(f"Looking at {analyst}'s view")
+
+
+
 col2, = st.columns(1)
 with col2:
     st.subheader("Select desired information")
@@ -170,6 +173,30 @@ else:
 
 
 if not analyst_data.empty:
+    # --- Add metrics here ---
+    col1, col2 = st.columns(2)
+
+    # WIP count
+    if "wip_tab" in analyst_data.columns:
+        wip_count = analyst_data[analyst_data["wip_tab"] == True].shape[0]
+    else:
+        wip_count = 0
+
+    # Published count
+    if "published_tab" in analyst_data.columns:
+        published_count = analyst_data[analyst_data["published_tab"] == True].shape[0]
+    else:
+        published_count = 0
+
+    with col1:
+        if data_view in ["WIP", "Both"]:
+            st.metric(label=f"WIP Records for {analyst}", value=wip_count)
+
+    with col2:
+        if data_view in ["Published", "Both"]:
+            st.metric(label=f"Published Records for {analyst}", value=published_count)
+   
+   
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
@@ -178,6 +205,7 @@ if not analyst_data.empty:
     gb.configure_column("key_contact", width=200)
     gb.configure_grid_options(domLayout='normal')
     gridOptions = gb.build()
+    
 
 
     AgGrid(
