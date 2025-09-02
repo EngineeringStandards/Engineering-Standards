@@ -170,11 +170,11 @@ if record_ids:
 wip_count, published_count = get_metrics(analyst_data)
 
 
-def metric_box(label, value, color="#f0f2f6"):
+def metric_box(label, value, background_color="#f0f2f6", value_color="#333"):
     st.markdown(
         f"""
         <div style="
-            background-color: {color};
+            background-color: {background_color};
             padding: 20px;
             border-radius: 10px;
             text-align: center;
@@ -182,7 +182,7 @@ def metric_box(label, value, color="#f0f2f6"):
             font-weight: bold;
         ">
             {label}<br>
-            <span style="font-size: 32px; color: #333;">{value}</span>
+            <span style="font-size: 32px; color: {value_color};">{value}</span>
         </div>
         """,
         unsafe_allow_html=True
@@ -192,20 +192,21 @@ if not analyst_data.empty:
     if data_view == "Both":
         col1, col2, col3 = st.columns(3)
         with col1:
-            metric_box("WIP Records", wip_count,  "#fcf8e3" )
+            metric_box("WIP Records", wip_count, "#fcf8e3", "#d9534f")  # Red value
         with col2:
-            metric_box("Published Records", published_count, "#dff0d8")
+            metric_box("Published Records", published_count, "#dff0d8", "#333")
         with col3:
-            metric_box("Total Records", wip_count + published_count, "#d9edf7")
+            metric_box("Total Records", wip_count + published_count, "#d9edf7", "#333")
         st.markdown("<br>", unsafe_allow_html=True)  # Adds space below the row
     else:
         col = st.columns(1)[0]
         with col:
             if data_view == "WIP":
-                metric_box(f"WIP Records for {analyst}", wip_count, "#fcf8e3")
+                metric_box(f"WIP Records for {analyst}", wip_count, "#fcf8e3", "#d9534f")  # Red value
             elif data_view == "Published":
-                metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
+                metric_box(f"Published Records for {analyst}", published_count, "#dff0d8", "#333")
         st.markdown("<br>", unsafe_allow_html=True)  # Space below
+
 
 
 
