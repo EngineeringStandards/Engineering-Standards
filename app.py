@@ -86,9 +86,10 @@ def get_analyst_data(analyst, data_view, record_ids=None):
     return df
 
 def get_metrics(df):
-    wip_count = df[df["WIP Tab"] == True].shape[0] if "WIP Tab" in df.columns else 0
-    published_count = df[df["Published Tab"] == True].shape[0] if "Published Tab" in df.columns else 0
+    wip_count = df[df["WIP Tab"].astype(bool)].shape[0] if "WIP Tab" in df.columns else 0
+    published_count = df[df["Published Tab"].astype(bool)].shape[0] if "Published Tab" in df.columns else 0
     return wip_count, published_count
+
 
 
 
