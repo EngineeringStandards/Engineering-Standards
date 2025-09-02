@@ -3,7 +3,7 @@ from databricks import sql
 from databricks.sdk.core import Config
 import streamlit as st
 import pandas as pd
-from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
+from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 
 # Ensure environment variable is set correctly
 warehouse_id = "f50df4c3b0b8cb91" #os.getenv("DATABRICKS_WAREHOUSE_ID")
@@ -208,10 +208,6 @@ if not analyst_data.empty:
         st.markdown("<br>", unsafe_allow_html=True)
 
 
-
-
-
-   
    
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
@@ -221,10 +217,39 @@ if not analyst_data.empty:
     gb.configure_column("Key Contact", width=400)
     gb.configure_column("Process Step", width=600)
     gb.configure_column("History", width=400)
-    gb.configure_grid_options(domLayout='normal')
+    gb.configure_grid_options(rowHeight=40)
+    # Header styling
+    gb.configure_grid_options(
+    headerHeight=50,  # taller header
+    getRowStyle=JsCode("""
+        function(params) {
+            return { 'font-size': '16px' }
+        }
+    """)
+)
+
+# Apply a header background color using CSS via gridOptions
+    gb.configure_grid_options(
+    defaultColDef={"headerClass": "custom-header"}
+)
+
+# Inject custom CSS for header
+    st.markdown("""
+<style>
+.ag-header-cell-label {
+    font-size: 16px !important;
+    font-weight: bold !important;
+}
+.ag-theme-balham .ag-header {
+    background-color: #3B82F6 !important;  /* blue header */
+    color: white !important;
+}
+</style>
+""", unsafe_allow_html=True)
+    
+    
     gridOptions = gb.build()
     
-
 
     AgGrid(
         analyst_data,
