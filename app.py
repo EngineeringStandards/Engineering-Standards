@@ -34,14 +34,14 @@ def get_analyst_data(analyst, data_view, record_ids=None):
                         FROM maxis_sandbox.engineering_standards.all_data_cleaned
                         WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
         else:
-            query = f"""SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action, 
+            query = f"""SELECT record_id, wip_title,wip_tab, project, submit_date, days_in_process, key_contact, action, 
                                local_standards_replaced, replaced_by, ownership, process_step, location, 
                                current_step_date, days_in_step, num_pages, history
                         FROM maxis_sandbox.engineering_standards.all_data_cleaned
                         WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
     else:
         if analyst == "Lisa Coppola" and data_view == "WIP":
-            query = """SELECT record_id, wip_title, project, submit_date, days_in_process, key_contact, action,
+            query = """SELECT record_id, wip_tab, wip_title, project, submit_date, days_in_process, key_contact, action,
                               local_standards_replaced, replaced_by, ownership, process_step, location, 
                               current_step_date, days_in_step, num_pages, history
                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
