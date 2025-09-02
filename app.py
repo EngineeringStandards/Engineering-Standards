@@ -156,10 +156,14 @@ record_ids_input = st.text_input("Search Record IDs:")
 # 1. Get the record IDs from input
 record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
 
-# 2. Fetch the analyst data
-analyst_data = get_analyst_data(analyst, data_view, record_ids)
+# 2. Fetch all the analyst data
+analyst_data = get_analyst_data(analyst, data_view)
 
-# 3. Calculate metrics
+# 3. Filter by record_ids if provided
+if record_ids:
+    analyst_data = analyst_data[analyst_data["Record ID"].isin(record_ids)]
+
+# 4. Calculate metrics
 wip_count, published_count = get_metrics(analyst_data)
 
 
