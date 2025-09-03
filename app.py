@@ -238,6 +238,15 @@ if not analyst_data.empty:
     }
 }
   
+
+    # Initialize session state if needed
+if "selected_row" not in st.session_state:
+    st.session_state.selected_row = None
+
+if "analyst_data_cache" not in st.session_state:
+    st.session_state.analyst_data_cache = analyst_data.copy()
+
+
     grid_df = st.session_state.analyst_data_cache
     grid_response = AgGrid(
         grid_df,
@@ -249,14 +258,6 @@ if not analyst_data.empty:
         custom_css=custom_css
  )
     
-
-    # Initialize session state if needed
-if "selected_row" not in st.session_state:
-    st.session_state.selected_row = None
-
-if "analyst_data_cache" not in st.session_state:
-    st.session_state.analyst_data_cache = analyst_data.copy()
-
 
 
 # Get selected rows from AgGrid
