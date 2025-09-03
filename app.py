@@ -236,9 +236,9 @@ if not st.session_state.analyst_data_cache.empty:
         }
     }
 
-   # analyst_data = st.session_state.analyst_data_cache
+    grid_df = st.session_state.analyst_data_cache
     grid_response = AgGrid(
-        st.session_state.analyst_data_cache,
+        grid_df,
         gridOptions=gridOptions,
         enable_enterprise_modules=False,
         update_mode=GridUpdateMode.SELECTION_CHANGED,
