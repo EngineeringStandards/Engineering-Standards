@@ -172,7 +172,24 @@ def metric_box(label, value, bg_color="#f0f2f6", label_color="#333", value_color
         unsafe_allow_html=True
     )
 
-if not analyst_data.empty:
+# Initialize session state for tracking filters and data
+if "current_analyst" not in st.session_state:
+    st.session_state.current_analyst = None
+if "current_data_view" not in st.session_state:
+    st.session_state.current_data_view = None
+if "analyst_data_cache" not in st.session_state:
+    st.session_state.analyst_data_cache = pd.DataFrame() # Initialize with an empty DataFrame
+
+# Check if the analyst or data view has changed
+if st.session_state.current_analyst != analyst or st.session_state.current_data_view != data_view:
+    # If a change is detected, update the session state and clear the row selection
+    st.session_state.current_analyst = analyst
+    st.session_state.current_data_view = data_view
+    st.session_state.analyst_data_cache = analyst_data.copy()
+    st.session_state.selected_row = None
+    st.experimental_rerun() # Use rerun to ensure the app state is reset and redrawn
+
+if not st.session_state.analyst_data_cache.empty:
     if data_view == "Both":
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -190,13 +207,6 @@ if not analyst_data.empty:
             elif data_view == "Published":
                 metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
         st.markdown("<br>", unsafe_allow_html=True)
-
-    # Initialize session state if needed, now inside the block where the data exists
-    if "selected_row" not in st.session_state:
-        st.session_state.selected_row = None
-
-    if "analyst_data_cache" not in st.session_state:
-        st.session_state.analyst_data_cache = analyst_data.copy()
 
     # Display the data in an editable grid
     header_class = "custom-header"
@@ -271,7 +281,7 @@ if not analyst_data.empty:
                 st.rerun()  # refresh grid
 
             if cancel:
-                st.session_state.show_popup = False
+                #st.session_state.show_popup = False
                 st.session_state.selected_row = None
                 st.rerun()
 
