@@ -237,9 +237,10 @@ if not analyst_data.empty:
         "font-size": "16px"
     }
 }
+    grid_df = st.session_state.analyst_data_cache
 
     grid_response = AgGrid(
-        analyst_data,
+        grid_df,
         gridOptions=gridOptions,
         enable_enterprise_modules=False,
         update_mode=GridUpdateMode.SELECTION_CHANGED,
@@ -253,8 +254,12 @@ if not analyst_data.empty:
 if "selected_row" not in st.session_state:
     st.session_state.selected_row = None
 
+if "analyst_data_cache" not in st.session_state:
+    st.session_state.analyst_data_cache = analyst_data.copy()
+
 # Get selected rows from AgGrid
 selected = grid_response["selected_rows"]
+
 
 # Update session state only if a row is selected
 if selected is not None and not selected.empty:
@@ -278,12 +283,12 @@ if st.session_state.selected_row:
 
         if submitted:
             rid = selected_row["Record ID"]
-            analyst_data.loc[analyst_data["Record ID"] == rid, "WIP Title"] = updated_wip_title
-            analyst_data.loc[analyst_data["Record ID"] == rid, "Key Contact"] = updated_key_contact
-            analyst_data.loc[analyst_data["Record ID"] == rid, "Process Step"] = updated_process_step
+            st.session_state.analyst_data_cache.loc[st.session_state.analyst_data_cache["Record ID"] == rid, "WIP Title"] = updated_wip_title
+            st.session_state.analyst_data_cache.loc[st.session_state.analyst_data_cache["Record ID"] == rid, "Key Contact"] = updated_key_contact
+            st.session_state.analyst_data_cache.loc[st.session_state.analyst_data_cache["Record ID"] == rid, "Process Step"] = updated_process_step
 
             st.success("Row updated successfully!")
-            st.session_state.show_popup = False
+            # st.session_state.show_popup = False
             st.session_state.selected_row = None
             st.rerun()  # refresh grid
 
