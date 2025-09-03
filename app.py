@@ -317,13 +317,13 @@ if not analyst_data.empty:
             st.success("Row updated successfully!")
             st.session_state.show_popup = False
             st.session_state.selected_row = None
-            st.experimental_rerun()  # refresh grid
+            st.rerun()  # refresh grid
 
         if cancel:
             st.session_state.show_popup = False
             st.session_state.selected_row = None
-            st.experimental_rerun()
-            
+            st.rerun()
+
     st.markdown("</div>", unsafe_allow_html=True)
 
 else:
