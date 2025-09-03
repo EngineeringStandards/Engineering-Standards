@@ -252,23 +252,21 @@ if not analyst_data.empty:
 
     # Track if popup should be shown
     if "show_popup" not in st.session_state:
-     st.session_state.show_popup = False
-     st.session_state.selected_row = None
+    st.session_state.show_popup = False
+if "selected_row" not in st.session_state:
+    st.session_state.selected_row = None
 
-    selected = grid_response["selected_rows"]
+# 1️⃣ Get selected row from AgGrid
+selected = grid_response["selected_rows"]
 
-    # 3. If a row is selected, open a form for editing
-    if selected is not None and len(selected) > 0:
-     selected_row = selected.iloc[0].to_dict()
-     st.session_state.show_popup = True
-     st.session_state.selected_row = selected_row
+if selected and len(selected) > 0:
+    st.session_state.selected_row = selected[0]  # store in session
+    st.session_state.show_popup = True
 
-    
-     # Only render popup when triggered
-    if st.session_state.show_popup and st.session_state.selected_row:
-     selected_row = st.session_state.selected_row
+# 2️⃣ Only render popup if a row is selected
+if st.session_state.show_popup and st.session_state.selected_row:
+    row = st.session_state.selected_row  # always safe
 
-    # CSS modal style
     st.markdown(
         """
         <style>
@@ -284,23 +282,18 @@ if not analyst_data.empty:
             z-index: 9999;
             width: 400px;
         }
-        .popup h3 {
-            margin-top: 0;
-        }
         </style>
         """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
-    # Actual popup content
     st.markdown("<div class='popup'>", unsafe_allow_html=True)
-
-    st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
+    st.subheader(f"Editing Record ID: {row['Record ID']}")
 
     with st.form("edit_row_form", clear_on_submit=True):
-        updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
-        updated_key_contact = st.text_input("Key Contact", selected_row["Key Contact"])
-        updated_process_step = st.text_input("Process Step", selected_row["Process Step"])
+        updated_wip_title = st.text_input("WIP Title", row["WIP Title"])
+        updated_key_contact = st.text_input("Key Contact", row["Key Contact"])
+        updated_process_step = st.text_input("Process Step", row["Process Step"])
 
         col1, col2 = st.columns(2)
         with col1:
@@ -309,20 +302,19 @@ if not analyst_data.empty:
             cancel = st.form_submit_button("❌ Cancel")
 
         if submitted:
-            rid = selected_row["Record ID"]
-            analyst_data.loc[analyst_data["Record ID"] == rid, "WIP Title"] = updated_wip_title
-            analyst_data.loc[analyst_data["Record ID"] == rid, "Key Contact"] = updated_key_contact
-            analyst_data.loc[analyst_data["Record ID"] == rid, "Process Step"] = updated_process_step
-
+            rid = row["Record ID"]
+            analyst_data.loc[analyst_data["Record ID"] == rid, ["WIP Title", "Key Contact", "Process Step"]] = [
+                updated_wip_title, updated_key_contact, updated_process_step
+            ]
             st.success("Row updated successfully!")
             st.session_state.show_popup = False
             st.session_state.selected_row = None
-            st.rerun()  # refresh grid
+            st.experimental_rerun()
 
         if cancel:
             st.session_state.show_popup = False
             st.session_state.selected_row = None
-            st.rerun()
+            st.experimental_rerun()
 
     st.markdown("</div>", unsafe_allow_html=True)
 
