@@ -177,19 +177,34 @@ if "current_analyst" not in st.session_state:
     st.session_state.current_analyst = None
 if "current_data_view" not in st.session_state:
     st.session_state.current_data_view = None
+if "current_record_ids" not in st.session_state:
+    st.session_state.current_record_ids = None
 if "analyst_data_cache" not in st.session_state:
     st.session_state.analyst_data_cache = pd.DataFrame() # Initialize with an empty DataFrame
 
-# Check if the analyst or data view has changed
-if st.session_state.current_analyst != analyst or st.session_state.current_data_view != data_view:
-    # If a change is detected, update the session state and clear the row selection
+# Check if ANY of the filters have changed
+if (
+    st.session_state.current_analyst != analyst
+    or st.session_state.current_data_view != data_view
+    or st.session_state.current_record_ids != record_ids
+):
+    # If a change is detected, re-fetch the data and update the session state
+    analyst_data = get_analyst_data(analyst, data_view)
+
+    # Apply in-memory filtering by record ID if provided
+    if record_ids:
+        analyst_data = analyst_data[analyst_data["Record ID"].isin(record_ids)]
+
+    # Update all tracker variables and the data cache
     st.session_state.current_analyst = analyst
     st.session_state.current_data_view = data_view
+    st.session_state.current_record_ids = record_ids
     st.session_state.analyst_data_cache = analyst_data.copy()
     st.session_state.selected_row = None
     st.rerun() # Use rerun to ensure the app state is reset and redrawn
 
 if not st.session_state.analyst_data_cache.empty:
+    wip_count, published_count = get_metrics(st.session_state.analyst_data_cache)
     if data_view == "Both":
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -211,7 +226,7 @@ if not st.session_state.analyst_data_cache.empty:
     # Display the data in an editable grid
     header_class = "custom-header"
     
-    gb = GridOptionsBuilder.from_dataframe(analyst_data)
+    gb = GridOptionsBuilder.from_dataframe(st.session_state.analyst_data_cache)
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
     gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True, headerClass=header_class)
