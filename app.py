@@ -250,24 +250,22 @@ if not analyst_data.empty:
  )
     
 
-    # Track if popup should be shown
-    if "show_popup" not in st.session_state:
-     st.session_state.show_popup = False
-     st.session_state.selected_row = None
+    # Initialize session state if needed
+if "selected_row" not in st.session_state:
+    st.session_state.selected_row = None
 
-    selected = grid_response["selected_rows"]
+# Get selected rows from AgGrid
+selected = grid_response["selected_rows"]
 
-    # 3. If a row is selected, open a form for editing
-    if selected is not None and len(selected) > 0:
-     selected_row = selected.iloc[0].to_dict()
-     st.session_state.show_popup = True
-     st.session_state.selected_row = selected_row
-     st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
-    
-     # Only render popup when triggered
-    if st.session_state.show_popup and st.session_state.selected_row:
-     selected_row = st.session_state.selected_row
-    
+# Update session state only if a row is selected
+if selected and len(selected) > 0:
+    st.session_state.selected_row = selected[0]  # AgGrid gives a list of dicts
+
+# Only render form if a row is selected
+if st.session_state.selected_row:
+    selected_row = st.session_state.selected_row
+
+    st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
 
     with st.form("edit_row_form", clear_on_submit=True):
         updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
