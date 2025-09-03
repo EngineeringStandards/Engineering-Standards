@@ -268,26 +268,7 @@ if not analyst_data.empty:
     if st.session_state.show_popup and st.session_state.selected_row:
      selected_row = st.session_state.selected_row
 
-    # CSS modal style
-    st.markdown("""
-    <style>
-    .popup {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0px 0px 20px rgba(0,0,0,0.4);
-        z-index: 9999;
-        width: 400px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # Actual popup content
-    st.markdown("<div class='popup'>", unsafe_allow_html=True)
+   
     st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
 
     with st.form("edit_row_form", clear_on_submit=True):
@@ -317,7 +298,7 @@ if not analyst_data.empty:
             st.session_state.selected_row = None
             st.rerun()
 
-    st.markdown("</div>", unsafe_allow_html=True)
+   
 
 else:
     st.warning("No data to display")
