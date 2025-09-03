@@ -207,13 +207,15 @@ if not analyst_data.empty:
                 metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
         st.markdown("<br>", unsafe_allow_html=True)
 
+
+    # Display the data in an editable grid
     header_class = "custom-header"
    
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
-
-    gb.configure_default_column(editable=True, groupable=True, filter=True, sortable=True, resizable=True, headerClass=header_class)
+    gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True, headerClass=header_class)
+    gb.configure_selection("single")
     gb.configure_column("WIP Title", width=700, headerClass=header_class)
     gb.configure_column("Key Contact", width=400, headerClass=header_class)
     gb.configure_column("Process Step", width=600, headerClass=header_class)
@@ -236,7 +238,7 @@ if not analyst_data.empty:
     }
 }
 
-    AgGrid(
+    grid_response = AgGrid(
         analyst_data,
         gridOptions=gridOptions,
         enable_enterprise_modules=False,
@@ -245,6 +247,30 @@ if not analyst_data.empty:
         height=600,
         #fit_columns_on_grid_load=True,
         custom_css=custom_css
-    )
+ )
+    selected = grid_response["selected_rows"]
+    
+    # 3. If a row is selected, open a form for editing
+if selected:
+    selected_row = selected[0]
+
+    st.write(f"Editing Record ID: {selected_row['Record ID']}")
+
+    with st.form("edit_row_form"):
+        updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
+        updated_key_contact = st.text_input("Key Contact", selected_row["Key Contact"])
+        updated_process_step = st.text_input("Process Step", selected_row["Process Step"])
+
+        submitted = st.form_submit_button("Save Changes")
+
+        if submitted:
+            # Update dataframe in memory
+            rid = selected_row["Record ID"]
+            analyst_data.loc[analyst_data["Record ID"] == rid, "WIP Title"] = updated_wip_title
+            analyst_data.loc[analyst_data["Record ID"] == rid, "Key Contact"] = updated_key_contact
+            analyst_data.loc[analyst_data["Record ID"] == rid, "Process Step"] = updated_process_step
+
+            st.success("Row updated successfully!")
+
 else:
     st.warning("No data to display")
