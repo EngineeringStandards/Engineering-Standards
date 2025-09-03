@@ -248,31 +248,79 @@ if not analyst_data.empty:
         #fit_columns_on_grid_load=True,
         custom_css=custom_css
  )
+    
+
+    # Track if popup should be shown
+    if "show_popup" not in st.session_state:
+     st.session_state.show_popup = False
+
+
     selected = grid_response["selected_rows"]
 
     # 3. If a row is selected, open a form for editing
     if selected is not None and len(selected) > 0:
      selected_row = selected.iloc[0].to_dict()
+     st.session_state.show_popup = True
+     st.session_state.selected_row = selected_row
 
+    
+     # Only render popup when triggered
+    if st.session_state.show_popup:
+     selected_row = st.session_state.selected_row
 
-    with st.modal("Edit Record", key="edit_modal"):
-     st.write(f"Editing Record ID: {selected_row['Record ID']}")
+    # CSS modal style
+    st.markdown(
+        """
+        <style>
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.4);
+            z-index: 9999;
+            width: 400px;
+        }
+        .popup h3 {
+            margin-top: 0;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Actual popup content
+    st.markdown("<div class='popup'>", unsafe_allow_html=True)
+
+    st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
 
     with st.form("edit_row_form"):
         updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
         updated_key_contact = st.text_input("Key Contact", selected_row["Key Contact"])
         updated_process_step = st.text_input("Process Step", selected_row["Process Step"])
 
-        submitted = st.form_submit_button("Save Changes")
+        col1, col2 = st.columns(2)
+        with col1:
+            submitted = st.form_submit_button("💾 Save")
+        with col2:
+            cancel = st.form_submit_button("❌ Cancel")
 
         if submitted:
-            # Update dataframe in memory
             rid = selected_row["Record ID"]
             analyst_data.loc[analyst_data["Record ID"] == rid, "WIP Title"] = updated_wip_title
             analyst_data.loc[analyst_data["Record ID"] == rid, "Key Contact"] = updated_key_contact
             analyst_data.loc[analyst_data["Record ID"] == rid, "Process Step"] = updated_process_step
 
             st.success("Row updated successfully!")
+            st.session_state.show_popup = False
+
+        if cancel:
+            st.session_state.show_popup = False
+
+    st.markdown("</div>", unsafe_allow_html=True)
 
 else:
     st.warning("No data to display")
