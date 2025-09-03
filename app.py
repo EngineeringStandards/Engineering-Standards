@@ -9,11 +9,6 @@ from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 warehouse_id = "f50df4c3b0b8cb91" #os.getenv("DATABRICKS_WAREHOUSE_ID")
 assert warehouse_id, "DATABRICKS_WAREHOUSE_ID environment variable not set"
 
-
-
-
-# Initialize Config once for efficiency
-# Removed unused Config() instantiation
 # Use as sql query runner
 def sqlQuery(query: str) -> pd.DataFrame:
     with sql.connect(
@@ -124,21 +119,11 @@ st.markdown("<h1 style='color:#1F2937;'>Engineering Standards Dashboard</h1>", u
 st.markdown("<hr style='border:2px solid #3B82F6'>", unsafe_allow_html=True)
 #st.image("gm-logo-solid-blue-sm.png", width=150)
 
-@st.cache_data(ttl=30)  # only re-query if it's been 30 seconds
-def getData():
-    # This example query depends on the nyctaxi data set in Unity Catalog, see https://docs.databricks.com/en/discover/databricks-datasets.html for details
-    return sqlQuery("select * from samples.nyctaxi.trips limit 5000")
-
-data = getData()
-
-# test
 
 st.header("Engineering Standards GMW Tracking Sheet")
 
 analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
 st.write(f"Looking at {analyst}'s view")
-
-
 
 col2, = st.columns(1)
 with col2:
