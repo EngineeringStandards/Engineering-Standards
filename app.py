@@ -1,3 +1,14 @@
+# ============================================================================
+# ENGINEERING STANDARDS DASHBOARD - MAIN APPLICATION
+# ============================================================================
+# This is the main Streamlit application for the Engineering Standards Dashboard
+# It provides functionality to view, search, and edit engineering standards data
+# from Databricks using an interactive grid interface.
+# ============================================================================
+
+# ============================================================================
+# IMPORTS AND DEPENDENCIES
+# ============================================================================
 import os
 from databricks import sql
 from databricks.sdk.core import Config
@@ -5,23 +16,53 @@ import streamlit as st
 import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 
-# Ensure environment variable is set correctly
+# ============================================================================
+# CONFIGURATION AND CONSTANTS
+# ============================================================================
+# Databricks warehouse configuration
 warehouse_id = "f50df4c3b0b8cb91" #os.getenv("DATABRICKS_WAREHOUSE_ID")
 assert warehouse_id, "DATABRICKS_WAREHOUSE_ID environment variable not set"
 
-# Use as sql query runner
+# Databricks connection parameters
+DATABRICKS_SERVER = "adb-4151713458336319.19.azuredatabricks.net"
+DATABRICKS_TOKEN = "dapi97bfcf4f2625d2d7d1c1982bcee6cf8d-3"  # Don't touch token
+
+
+# ============================================================================
+# DATABASE CONNECTION AND QUERY FUNCTIONS
+# ============================================================================
+
 def sqlQuery(query: str) -> pd.DataFrame:
+    """
+    Execute SQL query against Databricks warehouse and return results as DataFrame.
+    
+    Args:
+        query (str): SQL query to execute
+        
+    Returns:
+        pd.DataFrame: Query results as pandas DataFrame
+    """
     with sql.connect(
-        server_hostname = "adb-4151713458336319.19.azuredatabricks.net",
-        http_path = f"/sql/1.0/warehouses/{warehouse_id}",
-        # Don't touch token
-        access_token = "dapi97bfcf4f2625d2d7d1c1982bcee6cf8d-3"
+        server_hostname=DATABRICKS_SERVER,
+        http_path=f"/sql/1.0/warehouses/{warehouse_id}",
+        access_token=DATABRICKS_TOKEN
     ) as connection:
         with connection.cursor() as cursor:
             cursor.execute(query)
             return cursor.fetchall_arrow().to_pandas()
-        
+
 def get_analyst_data(analyst, data_view, record_ids=None):
+    """
+    Retrieve analyst data from the engineering standards database.
+    
+    Args:
+        analyst (str): Name of the analyst to filter by
+        data_view (str): Type of data to retrieve ('WIP', 'Published', or 'Both')
+        record_ids (list, optional): List of specific record IDs to filter by
+        
+    Returns:
+        pd.DataFrame: Filtered analyst data with renamed columns
+    """
     if record_ids:
         record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
         if analyst == "Lisa Coppola" and data_view == "WIP":
@@ -107,26 +148,80 @@ def get_analyst_data(analyst, data_view, record_ids=None):
 
     return df
 
+# ============================================================================
+# UTILITY FUNCTIONS
+# ============================================================================
+
 def get_metrics(df):
+    """
+    Calculate WIP and Published record counts from DataFrame.
+    
+    Args:
+        df (pd.DataFrame): DataFrame containing WIP Tab and Published Tab columns
+        
+    Returns:
+        tuple: (wip_count, published_count)
+    """
     wip_count = df[df["WIP Tab"] == True].shape[0] if "WIP Tab" in df.columns else 0
     published_count = df[df["Published Tab"] == True].shape[0] if "Published Tab" in df.columns else 0
     return wip_count, published_count
 
+def metric_box(label, value, bg_color="#f0f2f6", label_color="#333", value_color="#333"):
+    """
+    Create a styled metric display box using HTML/CSS.
+    
+    Args:
+        label (str): Label text for the metric
+        value (int): Numeric value to display
+        bg_color (str): Background color hex code
+        label_color (str): Label text color hex code
+        value_color (str): Value text color hex code
+    """
+    st.markdown(
+        f"""
+        <div style="
+            background-color: {bg_color};
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        ">
+            <span style="color: {label_color};">{label}</span><br>
+            <span style="font-size: 32px; color: {value_color};">{value}</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
+@st.cache_data(ttl=30)  # Cache for 30 seconds to avoid unnecessary re-queries
+def getData():
+    """
+    Get sample data from NYC taxi trips (legacy function - may be removed).
+    
+    Returns:
+        pd.DataFrame: Sample taxi trip data
+    """
+    return sqlQuery("select * from samples.nyctaxi.trips limit 5000")
+
+# ============================================================================
+# STREAMLIT APP CONFIGURATION AND LAYOUT
+# ============================================================================
+
+# Configure page layout and styling
 st.set_page_config(layout="wide")
 st.markdown("<h1 style='color:#1F2937;'>Engineering Standards Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<hr style='border:2px solid #3B82F6'>", unsafe_allow_html=True)
 
-@st.cache_data(ttl=30)  # only re-query if it's been 30 seconds
-def getData():
-    return sqlQuery("select * from samples.nyctaxi.trips limit 5000")
-
+# Get sample data (legacy - may be removed in future)
 data = getData()
 
 st.header("Engineering Standards GMW Tracking Sheet")
 
 analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
 st.write(f"Looking at {analyst}'s view")
+
+#process_steps
 
 col2, = st.columns(1)
 with col2:
