@@ -3,3 +3,5 @@ databricks.sdk
 streamlit
 pandas
 streamlit-aggrid
+pathlib
+openyxl
