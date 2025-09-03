@@ -19,9 +19,9 @@ if uploaded_file is not None:
     # Process the Excel file
     output_files = process_excel(temp_file)
 
-    st.success("Reports created successfully:")
+    st.success("Reports created successfully")
     for f in output_files:
-        st.write(f"- {f.name}")
+        st.write(f"{f.name}")
         with open(f, "rb") as file_bytes:
             st.download_button(
                 label=f"Download {f.name}",
@@ -30,4 +30,4 @@ if uploaded_file is not None:
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 else:
-    st.warning("Please upload an Excel file to proceed.")
+    st.write("Please upload an Excel file to proceed.")
