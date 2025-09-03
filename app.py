@@ -258,13 +258,12 @@ if "selected_row" not in st.session_state:
 selected = grid_response["selected_rows"]
 
 # Update session state only if a row is selected
-if selected and len(selected) > 0:
-    st.session_state.selected_row = selected[0]  # AgGrid gives a list of dicts
+if selected is not None and not selected.empty:
+    st.session_state.selected_row = selected.iloc[0].to_dict()
 
 # Only render form if a row is selected
 if st.session_state.selected_row:
     selected_row = st.session_state.selected_row
-
     st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
 
     with st.form("edit_row_form", clear_on_submit=True):
