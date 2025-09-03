@@ -296,7 +296,7 @@ if not analyst_data.empty:
 
     st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
 
-    with st.form("edit_row_form", clear_on_submit=True):
+    with st.form("edit_row_form"):
         updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
         updated_key_contact = st.text_input("Key Contact", selected_row["Key Contact"])
         updated_process_step = st.text_input("Process Step", selected_row["Process Step"])
