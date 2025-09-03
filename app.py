@@ -9,11 +9,6 @@ from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 warehouse_id = "f50df4c3b0b8cb91" #os.getenv("DATABRICKS_WAREHOUSE_ID")
 assert warehouse_id, "DATABRICKS_WAREHOUSE_ID environment variable not set"
 
-
-
-
-# Initialize Config once for efficiency
-# Removed unused Config() instantiation
 # Use as sql query runner
 def sqlQuery(query: str) -> pd.DataFrame:
     with sql.connect(
@@ -35,8 +30,8 @@ def get_analyst_data(analyst, data_view, record_ids=None):
                         WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
         else:
             query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action, 
-                               local_standards_replaced, replaced_by, ownership, process_step, location, 
-                               current_step_date, days_in_step, num_pages, history
+                                local_standards_replaced, replaced_by, ownership, process_step, location, 
+                                current_step_date, days_in_step, num_pages, history
                         FROM maxis_sandbox.engineering_standards.all_data_cleaned
                         WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
     else:
@@ -44,41 +39,41 @@ def get_analyst_data(analyst, data_view, record_ids=None):
         if analyst == "Lisa Coppola":
             if data_view == "WIP":
                 query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                  local_standards_replaced, replaced_by, ownership, process_step, location, 
-                                  current_step_date, days_in_step, num_pages, history
-                           FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                           WHERE wip_tab = TRUE"""
+                                     local_standards_replaced, replaced_by, ownership, process_step, location, 
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE wip_tab = TRUE"""
             elif data_view == "Published":
                 query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                  local_standards_replaced, replaced_by, ownership, process_step, location, 
-                                  current_step_date, days_in_step, num_pages, history
-                           FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                           WHERE published_tab = TRUE"""
+                                     local_standards_replaced, replaced_by, ownership, process_step, location, 
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE published_tab = TRUE"""
             else:  # Both
                 query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                  local_standards_replaced, replaced_by, ownership, process_step, location, 
-                                  current_step_date, days_in_step, num_pages, history
-                           FROM maxis_sandbox.engineering_standards.all_data_cleaned"""
+                                     local_standards_replaced, replaced_by, ownership, process_step, location, 
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned"""
         else:
             # Other analysts
             if data_view == "WIP":
                 query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                  local_standards_replaced, replaced_by, ownership, process_step, location,
-                                  current_step_date, days_in_step, num_pages, history
-                           FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                           WHERE analyst = '{analyst}' AND wip_tab = TRUE"""
+                                     local_standards_replaced, replaced_by, ownership, process_step, location,
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE analyst = '{analyst}' AND wip_tab = TRUE"""
             elif data_view == "Published":
                 query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                  local_standards_replaced, replaced_by, ownership, process_step, location,
-                                  current_step_date, days_in_step, num_pages, history
-                           FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                           WHERE analyst = '{analyst}' AND published_tab = TRUE"""
+                                     local_standards_replaced, replaced_by, ownership, process_step, location,
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE analyst = '{analyst}' AND published_tab = TRUE"""
             else:  # Both
                 query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                  local_standards_replaced, replaced_by, ownership, process_step, location,
-                                  current_step_date, days_in_step, num_pages, history
-                           FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                           WHERE analyst = '{analyst}'"""
+                                     local_standards_replaced, replaced_by, ownership, process_step, location,
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE analyst = '{analyst}'"""
 
     df = sqlQuery(query)
 
@@ -118,34 +113,25 @@ def get_metrics(df):
     return wip_count, published_count
 
 
-
 st.set_page_config(layout="wide")
 st.markdown("<h1 style='color:#1F2937;'>Engineering Standards Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<hr style='border:2px solid #3B82F6'>", unsafe_allow_html=True)
-#st.image("gm-logo-solid-blue-sm.png", width=150)
 
 @st.cache_data(ttl=30)  # only re-query if it's been 30 seconds
 def getData():
-    # This example query depends on the nyctaxi data set in Unity Catalog, see https://docs.databricks.com/en/discover/databricks-datasets.html for details
     return sqlQuery("select * from samples.nyctaxi.trips limit 5000")
 
 data = getData()
-
-# test
 
 st.header("Engineering Standards GMW Tracking Sheet")
 
 analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
 st.write(f"Looking at {analyst}'s view")
 
-
-
 col2, = st.columns(1)
 with col2:
     st.subheader("Select desired information")
     data_view = st.radio("Select View:", ['WIP', 'Published', 'Both'])
-
-    # Display the selected option using success message
     if data_view == 'WIP':
         st.success("WIP")
     elif data_view == 'Published':
@@ -153,7 +139,6 @@ with col2:
     elif data_view == 'Both':
         st.success("Both")
 
-   
 record_ids_input = st.text_input("Search Record IDs:")
 
 # 1. Get the record IDs from input
@@ -168,7 +153,6 @@ if record_ids:
 
 # 4. Calculate metrics
 wip_count, published_count = get_metrics(analyst_data)
-
 
 def metric_box(label, value, bg_color="#f0f2f6", label_color="#333", value_color="#333"):
     st.markdown(
@@ -207,10 +191,16 @@ if not analyst_data.empty:
                 metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
         st.markdown("<br>", unsafe_allow_html=True)
 
+    # Initialize session state if needed, now inside the block where the data exists
+    if "selected_row" not in st.session_state:
+        st.session_state.selected_row = None
+
+    if "analyst_data_cache" not in st.session_state:
+        st.session_state.analyst_data_cache = analyst_data.copy()
 
     # Display the data in an editable grid
     header_class = "custom-header"
-   
+    
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
@@ -224,28 +214,17 @@ if not analyst_data.empty:
     gb.configure_column("Days In Process", headerClass=header_class)
     gb.configure_column("Days in Step", headerClass=header_class)
     gb.configure_column("Pages", headerClass=header_class)
-   
     
     gridOptions = gb.build()
     
-    
     custom_css = {
-    ".custom-header": {
-        "background-color":"#d9edf7",
-        "color": "black",
-        "font-weight": "bold",
-        "font-size": "16px"
+        ".custom-header": {
+            "background-color":"#d9edf7",
+            "color": "black",
+            "font-weight": "bold",
+            "font-size": "16px"
+        }
     }
-}
-  
-
-    # Initialize session state if needed
-if "selected_row" not in st.session_state:
-    st.session_state.selected_row = None
-
-if "analyst_data_cache" not in st.session_state:
-    st.session_state.analyst_data_cache = analyst_data.copy()
-
 
     grid_df = st.session_state.analyst_data_cache
     grid_response = AgGrid(
@@ -257,51 +236,45 @@ if "analyst_data_cache" not in st.session_state:
         height=600,
         #fit_columns_on_grid_load=True,
         custom_css=custom_css
- )
+    )
     
+    # Get selected rows from AgGrid
+    selected = grid_response["selected_rows"]
 
+    # Update session state only if a row is selected
+    if selected is not None and not selected.empty:
+        st.session_state.selected_row = selected.iloc[0].to_dict()
 
-# Get selected rows from AgGrid
-selected = grid_response["selected_rows"]
+    # Only render form if a row is selected
+    if st.session_state.selected_row:
+        selected_row = st.session_state.selected_row
+        st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
 
+        with st.form("edit_row_form", clear_on_submit=True):
+            updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
+            updated_key_contact = st.text_input("Key Contact", selected_row["Key Contact"])
+            updated_process_step = st.text_input("Process Step", selected_row["Process Step"])
 
-# Update session state only if a row is selected
-if selected is not None and not selected.empty:
-    st.session_state.selected_row = selected.iloc[0].to_dict()
+            col1, col2 = st.columns(2)
+            with col1:
+                submitted = st.form_submit_button("💾 Save")
+            with col2:
+                cancel = st.form_submit_button("❌ Cancel")
 
-# Only render form if a row is selected
-if st.session_state.selected_row:
-    selected_row = st.session_state.selected_row
-    st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
+            if submitted:
+                rid = selected_row["Record ID"]
+                st.session_state.analyst_data_cache.loc[st.session_state.analyst_data_cache["Record ID"] == rid, "WIP Title"] = updated_wip_title
+                st.session_state.analyst_data_cache.loc[st.session_state.analyst_data_cache["Record ID"] == rid, "Key Contact"] = updated_key_contact
+                st.session_state.analyst_data_cache.loc[st.session_state.analyst_data_cache["Record ID"] == rid, "Process Step"] = updated_process_step
 
-    with st.form("edit_row_form", clear_on_submit=True):
-        updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
-        updated_key_contact = st.text_input("Key Contact", selected_row["Key Contact"])
-        updated_process_step = st.text_input("Process Step", selected_row["Process Step"])
+                st.success("Row updated successfully!")
+                st.session_state.selected_row = None
+                st.rerun()  # refresh grid
 
-        col1, col2 = st.columns(2)
-        with col1:
-            submitted = st.form_submit_button("💾 Save")
-        with col2:
-            cancel = st.form_submit_button("❌ Cancel")
-
-        if submitted:
-            rid = selected_row["Record ID"]
-            st.session_state.analyst_data_cache.loc[st.session_state.analyst_data_cache["Record ID"] == rid, "WIP Title"] = updated_wip_title
-            st.session_state.analyst_data_cache.loc[st.session_state.analyst_data_cache["Record ID"] == rid, "Key Contact"] = updated_key_contact
-            st.session_state.analyst_data_cache.loc[st.session_state.analyst_data_cache["Record ID"] == rid, "Process Step"] = updated_process_step
-
-            st.success("Row updated successfully!")
-            # st.session_state.show_popup = False
-            st.session_state.selected_row = None
-            st.rerun()  # refresh grid
-
-        if cancel:
-            st.session_state.show_popup = False
-            st.session_state.selected_row = None
-            st.rerun()
-
-   
+            if cancel:
+                st.session_state.show_popup = False
+                st.session_state.selected_row = None
+                st.rerun()
 
 else:
     st.warning("No data to display")
