@@ -252,7 +252,7 @@ if not analyst_data.empty:
 
     # 3. If a row is selected, open a form for editing
     if selected is not None and len(selected) > 0:
-     selected_row = selected[0]  # first selected row
+     selected_row = selected.iloc[0].to_dict()
 
     st.write(f"Editing Record ID: {selected_row['Record ID']}")
 
