@@ -248,10 +248,10 @@ if not analyst_data.empty:
         custom_css=custom_css
  )
     selected = grid_response["selected_rows"]
-    
+
     # 3. If a row is selected, open a form for editing
-if selected:
-    selected_row = selected[0]
+    if selected:
+     selected_row = selected[0]
 
     st.write(f"Editing Record ID: {selected_row['Record ID']}")
 
