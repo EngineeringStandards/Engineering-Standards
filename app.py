@@ -213,7 +213,7 @@ if not analyst_data.empty:
     gb.configure_pagination(paginationAutoPageSize=True)  # pagination
     gb.configure_side_bar()  # enable columns panel
 
-    gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True, headerClass=header_class)
+    gb.configure_default_column(editable=True, groupable=True, filter=True, sortable=True, resizable=True, headerClass=header_class)
     gb.configure_column("WIP Title", width=700, headerClass=header_class)
     gb.configure_column("Key Contact", width=400, headerClass=header_class)
     gb.configure_column("Process Step", width=600, headerClass=header_class)
