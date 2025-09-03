@@ -267,9 +267,7 @@ if not analyst_data.empty:
      # Only render popup when triggered
     if st.session_state.show_popup and st.session_state.selected_row:
      selected_row = st.session_state.selected_row
-
-   
-    st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
+     st.subheader(f"Editing Record ID: {selected_row['Record ID']}")
 
     with st.form("edit_row_form", clear_on_submit=True):
         updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
