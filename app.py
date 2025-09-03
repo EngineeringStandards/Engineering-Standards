@@ -251,8 +251,8 @@ if not analyst_data.empty:
     selected = grid_response["selected_rows"]
 
     # 3. If a row is selected, open a form for editing
-    if selected:
-     selected_row = selected[0]
+    if selected is not None and len(selected) > 0:
+     selected_row = selected[0]  # first selected row
 
     st.write(f"Editing Record ID: {selected_row['Record ID']}")
 
