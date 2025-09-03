@@ -238,7 +238,7 @@ if not analyst_data.empty:
     }
 }
   
-
+    grid_df = st.session_state.analyst_data_cache
     grid_response = AgGrid(
         grid_df,
         gridOptions=gridOptions,
@@ -258,7 +258,7 @@ if "selected_row" not in st.session_state:
 if "analyst_data_cache" not in st.session_state:
     st.session_state.analyst_data_cache = analyst_data.copy()
 
-grid_df = st.session_state.analyst_data_cache
+
 
 # Get selected rows from AgGrid
 selected = grid_response["selected_rows"]
