@@ -251,9 +251,9 @@ if not analyst_data.empty:
 
     # Track if popup should be shown
     if "show_popup" not in st.session_state:
-    st.session_state.show_popup = False
-if "selected_row" not in st.session_state:
-    st.session_state.selected_row = None
+     st.session_state.show_popup = False
+    if "selected_row" not in st.session_state:
+     st.session_state.selected_row = None
 
 # 1️⃣ Get selected row from AgGrid
 selected = grid_response["selected_rows"]
