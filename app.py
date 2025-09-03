@@ -236,7 +236,7 @@ if not st.session_state.analyst_data_cache.empty:
         }
     }
 
-    grid_df = st.session_state.analyst_data_cache
+    analyst_data = st.session_state.analyst_data_cache
     grid_response = AgGrid(
        analyst_data,
         gridOptions=gridOptions,
