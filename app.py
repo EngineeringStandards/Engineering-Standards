@@ -187,7 +187,7 @@ if st.session_state.current_analyst != analyst or st.session_state.current_data_
     st.session_state.current_data_view = data_view
     st.session_state.analyst_data_cache = analyst_data.copy()
     st.session_state.selected_row = None
-    st.experimental_rerun() # Use rerun to ensure the app state is reset and redrawn
+    st.rerun() # Use rerun to ensure the app state is reset and redrawn
 
 if not st.session_state.analyst_data_cache.empty:
     if data_view == "Both":
