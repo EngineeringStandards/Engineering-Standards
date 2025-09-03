@@ -253,7 +253,9 @@ if not analyst_data.empty:
     if selected is not None and len(selected) > 0:
      selected_row = selected.iloc[0].to_dict()
 
-    st.write(f"Editing Record ID: {selected_row['Record ID']}")
+
+    with st.modal("Edit Record", key="edit_modal"):
+     st.write(f"Editing Record ID: {selected_row['Record ID']}")
 
     with st.form("edit_row_form"):
         updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
