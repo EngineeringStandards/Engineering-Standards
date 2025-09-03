@@ -385,7 +385,22 @@ if not st.session_state.analyst_data_cache.empty:
         with st.form("edit_row_form", clear_on_submit=True):
             updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
             updated_key_contact = st.text_input("Key Contact", selected_row["Key Contact"])
-            updated_process_step = st.selectbox("Process Step", options=process_steps)
+            
+
+            # Get the current value from the selected row
+            current_process_step = selected_row["Process Step"]
+
+            # Try to find the index of the current value in the PROCESS_STEPS list
+            try:
+                current_process_step_index = process_steps.index(current_process_step)
+            except ValueError:
+                # If the value is not in the list, set the default to the first option
+                current_process_step_index = 0
+                st.warning(f"Process Step '{current_process_step}' not found in dropdown list. Defaulting to '{process_steps[0]}'.")
+            
+            
+            
+            updated_process_step = st.selectbox("Process Step", options=process_steps, index = current_process_step_index)
 
     
 
