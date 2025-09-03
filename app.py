@@ -238,7 +238,7 @@ if not st.session_state.analyst_data_cache.empty:
 
     grid_df = st.session_state.analyst_data_cache
     grid_response = AgGrid(
-        grid_df,
+       analyst_data,
         gridOptions=gridOptions,
         enable_enterprise_modules=False,
         update_mode=GridUpdateMode.SELECTION_CHANGED,
