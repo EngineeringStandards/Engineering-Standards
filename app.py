@@ -221,8 +221,20 @@ st.header("Engineering Standards GMW Tracking Sheet")
 analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
 st.write(f"Looking at {analyst}'s view")
 
-#process_steps
+process_steps = [
+"1: Identify needs/draft document based on global team agreement",
+"2: Receive quality request in mailbox",
+"3: Prepare initial draft/obtain doc ID",
+"4: Finalize content, ensure global agreement",
+"5A: Verify doc quality/edit Word file",
+"5C: Send pdf & CG746 to Engr.",
+"6: Obtain team approval for pdf/CG746",
+"7A: Update release info/send docs to publisher",
+"7B: Review approvals/publish to GDM",
+"8: Published"
 
+
+]
 col2, = st.columns(1)
 with col2:
     st.subheader("Select desired information")
@@ -372,7 +384,10 @@ if not st.session_state.analyst_data_cache.empty:
         with st.form("edit_row_form", clear_on_submit=True):
             updated_wip_title = st.text_input("WIP Title", selected_row["WIP Title"])
             updated_key_contact = st.text_input("Key Contact", selected_row["Key Contact"])
-            updated_process_step = st.text_input("Process Step", selected_row["Process Step"])
+            updated_process_step = st.selectbox("Process Step", options=process_steps)
+
+    
+
 
             col1, col2 = st.columns(2)
             with col1:
