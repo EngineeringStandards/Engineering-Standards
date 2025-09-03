@@ -222,6 +222,7 @@ analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scof
 st.write(f"Looking at {analyst}'s view")
 
 process_steps = [
+"",
 "1: Identify needs/draft document based on global team agreement",
 "2: Receive quality request in mailbox",
 "3: Prepare initial draft/obtain doc ID",
