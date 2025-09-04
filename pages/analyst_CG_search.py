@@ -29,4 +29,4 @@ else:
 if data.empty:
     st.write("No records found.")
 else:
-    st.data_editor(data, use_container_width=True)
+    st.data_editor(data, use_container_width=True, hide_index=True, num_rows="dynamic")
