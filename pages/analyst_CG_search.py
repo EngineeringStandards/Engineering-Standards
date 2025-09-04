@@ -6,11 +6,6 @@ st.title("CG Dashboard")
 st.sidebar.success("You are currently viewing the CG Dashboard")
 
 """
-Add an editable table to the page to show all CG records with a search box.
-    call a function from cg_processing.py to get the data
-
-Try to make all sql calls determined in the processing scripts to keep this page clean.
-
 Ask Jim exactly what he wants on this page.
 
 Make it possible to create a new CG record from this page?
@@ -29,4 +24,5 @@ else:
 if data.empty:
     st.write("No records found.")
 else:
-    st.data_editor(data, use_container_width=True, hide_index=True, num_rows="dynamic")
+    st.data_editor(data, use_container_width=True, hide_index=True, num_rows="dynamic", disabled=["Tracking ID"])
+    st.button("Save changes")

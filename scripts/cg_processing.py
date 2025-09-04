@@ -77,14 +77,21 @@ def edit_cg(tracking_id: str, updates: dict):
 
 '''
 Function to get the next available tracking_id for a new CG record which will help so determine the next Record ID and Record ID Number.
+
+Currently disables because Record ID and Record ID Number are not being auto-generated.
 '''
+"""
 def get_next_tracking_id():
     query = "SELECT MAX(tracking_id) AS max_id FROM maxis_sandbox.engineering_standards.cg_cleaned_data"
     df = sqlQuery(query)
     max_id = df.at[0, 'max_id']
     next_id = (int(max_id) + 1) if max_id is not None else 1
     return str(next_id).zfill(6)  # Zero-pad to 6 digits
+"""
 
+'''
+Function to find a CG record by its Tracking ID.
+'''
 def find_CG_by_tracking_id(tracking_id: str):
     search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = '{tracking_id}'"
     df = sqlQuery(search_query)
