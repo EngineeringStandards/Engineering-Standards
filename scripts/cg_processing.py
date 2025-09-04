@@ -120,9 +120,8 @@ def update_records(data, updated_data):
         tracking_id = row["Tracking ID"]
 
         query = (
-            "UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data "
-            "SET title = %s, author = %s, status = %s "
-            "WHERE tracking_id = %s"
+            f"""UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data 
+            SET title = {row["Title"]}, author = {row["Author"]}, status = {row["Status"]}
+            WHERE tracking_id = {tracking_id}"""
         )
-        values = (row["Title"], row["Author"], row["Status"], tracking_id)
-        sqlQuery(query, values)
+        sqlQuery(query)

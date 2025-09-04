@@ -18,18 +18,9 @@ def sqlQuery(query: str, params=None) -> pd.DataFrame:
         access_token = "dapi97bfcf4f2625d2d7d1c1982bcee6cf8d-3"
     ) as connection:
        with connection.cursor() as cursor:
-            if params is not None:
-                cursor.execute(query, params)
-            else:
-                cursor.execute(query)
-
-            qtype = query.strip().split()[0].lower()
-
-            if qtype == "select":
-                return cursor.fetchall_arrow().to_pandas()
-            else:
-                return pd.DataFrame()
-
+            cursor.execute(query)
+            return cursor.fetchall_arrow().to_pandas()
+            
 def get_analyst_data(analyst, data_view, record_ids=None):
     if record_ids:
         record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
