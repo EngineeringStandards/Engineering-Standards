@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from app.py import sqlQuery
+from app import sqlQuery
 
 '''
 List of cleaned headers to replace the messy original headers from the Excel file.
