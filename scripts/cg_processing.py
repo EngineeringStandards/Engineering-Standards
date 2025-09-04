@@ -96,3 +96,33 @@ def find_CG_by_tracking_id(tracking_id: str):
     search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = '{tracking_id}'"
     df = sqlQuery(search_query)
     return df
+
+"""
+Update CG records in the database based on changes made in the Streamlit data editor.
+
+Parameters:
+    data (pd.DataFrame): The original dataframe containing CG records.
+    updated_data (pd.DataFrame): The dataframe after edits made in the Streamlit editor.
+
+Returns:
+    str: A message indicating whether changes were detected and processed.
+"""
+def update_records(data, updated_data):
+    # Align indexes and columns before comparing
+    aligned_data = data.reindex_like(updated_data)
+    changes = updated_data.compare(aligned_data)
+
+    if changes.empty:
+        return "No changes detected."
+
+    for idx in changes.index.get_level_values(0).unique():
+        row = updated_data.loc[idx]
+        tracking_id = row["Tracking ID"]
+
+        query = (
+            "UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data "
+            "SET title = %s, author = %s, status = %s "
+            "WHERE tracking_id = %s"
+        )
+        values = (row["Title"], row["Author"], row["Status"], tracking_id)
+        sqlQuery(query, values)

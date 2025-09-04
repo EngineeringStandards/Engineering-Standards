@@ -32,5 +32,5 @@ else:
                                 )
 
     if st.button("Save changes"):
-        st.write("Changes saved (not really, this is a demo).")
-        # Here you would add code to save the edited_data back to the database
+        update_records(data, edited_data)
+
