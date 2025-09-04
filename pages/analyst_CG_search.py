@@ -16,7 +16,7 @@ Ask Jim exactly what he wants on this page.
 Make it possible to create a new CG record from this page?
 """
 
-cg_search = st.text_input("Movie title", "Enter CG tracking ID to search")
+cg_search = st.text_input("CG Tracking ID", "Enter CG tracking ID to search")
 st.write (f"Searching for CG tracking ID: {cg_search}")
 
 data = base_cg_query()
