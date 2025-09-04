@@ -124,6 +124,6 @@ def update_records(data, updated_data):
             SET title = ?, author = ?, status = ?
             WHERE tracking_id = ?
             """
-            
-        values = (row["Title_new"], row["Author_new"], row["Status_new"], row["Tracking ID"])
+
+        values = (row["Title"], row["Author"], row["Status"], row["Tracking ID"])
         sqlQuery(query, values)
