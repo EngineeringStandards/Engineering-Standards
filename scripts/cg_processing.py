@@ -34,7 +34,8 @@ def rename_headers():
 Function to populate the dataframe with all CG records from the database.
 '''
 def base_cg_query():
-    query = """SELECT tracking_id AS `Tracking ID`, 
+    query = """SELECT 
+                    tracking_id AS "Tracking ID", 
                     record_id AS `Record ID`, 
                     record_id_num AS `Record ID Number`, 
                     title AS `Title`, 
@@ -43,9 +44,9 @@ def base_cg_query():
                     author AS `Author`, 
                     owner AS `Owner`, 
                     owner_gmin AS `Owner GMIN`, 
-                    gmws AS `GMW's`, 
+                    gmws AS `GMWs`, 
                     status AS `Status` 
-             FROM maxis_sandbox.engineering_standards.cg_cleaned_data"""
+                    FROM maxis_sandbox.engineering_standards.cg_cleaned_data"""
     df = sqlQuery(query)
     return df
 
