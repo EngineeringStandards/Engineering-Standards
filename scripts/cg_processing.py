@@ -30,12 +30,7 @@ def rename_headers():
     print(f"✅ Saved cleaned Excel: {output_excel}")
     print(f"✅ Saved cleaned CSV: {output_csv}")
 
-'''
-Function to populate the dataframe with all CG records from the database.
-'''
-def base_cg_query():
-    query = """SELECT 
-                    tracking_id AS `Tracking ID`, 
+base_columns = """tracking_id AS `Tracking ID`, 
                     record_id AS `Record ID`, 
                     record_id_num AS `Record ID Number`, 
                     title AS `Title`, 
@@ -45,8 +40,13 @@ def base_cg_query():
                     owner AS `Owner`, 
                     owner_gmin AS `Owner GMIN`, 
                     gmws AS `GMWs`, 
-                    status AS `Status` 
-                    FROM maxis_sandbox.engineering_standards.cg_cleaned_data"""
+                    status AS `Status`"""
+
+'''
+Function to populate the dataframe with all CG records from the database.
+'''
+def base_cg_query():
+    query = """SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data"""
     df = sqlQuery(query)
     return df
 
@@ -84,3 +84,8 @@ def get_next_tracking_id():
     max_id = df.at[0, 'max_id']
     next_id = (int(max_id) + 1) if max_id is not None else 1
     return str(next_id).zfill(6)  # Zero-pad to 6 digits
+
+def find_CG_by_tracking_id(tracking_id: str):
+    search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = '{tracking_id}'"
+    df = sqlQuery(search_query)
+    return df

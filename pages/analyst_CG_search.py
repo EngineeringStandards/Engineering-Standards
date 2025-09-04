@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from scripts.cg_processing import base_cg_query
+from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id
 
 st.title("CG Search Page")
 st.sidebar.success("You are currently viewing the CG search page")
@@ -19,5 +19,9 @@ Make it possible to create a new CG record from this page?
 cg_search = st.text_input("CG Tracking ID", "Enter CG tracking ID to search")
 st.write (f"Searching for CG tracking ID: {cg_search}")
 
-data = base_cg_query()
+if cg_search != "Enter CG tracking ID to search":
+    data = find_CG_by_tracking_id(cg_search)
+else:
+    data = base_cg_query()
+    
 st.dataframe(data)
