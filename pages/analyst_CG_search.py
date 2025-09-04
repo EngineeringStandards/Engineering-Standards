@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id
 
-st.title("CG Search Page")
-st.sidebar.success("You are currently viewing the CG search page")
+st.title("CG Dashboard")
+st.sidebar.success("You are currently viewing the CG Dashboard")
 
 """
 Add an editable table to the page to show all CG records with a search box.
@@ -15,7 +15,7 @@ Ask Jim exactly what he wants on this page.
 
 Make it possible to create a new CG record from this page?
 """
-
+# Search box for CG Tracking ID
 cg_search = st.text_input("CG Tracking ID", "Enter CG tracking ID to search")
 st.write(f"Searching for CG tracking ID: {cg_search}")
 
@@ -25,7 +25,8 @@ if not cg_search or cg_search == "Enter CG tracking ID to search":
 else:
     data = find_CG_by_tracking_id(cg_search)
 
+# Show the data in a table and an error message if no records are found with the search criteria
 if data.empty:
     st.write("No records found.")
 else:
-    st.dataframe(data)
+    st.data_editor(data, use_container_width=True)
