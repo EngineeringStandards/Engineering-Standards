@@ -12,15 +12,23 @@ assert warehouse_id, "DATABRICKS_WAREHOUSE_ID environment variable not set"
 # Use as sql query runner
 def sqlQuery(query: str, params=None) -> pd.DataFrame:
     with sql.connect(
-        server_hostname = "adb-4151713458336319.19.azuredatabricks.net",
-        http_path = f"/sql/1.0/warehouses/{warehouse_id}",
-        # Don't touch token
-        access_token = "dapi97bfcf4f2625d2d7d1c1982bcee6cf8d-3"
+        server_hostname="adb-4151713458336319.19.azuredatabricks.net",
+        http_path=f"/sql/1.0/warehouses/{warehouse_id}",
+        access_token="dapi97bfcf4f2625d2d7d1c1982bcee6cf8d-3"
     ) as connection:
-       with connection.cursor() as cursor:
-            cursor.execute(query)
-            return cursor.fetchall_arrow().to_pandas()
-            
+        with connection.cursor() as cursor:
+            if params is not None:
+                cursor.execute(query, params)
+            else:
+                cursor.execute(query)
+
+            qtype = query.strip().split()[0].lower()
+
+            if qtype == "select":
+                return cursor.fetchall_arrow().to_pandas()
+            else:
+                return pd.DataFrame()
+
 def get_analyst_data(analyst, data_view, record_ids=None):
     if record_ids:
         record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])

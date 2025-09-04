@@ -118,13 +118,12 @@ def update_records(data, updated_data):
     for idx in changes.index.get_level_values(0).unique():
         row = updated_data.loc[idx]
         tracking_id = row["Tracking ID"]
-        title = row["Title"]
-        author = row["Author"] 
-        status = row["Status"]
 
-        query = (
-            f"""UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data 
-            SET title = `{title}`, author = `{author}`, status = `{status}`
-            WHERE tracking_id = `{tracking_id}`"""
-        )
-        sqlQuery(query)
+        query = """
+            UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data
+            SET title = ?, author = ?, status = ?
+            WHERE tracking_id = ?
+            """
+            
+        values = (row["Title_new"], row["Author_new"], row["Status_new"], row["Tracking ID"])
+        sqlQuery(query, values)
