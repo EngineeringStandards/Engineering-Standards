@@ -24,5 +24,13 @@ else:
 if data.empty:
     st.write("No records found.")
 else:
-    st.data_editor(data, use_container_width=True, hide_index=True, num_rows="dynamic", disabled=["Tracking ID"])
-    st.button("Save changes")
+    edited_data = st.data_editor(data, 
+                                use_container_width=True, 
+                                hide_index=True, 
+                                num_rows="dynamic", 
+                                disabled=["Tracking ID"]
+                                )
+
+    if st.button("Save changes"):
+        st.write("Changes saved (not really, this is a demo).")
+        # Here you would add code to save the edited_data back to the database
