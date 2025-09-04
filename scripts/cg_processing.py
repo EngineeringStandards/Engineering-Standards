@@ -124,7 +124,7 @@ def update_records(data, updated_data):
 
         query = (
             f"""UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data 
-            SET title = {title}, author = {author}, status = {status}
-            WHERE tracking_id = {tracking_id}"""
+            SET title = `{title}`, author = `{author}`, status = `{status}`
+            WHERE tracking_id = `{tracking_id}`"""
         )
         sqlQuery(query)
