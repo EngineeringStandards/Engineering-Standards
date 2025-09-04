@@ -46,7 +46,7 @@ base_columns = """tracking_id AS `Tracking ID`,
 Function to populate the dataframe with all CG records from the database.
 '''
 def base_cg_query():
-    query = """SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data"""
+    query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data"
     df = sqlQuery(query)
     return df
 
