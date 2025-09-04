@@ -35,7 +35,7 @@ Function to populate the dataframe with all CG records from the database.
 '''
 def base_cg_query():
     query = """SELECT 
-                    tracking_id AS "Tracking ID", 
+                    tracking_id, 
                     record_id AS `Record ID`, 
                     record_id_num AS `Record ID Number`, 
                     title AS `Title`, 
