@@ -37,7 +37,7 @@ def base_cg_query():
     query = """SELECT tracking_id AS "Tracking ID", 
                     record_id AS "Record ID", 
                     record_id_num AS "Record ID Number", 
-                    title AS "Title, 
+                    title AS "Title", 
                     filename AS "Filename", 
                     team_name AS "Team Name", 
                     author AS "Author", 
