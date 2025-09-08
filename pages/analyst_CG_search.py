@@ -23,11 +23,11 @@ if data.empty:
 else:
     edited_data = st.data_editor(
         data,
-        key="cg_editor",  # stable key so widget updates instead of duplicating
+        key="cg_editor", 
         width="stretch",
         hide_index=True,
         num_rows="dynamic",
-        disabled=["Tracking ID"]  # Prevent editing of PK
+        disabled=["Tracking ID"]
     )
 
     if st.button("Save changes"):

@@ -42,9 +42,12 @@ base_columns = """tracking_id AS `Tracking ID`,
                     gmws AS `GMWs`, 
                     status AS `Status`"""
 
-'''
-Function to populate the dataframe with all CG records from the database.
-'''
+"""
+Populate the dataframe with all CG records from the database.
+
+Returns:
+    pd.DataFrame: DataFrame containing all CG records.
+"""
 def base_cg_query():
     query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data"
     df = sqlQuery(query)
@@ -63,9 +66,12 @@ def create_new_cg_record(data: dict):
     sqlQuery(query)
     print("New CG record created successfully.")
 
-'''
-Function to find a CG record by its Tracking ID.
-'''
+"""
+Find a specific CG record by using its Tracking ID.
+
+Parameters:
+    tracking_id (str): The CG Tracking ID to search for.
+"""
 def find_CG_by_tracking_id(tracking_id: str):
     search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = '{tracking_id}'"
     df = sqlQuery(search_query)
@@ -77,9 +83,6 @@ Update CG records in the database based on changes made in the Streamlit data ed
 Parameters:
     data (pd.DataFrame): The original dataframe containing CG records.
     updated_data (pd.DataFrame): The dataframe after edits made in the Streamlit editor.
-
-Returns:
-    str: A message indicating whether changes were detected and processed.
 """
 def update_records(data, updated_data):
     # Align indexes and columns before comparing
