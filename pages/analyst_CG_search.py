@@ -25,7 +25,7 @@ if data.empty:
     st.write("No records found.")
 else:
     edited_data = st.data_editor(data, 
-                                use_container_width=True, 
+                                width='stretch', 
                                 hide_index=True, 
                                 num_rows="dynamic", 
                                 disabled=["Tracking ID"]
