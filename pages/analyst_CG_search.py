@@ -24,13 +24,24 @@ else:
 if data.empty:
     st.write("No records found.")
 else:
-    edited_data = st.data_editor(data, 
-                                width='stretch', 
-                                hide_index=True, 
-                                num_rows="dynamic", 
-                                disabled=["Tracking ID"]
-                                )
+    edited_data = st.data_editor(
+        data,
+        width="stretch",
+        hide_index=True,
+        num_rows="dynamic",
+        disabled=["Tracking ID"]  # Prevent editing of PK
+    )
 
     if st.button("Save changes"):
         update_records(data, edited_data)
+ 
+        # Refresh data from DB so updated values show in table
+        refreshed_data = sqlQuery("SELECT * FROM maxis_sandbox.engineering_standards.cg_cleaned_data")
+        st.data_editor(
+        data,
+        width="stretch",
+        hide_index=True,
+        num_rows="dynamic",
+        disabled=["Tracking ID"]  # Prevent editing of PK
+        )   
 

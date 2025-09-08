@@ -64,32 +64,6 @@ def create_new_cg_record(data: dict):
     print("New CG record created successfully.")
 
 '''
-Edit an existing CG record in the database identified by Tracking ID, updating with values from updates dictionary.
-'''
-def edit_cg(tracking_id: str, updates: dict):
-    # Example function to edit an existing CG record in the database
-    set_clause = ', '.join([f"{col} = %s" for col in updates.keys()])
-    query = f"UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data SET {set_clause} WHERE tracking_id = %s"
-    values = list(updates.values()) + [tracking_id]
-    # Execute the query using your database connection (not implemented here)
-    sqlQuery(query)
-    print(f"CG record {tracking_id} updated successfully.")
-
-'''
-Function to get the next available tracking_id for a new CG record which will help so determine the next Record ID and Record ID Number.
-
-Currently disables because Record ID and Record ID Number are not being auto-generated.
-'''
-"""
-def get_next_tracking_id():
-    query = "SELECT MAX(tracking_id) AS max_id FROM maxis_sandbox.engineering_standards.cg_cleaned_data"
-    df = sqlQuery(query)
-    max_id = df.at[0, 'max_id']
-    next_id = (int(max_id) + 1) if max_id is not None else 1
-    return str(next_id).zfill(6)  # Zero-pad to 6 digits
-"""
-
-'''
 Function to find a CG record by its Tracking ID.
 '''
 def find_CG_by_tracking_id(tracking_id: str):
@@ -117,13 +91,13 @@ def update_records(data, updated_data):
 
     for idx in changes.index.get_level_values(0).unique():
         row = updated_data.loc[idx]
-        tracking_id = row["Tracking ID"]
 
         query = """
             UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data
             SET title = ?, author = ?, status = ?
             WHERE tracking_id = ?
-            """
-
+        """
         values = (row["Title"], row["Author"], row["Status"], row["Tracking ID"])
+        
+        # Execute SQL update
         sqlQuery(query, values)
