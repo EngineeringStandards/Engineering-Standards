@@ -36,9 +36,9 @@ else:
         update_records(data, edited_data)
  
         # Refresh data from DB so updated values show in table
-        refreshed_data = sqlQuery("SELECT * FROM maxis_sandbox.engineering_standards.cg_cleaned_data")
+        refreshed_data = base_cg_query()
         st.data_editor(
-        data,
+        refreshed_data,
         width="stretch",
         hide_index=True,
         num_rows="dynamic",
