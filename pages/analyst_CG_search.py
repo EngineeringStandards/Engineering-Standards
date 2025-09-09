@@ -58,7 +58,9 @@ if st.session_state.show_form:
         status = st.selectbox("Status", ["Active", "Inactive", "Draft"])
         notes = st.text_area("Notes")
         submitted = st.form_submit_button("Submit")
-        
+
         if submitted:
             st.write("Form submitted (not implemented yet)")
+            st.write(f"Tracking ID: {tracking_id}, Title: {title}, Author: {author}, Status: {status}, Notes: {notes}")
+            st.session_state.show_form = False 
             # Here you would call a function to create a new CG record in the database
