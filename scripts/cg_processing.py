@@ -30,6 +30,9 @@ def rename_headers():
     print(f"✅ Saved cleaned Excel: {output_excel}")
     print(f"✅ Saved cleaned CSV: {output_csv}")
 
+"""
+List of basic columns to be used in SQL queries.
+"""
 base_columns = """tracking_id AS `Tracking ID`, 
                     record_id AS `Record ID`, 
                     record_id_num AS `Record ID Number`, 

@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id, update_records
 
-# Inject custom CSS
 st.markdown(
     """
     <style>
@@ -39,7 +38,7 @@ else:
     edited_data = st.data_editor(
         data,
         key="cg_editor", 
-        width="stretch",
+        width="2500px",
         hide_index=True,
         num_rows="dynamic",
         disabled=["Tracking ID"]
