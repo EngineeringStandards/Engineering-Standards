@@ -60,15 +60,14 @@ def base_cg_query():
 '''
 Create a new CG record in the database from a dictionary of data values.
 '''
-def create_new_cg_record(data: dict):
-    # Example function to create a new CG record in the database
-    columns = ', '.join(data.keys())
-    placeholders = ', '.join(['%s'] * len(data))
-    query = f"INSERT INTO maxis_sandbox.engineering_standards.cg_cleaned_data ({columns}) VALUES ({placeholders})"
-    values = list(data.values())
-    # Execute the query using your database connection (not implemented here)
-    sqlQuery(query)
-    print("New CG record created successfully.")
+def create_new_cg_record(data: list):
+    create_query = """
+        INSERT INTO maxis_sandbox.engineering_standards.cg_cleaned_data 
+        (tracking_id, title, author, status, notes)
+        VALUES (?,?,?,?,?)  
+        """
+    sqlQuery(create_query, data)
+    
 
 """
 Find a specific CG record by using its Tracking ID.

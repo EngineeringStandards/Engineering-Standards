@@ -61,6 +61,6 @@ if st.session_state.show_form:
 
         if submitted:
             values_list = [st.session_state[k] for k in st.session_state if k.startswith("form_")]
-            st.write("Form values as list:", values_list)
+            st.write("Form values as list:", values_list.type(), values_list)
             st.session_state.show_form = False 
             # Here you would call a function to create a new CG record in the database
