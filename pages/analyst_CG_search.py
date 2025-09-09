@@ -60,6 +60,8 @@ if st.session_state.show_form:
         submitted = st.form_submit_button("Submit")
 
         if submitted:
+            values_dict = {k: st.session_state[k] for k in st.session_state if k.startswith("form_")}
             create_new_cg_record(values_dict)
             st.session_state.show_form = False 
             st.rerun()
+            # Here you would call a function to create a new CG record in the database
