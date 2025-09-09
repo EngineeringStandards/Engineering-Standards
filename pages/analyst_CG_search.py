@@ -52,11 +52,11 @@ if st.button("Add CG record"):
 if st.session_state.show_form:
     with st.form("new_cg_form",enter_to_submit=False, clear_on_submit=True):
         st.write("New CG record form (not implemented yet)")
-        tracking_id = st.text_input("Tracking ID")
-        title = st.text_input("Title")
-        author = st.text_input("Author")
-        status = st.selectbox("Status", ["Active", "Inactive", "Draft"])
-        notes = st.text_area("Notes")
+        tracking_id = st.text_input("Tracking ID", key="form_tracking_id")
+        title = st.text_input("Title", key="form_title")
+        author = st.text_input("Author", key="form_author")
+        status = st.selectbox("Status", ["Active", "Inactive", "Draft"], key="form_status")
+        notes = st.text_area("Notes", key="form_notes")
         submitted = st.form_submit_button("Submit")
 
         if submitted:
