@@ -2,6 +2,21 @@ import streamlit as st
 import pandas as pd
 from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id, update_records
 
+# Inject custom CSS
+st.markdown(
+    """
+    <style>
+    .stDataFrame {  
+        "background-color":"#d9edf7",
+        "color": "black",
+        "font-weight": "bold",
+        "font-size": "16px"
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("CG Dashboard")
 st.sidebar.success("You are currently viewing the CG Dashboard")
 

@@ -92,8 +92,8 @@ def update_records(data, updated_data):
     if changes.empty:
         return "No changes detected."
 
-    for idx in changes.index.get_level_values(0).unique():
-        row = updated_data.loc[idx]
+    for i in changes.index.get_level_values(0).unique():
+        row = updated_data.loc[i]
 
         query = """
             UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data
