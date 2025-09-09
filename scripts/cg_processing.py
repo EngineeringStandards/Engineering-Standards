@@ -78,7 +78,6 @@ Parameters:
 def find_CG_by_tracking_id(tracking_id: str):
     search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = '{tracking_id}'"
     df = sqlQuery(search_query)
-    console.log("Searching for CG Tracking ID:", tracking_id)
     return df
 
 """
@@ -108,4 +107,3 @@ def update_records(data, updated_data):
         
         # Execute SQL update
         sqlQuery(query, values)
-    console.log("Records updated successfully.")
