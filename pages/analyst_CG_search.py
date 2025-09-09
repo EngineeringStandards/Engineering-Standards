@@ -23,13 +23,13 @@ st.sidebar.success("You are currently viewing the CG Dashboard")
 cg_search = st.text_input("CG Tracking ID", "Enter CG tracking ID to search")
 st.write(f"Searching for CG tracking ID: {cg_search}")
 
-if "cg_data" not in st.session_state:
-    if not cg_search or cg_search == "Enter CG tracking ID to search":
-        st.session_state.cg_data = base_cg_query()
-    else:
-        st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
+# Always refresh data based on search input
+if not cg_search or cg_search == "Enter CG tracking ID to search":
+    data = base_cg_query()
+else:
+    data = find_CG_by_tracking_id(cg_search)
 
-data = st.session_state.cg_data
+st.session_state.cg_data = data  # keep in session_state if you want edits to persist
 
 # Show the data in a table and an error message if no records are found with the search criteria
 if data.empty:
@@ -47,7 +47,7 @@ else:
     if st.button("Save changes"):
         update_records(data, edited_data)
 
-        # Refresh data and replace session state
+        # Refresh data again after saving
         if not cg_search or cg_search == "Enter CG tracking ID to search":
             st.session_state.cg_data = base_cg_query()
         else:
