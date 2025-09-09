@@ -50,13 +50,15 @@ if st.button("Add CG record"):
 
 # Only render form if button was pressed
 if st.session_state.show_form:
-    with st.write("New CG record form (not implemented yet)")
-    tracking_id = st.text_input("Tracking ID")
-    title = st.text_input("Title")
-    author = st.text_input("Author")
-    status = st.selectbox("Status", ["Active", "Inactive", "Draft"])
-    notes = st.text_area("Notes")
-    submitted = st.form_submit_button("Submit")
-    if submitted:
-        st.write("Form submitted (not implemented yet)")
-        # Here you would call a function to create a new CG record in the database
+    with st.form("new_cg_form"):
+        st.write("New CG record form (not implemented yet)")
+        tracking_id = st.text_input("Tracking ID")
+        title = st.text_input("Title")
+        author = st.text_input("Author")
+        status = st.selectbox("Status", ["Active", "Inactive", "Draft"])
+        notes = st.text_area("Notes")
+        submitted = st.form_submit_button("Submit")
+        
+        if submitted:
+            st.write("Form submitted (not implemented yet)")
+            # Here you would call a function to create a new CG record in the database
