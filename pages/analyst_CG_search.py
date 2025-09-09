@@ -2,20 +2,6 @@ import streamlit as st
 import pandas as pd
 from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id, update_records
 
-st.markdown(
-    """
-    <style>
-    .stDataFrame {  
-        "background-color":"#d9edf7",
-        "color": "black",
-        "font-weight": "bold",
-        "font-size": "16px"
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 st.title("CG Dashboard")
 st.sidebar.success("You are currently viewing the CG Dashboard")
 
@@ -29,7 +15,7 @@ if not cg_search or cg_search == "Enter CG tracking ID to search":
 else:
     data = find_CG_by_tracking_id(cg_search)
 
-st.session_state.cg_data = data  # keep in session_state if you want edits to persist
+st.session_state.cg_data = data  
 
 # Show the data in a table and an error message if no records are found with the search criteria
 if data.empty:
@@ -55,3 +41,16 @@ else:
 
         st.rerun()
 
+st.button ("Create new CG record (not implemented yet)")
+
+with st.form("new_cg_form"):
+    st.write("New CG record form (not implemented yet)")
+    tracking_id = st.text_input("Tracking ID")
+    title = st.text_input("Title")
+    author = st.text_input("Author")
+    status = st.selectbox("Status", ["Active", "Inactive", "Draft"])
+    notes = st.text_area("Notes")
+    submitted = st.form_submit_button("Submit")
+    if submitted:
+        st.write("Form submitted (not implemented yet)")
+        # Here you would call a function to create a new CG record in the database
