@@ -41,10 +41,16 @@ else:
 
         st.rerun()
 
-st.button ("Create new CG record (not implemented yet)")
+if "show_form" not in st.session_state:
+    st.session_state.show_form = False
 
-with st.form("new_cg_form"):
-    st.write("New CG record form (not implemented yet)")
+# Button that makes the form visibile
+if st.button("Add CG record"):
+    st.session_state.show_form = True
+
+# Only render form if button was pressed
+if st.session_state.show_form:
+    withst.write("New CG record form (not implemented yet)")
     tracking_id = st.text_input("Tracking ID")
     title = st.text_input("Title")
     author = st.text_input("Author")
