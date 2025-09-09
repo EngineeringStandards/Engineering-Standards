@@ -50,7 +50,7 @@ if st.button("Add CG record"):
 
 # Only render form if button was pressed
 if st.session_state.show_form:
-    withst.write("New CG record form (not implemented yet)")
+    with st.write("New CG record form (not implemented yet)")
     tracking_id = st.text_input("Tracking ID")
     title = st.text_input("Title")
     author = st.text_input("Author")
