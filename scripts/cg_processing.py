@@ -43,7 +43,8 @@ base_columns = """tracking_id AS `Tracking ID`,
                     owner AS `Owner`, 
                     owner_gmin AS `Owner GMIN`, 
                     gmws AS `GMWs`, 
-                    status AS `Status`"""
+                    status AS `Status`,
+                    notes AS `Notes`"""
 
 """
 Populate the dataframe with all CG records from the database.
@@ -100,10 +101,10 @@ def update_records(data, updated_data):
 
         query = """
             UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data
-            SET title = ?, author = ?, status = ?
+            SET title = ?, author = ?, status = ?, notes = ?
             WHERE tracking_id = ?
         """
-        values = (row["Title"], row["Author"], row["Status"], row["Tracking ID"])
+        values = (row["Title"], row["Author"], row["Status"], row["Notes"], row["Tracking ID"])
         
         # Execute SQL update
         sqlQuery(query, values)
