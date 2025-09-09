@@ -38,7 +38,7 @@ else:
     edited_data = st.data_editor(
         data,
         key="cg_editor", 
-        width=5000,
+        width="content",
         hide_index=True,
         num_rows="dynamic",
         disabled=["Tracking ID"]
