@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id, update_records
+from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id, update_records, create_new_cg_record
 
 st.title("CG Dashboard")
 st.sidebar.success("You are currently viewing the CG Dashboard")
@@ -60,7 +60,10 @@ if st.session_state.show_form:
         submitted = st.form_submit_button("Submit")
 
         if submitted:
-            values_list = [st.session_state[k] for k in st.session_state if k.startswith("form_")]
-            st.write("Form values as list:", values_list.type(), values_list)
+            values_dict = {k: st.session_state[k] for k in st.session_state if k.startswith("form_")}
+            st.write("Form values as list:", values_dict)
+
+            create_new_cg_record(values_dict)
+
             st.session_state.show_form = False 
             # Here you would call a function to create a new CG record in the database
