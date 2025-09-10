@@ -16,7 +16,7 @@ selected_option = st.pills("Search by", options, selection_mode="single")
 if not cg_search or cg_search == f"Enter {selected_option} to search":
     data = base_cg_query()
 else:
-    data = find_CG(selected_option, cg_search)
+    data = find_CG_by(selected_option, cg_search)
 
 st.session_state.cg_data = data  
 
@@ -47,7 +47,7 @@ else:
             if not cg_search or cg_search == "Enter CG tracking ID to search":
                 st.session_state.cg_data = base_cg_query()
             else:
-                st.session_state.cg_data = find_CG(selected_option,cg_search)
+                st.session_state.cg_data = find_CG_by(selected_option,cg_search)
 
             st.rerun()
 
