@@ -10,7 +10,7 @@ options = ["Tracking ID", "CG Number"]
 select_option = st.pills("Select search type", options, selection_mode="single")
 st.write(f"Selected search type: {select_option}")
 
-cg_search = st.text_input(f"{select_option}", f"Enter {select_option} to search")
+cg_search = st.text_input("CG Tracking ID", "Enter CG tracking ID to search")
 st.write(f"Searching for CG tracking ID: {cg_search}")
 
 # Always refresh data based on search input
@@ -35,19 +35,19 @@ else:
         disabled=["Tracking ID"]
     )
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    if st.button("Save changes"):
-        # Call function to process and save the changes made to the data
-        update_records(data, edited_data)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("Save changes"):
+            # Call function to process and save the changes made to the data
+            update_records(data, edited_data)
 
-        # Refresh data again after saving
-        if not cg_search or cg_search == "Enter CG tracking ID to search":
-            st.session_state.cg_data = base_cg_query()
-        else:
-            st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
+            # Refresh data again after saving
+            if not cg_search or cg_search == "Enter CG tracking ID to search":
+                st.session_state.cg_data = base_cg_query()
+            else:
+                st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
 
-        st.rerun()
+            st.rerun()
 
 if "show_creation_form" not in st.session_state:
     st.session_state.show_creation_form = False
