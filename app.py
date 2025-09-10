@@ -51,74 +51,43 @@ def sqlQuery(query: str) -> pd.DataFrame:
             cursor.execute(query)
             return cursor.fetchall_arrow().to_pandas()
 
-def get_analyst_data(analyst, data_view, record_ids=None):
+def get_analyst_data(record_ids=None):
     """
-    Retrieve analyst data from the engineering standards database.
-    
+    Retrieve engineering standards data from the database.
+
     Args:
-        analyst (str): Name of the analyst to filter by
-        data_view (str): Type of data to retrieve ('WIP', 'Published', or 'Both')
         record_ids (list, optional): List of specific record IDs to filter by
-        
+
     Returns:
-        pd.DataFrame: Filtered analyst data with renamed columns
+        pd.DataFrame: Filtered data with renamed columns
     """
+
     if record_ids:
-        record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
-        if analyst == "Lisa Coppola" and data_view == "WIP":
-            query = f"""SELECT record_id, wip_tab, published_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab
-                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                        WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
-        else:
-            query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action, 
-                                local_standards_replaced, replaced_by, ownership, process_step, location, 
-                                current_step_date, days_in_step, num_pages, history
-                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                        WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
+        # Make case-insensitive search list
+        record_ids_str = ",".join([f"'{rid.upper().strip()}'" for rid in record_ids])
+
+        query = f"""
+            SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process,
+                   key_contact, action, local_standards_replaced, replaced_by, ownership, process_step,
+                   location, current_step_date, days_in_step, num_pages, history,
+                   final_disposition_action, final_date, distribution_year, update_csv,
+                   ils_published, ils_submit_date
+            FROM maxis_sandbox.engineering_standards.all_data_cleaned
+            WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})
+        """
     else:
-        # Handle Lisa Coppola separately
-        if analyst == "Lisa Coppola":
-            if data_view == "WIP":
-                query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                     local_standards_replaced, replaced_by, ownership, process_step, location, 
-                                     current_step_date, days_in_step, num_pages, history
-                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                                WHERE wip_tab = TRUE"""
-            elif data_view == "Published":
-                query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                     local_standards_replaced, replaced_by, ownership, process_step, location, 
-                                     current_step_date, days_in_step, num_pages, history
-                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                                WHERE published_tab = TRUE"""
-            else:  # Both
-                query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                     local_standards_replaced, replaced_by, ownership, process_step, location, 
-                                     current_step_date, days_in_step, num_pages, history
-                                FROM maxis_sandbox.engineering_standards.all_data_cleaned"""
-        else:
-            # Other analysts
-            if data_view == "WIP":
-                query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                     local_standards_replaced, replaced_by, ownership, process_step, location,
-                                     current_step_date, days_in_step, num_pages, history
-                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                                WHERE analyst = '{analyst}' AND wip_tab = TRUE"""
-            elif data_view == "Published":
-                query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                     local_standards_replaced, replaced_by, ownership, process_step, location,
-                                     current_step_date, days_in_step, num_pages, history
-                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                                WHERE analyst = '{analyst}' AND published_tab = TRUE"""
-            else:  # Both
-                query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
-                                     local_standards_replaced, replaced_by, ownership, process_step, location,
-                                     current_step_date, days_in_step, num_pages, history
-                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
-                                WHERE analyst = '{analyst}'"""
+        query = """
+            SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process,
+                   key_contact, action, local_standards_replaced, replaced_by, ownership, process_step,
+                   location, current_step_date, days_in_step, num_pages, history,
+                   final_disposition_action, final_date, distribution_year, update_csv,
+                   ils_published, ils_submit_date
+            FROM maxis_sandbox.engineering_standards.all_data_cleaned
+        """
 
     df = sqlQuery(query)
 
-    # rename columns
+    # Rename columns for display
     df = df.rename(columns={
         "record_id": "Record ID",
         "wip_title": "WIP Title",
@@ -147,7 +116,6 @@ def get_analyst_data(analyst, data_view, record_ids=None):
     })
 
     return df
-
 # ============================================================================
 # UTILITY FUNCTIONS
 # ============================================================================
