@@ -65,13 +65,17 @@ if st.session_state.show_creation_form:
         status = st.selectbox("Status", ["Active", "Inactive", "Draft"], key="form_status")
         notes = st.text_area("Notes", key="form_notes")
         submitted = st.form_submit_button("Submit")
+        cancel = st.form_submit_button("Cancel")
 
         if submitted:
-
             # When the form is submitted, pull all form values into a dictionary to create a new record
             values_dict = {k: st.session_state[k] for k in st.session_state if k.startswith("form_")}
             create_new_cg_record(values_dict)
             st.session_state.show_creation_form = False 
+            st.rerun()
+        
+        elif cancel:
+            st.session_state.show_creation_form = False
             st.rerun()
 
 if "show_delete_form" not in st.session_state:
@@ -90,6 +94,7 @@ if st.session_state.show_delete_form:
         # Form field for CG record deletion
         tracking_id_to_delete = st.text_input("Tracking ID to delete", key="delete_form_tracking_id")
         delete_submitted = st.form_submit_button("Delete")
+        cancel_delete = st.form_submit_button("Cancel")
 
         if delete_submitted:
 
@@ -104,3 +109,6 @@ if st.session_state.show_delete_form:
 
                 # Show an error message if no Tracking ID was entered
                 st.error("Please enter a valid Tracking ID to delete.")
+        elif cancel_delete:
+            st.session_state.show_delete_form = False
+            st.rerun()
