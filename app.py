@@ -294,9 +294,9 @@ if not analyst_data.empty:
         col = st.columns(1)[0]
         with col:
             if data_view == "WIP":
-                metric_box(f"WIP Records for {analyst}", wip_count, "#fcf8e3", label_color="#d9534f", value_color="#d9534f")
+                metric_box(f"WIP Records", wip_count, "#fcf8e3", label_color="#d9534f", value_color="#d9534f")
             elif data_view == "Published":
-                metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
+                metric_box(f"Published Records", published_count, "#dff0d8")
         st.markdown("<br>", unsafe_allow_html=True)
 
     # Display the data in an editable grid
