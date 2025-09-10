@@ -24,7 +24,7 @@ else:
     edited_data = st.data_editor(
         data,
         key="cg_editor", 
-        width="content",
+        width=7000,
         hide_index=True,
         num_rows="dynamic",
         disabled=["Tracking ID"]
@@ -63,7 +63,7 @@ if st.session_state.show_form:
         submitted = st.form_submit_button("Submit")
 
         if submitted:
-            
+
             # When the form is submitted, pull all form values into a dictionary to create a new record
             values_dict = {k: st.session_state[k] for k in st.session_state if k.startswith("form_")}
             create_new_cg_record(values_dict)
