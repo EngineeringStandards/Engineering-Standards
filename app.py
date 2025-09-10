@@ -218,8 +218,8 @@ data = getData()
 
 st.header("Engineering Standards GMW Tracking Sheet")
 
-analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
-st.write(f"Looking at {analyst}'s view")
+# analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
+# st.write(f"Looking at {analyst}'s view")
 
 process_steps = [
 "None",
@@ -292,8 +292,8 @@ if "analyst_data_cache" not in st.session_state:
 
 # Check if ANY of the filters have changed
 if (
-    st.session_state.current_analyst != analyst
-    or st.session_state.current_data_view != data_view
+   # st.session_state.current_analyst != analyst or 
+    st.session_state.current_data_view != data_view
     or st.session_state.current_record_ids != record_ids
 ):
     # If a change is detected, re-fetch the data and update the session state
