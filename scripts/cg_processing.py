@@ -57,15 +57,22 @@ def base_cg_query():
     df = sqlQuery(query)
     return df
 
-'''
+"""
 Create a new CG record in the database from a dictionary of data values.
-'''
+
+Parameters:
+    data (dict): Dictionary containing CG record data with keys matching database columns.
+"""
 def create_new_cg_record(data: dict):
+
+    # Query to insert a new CG record into the database with base columns needed
     create_query = """
         INSERT INTO maxis_sandbox.engineering_standards.cg_cleaned_data 
         (tracking_id, title, author, status, notes)
         VALUES (?,?,?,?,?)  
         """
+        
+    # Tuple of values to insert into the database
     values = (data["form_tracking_id"], data["form_title"], data["form_author"], data["form_status"], data["form_notes"])
     sqlQuery(create_query, values)
 
@@ -77,6 +84,8 @@ Parameters:
     tracking_id (str): The CG Tracking ID to search for.
 """
 def find_CG_by_tracking_id(tracking_id: str):
+
+    # Prepare and execute SQL query to find the CG record
     search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = '{tracking_id}'"
     df = sqlQuery(search_query)
     return df
@@ -93,12 +102,15 @@ def update_records(data, updated_data):
     aligned_data = data.reindex_like(updated_data)
     changes = updated_data.compare(aligned_data)
 
+    # If no changes, exit early
     if changes.empty:
         return "No changes detected."
 
+    # Goes through each changed row and updates the database
     for i in changes.index.get_level_values(0).unique():
         row = updated_data.loc[i]
 
+        # Prepare SQL update statement
         query = """
             UPDATE maxis_sandbox.engineering_standards.cg_cleaned_data
             SET title = ?, author = ?, status = ?, notes = ?
