@@ -253,7 +253,7 @@ record_ids_input = st.text_input("Search Record IDs:")
 record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
 
 # 2. Fetch all the analyst data
-analyst_data = get_analyst_data(data_view)
+#analyst_data = get_analyst_data(data_view)
 
 # 3. Filter by record_ids if provided
 if record_ids:
