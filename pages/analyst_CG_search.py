@@ -17,7 +17,6 @@ else:
 
 st.session_state.cg_data = data  
 
-col1, col2, col3 = st.columns([1, 6, 1])
 # Show the data in a table and an error message if no records are found with the search criteria
 if data.empty:
     st.write("No records found.")
@@ -30,6 +29,7 @@ else:
         num_rows="dynamic",
         disabled=["Tracking ID"]
     )
+    col1, col2, col3 = st.columns([1, 6, 3])
     with col1:
         if st.button("Save changes"):
             # Call function to process and save the changes made to the data
@@ -76,7 +76,7 @@ if "show_delete_form" not in st.session_state:
     st.session_state.show_delete_form = False
 
 # Button that makes the delete form visibile
-with col3:
+with col3: 
     if st.button("Delete CG record"):
         st.session_state.show_delete_form = True
 
