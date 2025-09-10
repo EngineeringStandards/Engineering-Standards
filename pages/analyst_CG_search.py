@@ -17,6 +17,7 @@ else:
 
 st.session_state.cg_data = data  
 
+col1, col2, col3 = st.columns([1, 6, 1])
 # Show the data in a table and an error message if no records are found with the search criteria
 if data.empty:
     st.write("No records found.")
@@ -29,25 +30,26 @@ else:
         num_rows="dynamic",
         disabled=["Tracking ID"]
     )
+    with col1:
+        if st.button("Save changes"):
+            # Call function to process and save the changes made to the data
+            update_records(data, edited_data)
 
-    if st.button("Save changes"):
-        # Call function to process and save the changes made to the data
-        update_records(data, edited_data)
+            # Refresh data again after saving
+            if not cg_search or cg_search == "Enter CG tracking ID to search":
+                st.session_state.cg_data = base_cg_query()
+            else:
+                st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
 
-        # Refresh data again after saving
-        if not cg_search or cg_search == "Enter CG tracking ID to search":
-            st.session_state.cg_data = base_cg_query()
-        else:
-            st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
-
-        st.rerun()
+            st.rerun()
 
 if "show_creation_form" not in st.session_state:
     st.session_state.show_creation_form = False
 
 # Button that makes the form visibile
-if st.button("Add CG record"):
-    st.session_state.show_creation_form = True
+with col2:
+    if st.button("Add CG record"):
+        st.session_state.show_creation_form = True
 
 # Only render form if button was pressed
 if st.session_state.show_creation_form:
@@ -74,8 +76,9 @@ if "show_delete_form" not in st.session_state:
     st.session_state.show_delete_form = False
 
 # Button that makes the delete form visibile
-if st.button("Delete CG record"):
-    st.session_state.show_delete_form = True
+with col3:
+    if st.button("Delete CG record"):
+        st.session_state.show_delete_form = True
 
 # Only render delete form if button was pressed
 if st.session_state.show_delete_form:
