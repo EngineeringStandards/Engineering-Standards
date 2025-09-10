@@ -51,18 +51,74 @@ def sqlQuery(query: str) -> pd.DataFrame:
             cursor.execute(query)
             return cursor.fetchall_arrow().to_pandas()
 
-def get_analyst_data(data_view, record_ids=None):
-    if data_view == "WIP":
-        query = "SELECT * FROM wip_table"
-    elif data_view == "Published":
-        query = "SELECT * FROM published_table"
-    else:  # Both
-        query = "SELECT * FROM combined_table"
+def get_analyst_data(analyst, data_view, record_ids=None):
+    """
+    Retrieve analyst data from the engineering standards database.
+    
+    Args:
+        analyst (str): Name of the analyst to filter by
+        data_view (str): Type of data to retrieve ('WIP', 'Published', or 'Both')
+        record_ids (list, optional): List of specific record IDs to filter by
+        
+    Returns:
+        pd.DataFrame: Filtered analyst data with renamed columns
+    """
+    if record_ids:
+        record_ids_str = ",".join([f"'{rid}'" for rid in record_ids])
+        if analyst == "Lisa Coppola" and data_view == "WIP":
+            query = f"""SELECT record_id, wip_tab, published_tab, final_disposition_action, final_date, distribution_year, update_csv, ils_published, ils_submit_date, published_tab
+                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                        WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
+        else:
+            query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action, 
+                                local_standards_replaced, replaced_by, ownership, process_step, location, 
+                                current_step_date, days_in_step, num_pages, history
+                        FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                        WHERE UPPER(TRIM(record_id)) IN ({record_ids_str})"""
+    else:
+        # Handle Lisa Coppola separately
+        if analyst == "Lisa Coppola":
+            if data_view == "WIP":
+                query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
+                                     local_standards_replaced, replaced_by, ownership, process_step, location, 
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE wip_tab = TRUE"""
+            elif data_view == "Published":
+                query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
+                                     local_standards_replaced, replaced_by, ownership, process_step, location, 
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE published_tab = TRUE"""
+            else:  # Both
+                query = """SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
+                                     local_standards_replaced, replaced_by, ownership, process_step, location, 
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned"""
+        else:
+            # Other analysts
+            if data_view == "WIP":
+                query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
+                                     local_standards_replaced, replaced_by, ownership, process_step, location,
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE analyst = '{analyst}' AND wip_tab = TRUE"""
+            elif data_view == "Published":
+                query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
+                                     local_standards_replaced, replaced_by, ownership, process_step, location,
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE analyst = '{analyst}' AND published_tab = TRUE"""
+            else:  # Both
+                query = f"""SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process, key_contact, action,
+                                     local_standards_replaced, replaced_by, ownership, process_step, location,
+                                     current_step_date, days_in_step, num_pages, history
+                                FROM maxis_sandbox.engineering_standards.all_data_cleaned
+                                WHERE analyst = '{analyst}'"""
 
-    # Run the query
     df = sqlQuery(query)
 
-    # Rename columns
+    # rename columns
     df = df.rename(columns={
         "record_id": "Record ID",
         "wip_title": "WIP Title",
@@ -90,11 +146,8 @@ def get_analyst_data(data_view, record_ids=None):
         "ils_submit_date": "ILS Submit Date"
     })
 
-    # Filter by record IDs if provided
-    if record_ids:
-        df = df[df["Record ID"].isin(record_ids)]
-
     return df
+
 # ============================================================================
 # UTILITY FUNCTIONS
 # ============================================================================
@@ -165,8 +218,8 @@ data = getData()
 
 st.header("Engineering Standards GMW Tracking Sheet")
 
-# analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
-# st.write(f"Looking at {analyst}'s view")
+analyst = st.selectbox("Analyst:", ["Judy Brombach", "Stacy Weegman", "Greg Scofield", "Dave Haas", "Kim Thompson", "Rodger Mertz", "Greg Rushlow", "Lisa Coppola"])
+st.write(f"Looking at {analyst}'s view")
 
 process_steps = [
 "None",
@@ -200,7 +253,7 @@ record_ids_input = st.text_input("Search Record IDs:")
 record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
 
 # 2. Fetch all the analyst data
-#analyst_data = get_analyst_data(data_view)
+analyst_data = get_analyst_data(analyst, data_view)
 
 # 3. Filter by record_ids if provided
 if record_ids:
@@ -227,7 +280,39 @@ def metric_box(label, value, bg_color="#f0f2f6", label_color="#333", value_color
         unsafe_allow_html=True
     )
 
-if not analyst_data.empty:
+# Initialize session state for tracking filters and data
+if "current_analyst" not in st.session_state:
+    st.session_state.current_analyst = None
+if "current_data_view" not in st.session_state:
+    st.session_state.current_data_view = None
+if "current_record_ids" not in st.session_state:
+    st.session_state.current_record_ids = None
+if "analyst_data_cache" not in st.session_state:
+    st.session_state.analyst_data_cache = pd.DataFrame() # Initialize with an empty DataFrame
+
+# Check if ANY of the filters have changed
+if (
+    st.session_state.current_analyst != analyst
+    or st.session_state.current_data_view != data_view
+    or st.session_state.current_record_ids != record_ids
+):
+    # If a change is detected, re-fetch the data and update the session state
+    analyst_data = get_analyst_data(analyst, data_view)
+
+    # Apply in-memory filtering by record ID if provided
+    if record_ids:
+        analyst_data = analyst_data[analyst_data["Record ID"].isin(record_ids)]
+
+    # Update all tracker variables and the data cache
+    st.session_state.current_analyst = analyst
+    st.session_state.current_data_view = data_view
+    st.session_state.current_record_ids = record_ids
+    st.session_state.analyst_data_cache = analyst_data.copy()
+    st.session_state.selected_row = None
+    st.rerun() # Use rerun to ensure the app state is reset and redrawn
+
+if not st.session_state.analyst_data_cache.empty:
+    wip_count, published_count = get_metrics(st.session_state.analyst_data_cache)
     if data_view == "Both":
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -241,9 +326,9 @@ if not analyst_data.empty:
         col = st.columns(1)[0]
         with col:
             if data_view == "WIP":
-                metric_box(f"WIP Records", wip_count, "#fcf8e3", label_color="#d9534f", value_color="#d9534f")
+                metric_box(f"WIP Records for {analyst}", wip_count, "#fcf8e3", label_color="#d9534f", value_color="#d9534f")
             elif data_view == "Published":
-                metric_box(f"Published Records", published_count, "#dff0d8")
+                metric_box(f"Published Records for {analyst}", published_count, "#dff0d8")
         st.markdown("<br>", unsafe_allow_html=True)
 
     # Display the data in an editable grid
@@ -282,7 +367,7 @@ if not analyst_data.empty:
         update_mode=GridUpdateMode.SELECTION_CHANGED,
         theme="balham",  # themes: "streamlit", "light", "dark", "blue", "fresh", "balham"
         height=600,
-        fit_columns_on_grid_load=True,
+        #fit_columns_on_grid_load=True,
         custom_css=custom_css
     )
     
