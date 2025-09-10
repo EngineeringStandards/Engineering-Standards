@@ -71,7 +71,7 @@ def create_new_cg_record(data: dict):
         (tracking_id, title, author, status, notes)
         VALUES (?,?,?,?,?)  
         """
-        
+
     # Tuple of values to insert into the database
     values = (data["form_tracking_id"], data["form_title"], data["form_author"], data["form_status"], data["form_notes"])
     sqlQuery(create_query, values)
@@ -120,3 +120,13 @@ def update_records(data, updated_data):
         
         # Execute SQL update
         sqlQuery(query, values)
+
+"""
+Delete a CG record from the database using its Tracking ID.
+
+Parameters:
+    tracking_id (str): The CG Tracking ID of the record to delete.
+"""
+def delete_cg_record(tracking_id: str):
+    delete_query = f"DELETE FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = {tracking_id}"
+    sqlQuery(delete_query)

@@ -42,15 +42,15 @@ else:
 
         st.rerun()
 
-if "show_form" not in st.session_state:
-    st.session_state.show_form = False
+if "show_creation_form" not in st.session_state:
+    st.session_state.show_creation_form = False
 
 # Button that makes the form visibile
 if st.button("Add CG record"):
-    st.session_state.show_form = True
+    st.session_state.show_creation_form = True
 
 # Only render form if button was pressed
-if st.session_state.show_form:
+if st.session_state.show_creation_form:
     with st.form("new_cg_form",enter_to_submit=False, clear_on_submit=True):
         st.write("New CG record form")
 
@@ -67,5 +67,27 @@ if st.session_state.show_form:
             # When the form is submitted, pull all form values into a dictionary to create a new record
             values_dict = {k: st.session_state[k] for k in st.session_state if k.startswith("form_")}
             create_new_cg_record(values_dict)
-            st.session_state.show_form = False 
+            st.session_state.show_creation_form = False 
             st.rerun()
+
+if "show_delete_form" not in st.session_state:
+    st.session_state.show_delete_form = False
+
+if st.button("Delete CG record"):
+    st.session_state.show_delete_form = True
+
+if st.session_state.show_delete_form:
+    with st.form("delete_cg_form", enter_to_submit=False):
+        st.write("Delete CG record form")
+
+        # Form field for CG record deletion
+        tracking_id_to_delete = st.text_input("Tracking ID to delete", key="delete_form_tracking_id")
+        delete_submitted = st.form_submit_button("Delete")
+
+        if delete_submitted:
+            if tracking_id_to_delete:
+                delete_cg_record(tracking_id_to_delete)
+                st.session_state.show_delete_form = False
+                st.rerun()
+            else:
+                st.error("Please enter a valid Tracking ID to delete.")
