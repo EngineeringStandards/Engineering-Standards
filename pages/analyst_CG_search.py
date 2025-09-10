@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id, update_records, create_new_cg_record, delete_cg_record
+from scripts.cg_processing import base_cg_query, find_CG, update_records, create_new_cg_record, delete_cg_record
 
 st.title("CG Dashboard")
 st.sidebar.success("You are currently viewing the CG Dashboard")
@@ -10,10 +10,13 @@ cg_search = st.text_input("CG Tracking ID", "Enter CG tracking ID to search")
 st.write(f"Searching for CG tracking ID: {cg_search}")
 
 # Always refresh data based on search input
-if not cg_search or cg_search == "Enter CG tracking ID to search":
+options = ["Tracking ID", "CG Number"]
+selected_option = st.pills("Search by", options, selection_mode="single")
+
+if not cg_search or cg_search == f"Enter {selected_option} to search":
     data = base_cg_query()
 else:
-    data = find_CG_by_tracking_id(cg_search)
+    data = find_CG(selected_option, cg_search)
 
 st.session_state.cg_data = data  
 
@@ -38,10 +41,13 @@ else:
             update_records(data, edited_data)
 
             # Refresh data again after saving
+            options = ["Tracking ID", "CG Number"]
+            selected_option = st.pills("Search by", options, selection_mode="single")
+
             if not cg_search or cg_search == "Enter CG tracking ID to search":
                 st.session_state.cg_data = base_cg_query()
             else:
-                st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
+                st.session_state.cg_data = find_CG(selected_option,cg_search)
 
             st.rerun()
 
