@@ -82,7 +82,7 @@ Find a specific CG record by using its Tracking ID.
 Parameters:
     tracking_id (str): The CG Tracking ID to search for.
 """
-def find_CG(tracking_id: str):
+def find_CG_by_tracking_id(tracking_id: str):
     # Prepare and execute SQL query to find the CG record
     search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = '{tracking_id}'"
     df = sqlQuery(search_query)
