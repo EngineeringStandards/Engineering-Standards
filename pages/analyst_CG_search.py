@@ -36,18 +36,18 @@ else:
     )
 
 col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("Save changes"):
-            # Call function to process and save the changes made to the data
-            update_records(data, edited_data)
+with col1:
+    if st.button("Save changes"):
+        # Call function to process and save the changes made to the data
+        update_records(data, edited_data)
 
-            # Refresh data again after saving
-            if not cg_search or cg_search == "Enter CG tracking ID to search":
-                st.session_state.cg_data = base_cg_query()
-            else:
-                st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
+        # Refresh data again after saving
+        if not cg_search or cg_search == "Enter CG tracking ID to search":
+            st.session_state.cg_data = base_cg_query()
+        else:
+            st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
 
-            st.rerun()
+        st.rerun()
 
 if "show_creation_form" not in st.session_state:
     st.session_state.show_creation_form = False
