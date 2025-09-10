@@ -35,7 +35,7 @@ else:
         disabled=["Tracking ID"]
     )
 
-    col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("Save changes"):
             # Call function to process and save the changes made to the data
