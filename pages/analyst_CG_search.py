@@ -73,11 +73,13 @@ if st.session_state.show_creation_form:
 if "show_delete_form" not in st.session_state:
     st.session_state.show_delete_form = False
 
+# Button that makes the delete form visibile
 if st.button("Delete CG record"):
     st.session_state.show_delete_form = True
 
+# Only render delete form if button was pressed
 if st.session_state.show_delete_form:
-    with st.form("delete_cg_form", enter_to_submit=False):
+    with st.form("delete_cg_form", enter_to_submit=False, clear_on_submit=True):
         st.write("Delete CG record form")
 
         # Form field for CG record deletion
@@ -85,9 +87,15 @@ if st.session_state.show_delete_form:
         delete_submitted = st.form_submit_button("Delete")
 
         if delete_submitted:
+
+            # When the form is submitted, get the Tracking ID to delete
             if tracking_id_to_delete:
+
+                # Call function to delete the CG record with the specified Tracking ID
                 delete_cg_record(tracking_id_to_delete)
                 st.session_state.show_delete_form = False
                 st.rerun()
             else:
+
+                # Show an error message if no Tracking ID was entered
                 st.error("Please enter a valid Tracking ID to delete.")

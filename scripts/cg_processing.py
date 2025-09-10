@@ -64,7 +64,6 @@ Parameters:
     data (dict): Dictionary containing CG record data with keys matching database columns.
 """
 def create_new_cg_record(data: dict):
-
     # Query to insert a new CG record into the database with base columns needed
     create_query = """
         INSERT INTO maxis_sandbox.engineering_standards.cg_cleaned_data 
@@ -84,7 +83,6 @@ Parameters:
     tracking_id (str): The CG Tracking ID to search for.
 """
 def find_CG_by_tracking_id(tracking_id: str):
-
     # Prepare and execute SQL query to find the CG record
     search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = '{tracking_id}'"
     df = sqlQuery(search_query)
@@ -128,5 +126,6 @@ Parameters:
     tracking_id (str): The CG Tracking ID of the record to delete.
 """
 def delete_cg_record(tracking_id: str):
+    # Prepare and execute SQL delete statement
     delete_query = f"DELETE FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE tracking_id = {tracking_id}"
     sqlQuery(delete_query)
