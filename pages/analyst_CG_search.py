@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from scripts.cg_processing import base_cg_query, find_CG, update_records, create_new_cg_record, delete_cg_record
+from scripts.cg_processing import base_cg_query, find_CG_by, update_records, create_new_cg_record, delete_cg_record
 
 st.title("CG Dashboard")
 st.sidebar.success("You are currently viewing the CG Dashboard")
