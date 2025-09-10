@@ -10,7 +10,7 @@ options = ["Tracking ID", "CG Number"]
 select_option = st.pills("Select search type", options, selection_mode="single")
 st.write(f"Selected search type: {select_option}")
 
-cg_search = st.text_input("CG Tracking ID", "Enter CG tracking ID to search")
+cg_search = st.text_input(select_option, f"Enter {select_option} to search")
 st.write(f"Searching for CG tracking ID: {cg_search}")
 
 # Always refresh data based on search input
