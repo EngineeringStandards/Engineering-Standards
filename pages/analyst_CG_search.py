@@ -8,13 +8,12 @@ st.sidebar.success("You are currently viewing the CG Dashboard")
 # Search box for CG Tracking ID
 options = ["Tracking ID", "CG Number"]
 select_option = st.pills("Select search type", options, selection_mode="single")
-st.write(f"Selected search type: {select_option}")
 
-cg_search = st.text_input("CG Tracking ID", "Enter CG tracking ID to search")
-st.write(f"Searching for CG tracking ID: {cg_search}")
+cg_search = st.text_input("CG Tracking ID/CG Number", "Enter CG tracking ID or CG number to search")
+st.write(f"Searching for {select_option}: {cg_search}")
 
 # Always refresh data based on search input
-if not cg_search or cg_search == "Enter CG tracking ID to search":
+if not cg_search or cg_search == "Enter CG tracking ID or CG number to search":
     data = base_cg_query()
 else:
     data = find_CG_by_tracking_id(cg_search)
@@ -42,7 +41,7 @@ else:
             update_records(data, edited_data)
 
             # Refresh data again after saving
-            if not cg_search or cg_search == "Enter CG tracking ID to search":
+            if not cg_search or cg_search == "Enter CG tracking ID or CG number to search":
                 st.session_state.cg_data = base_cg_query()
             else:
                 st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
