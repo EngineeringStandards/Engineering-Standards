@@ -196,11 +196,11 @@ language_gdm,
 electronic_collection_gdm,
 regulatory_date_gdm,
 regulatory_standards_gdm,
-record_id_issue_date_gdm,
+
 owner_gdm,
-content_date_gdm,
+
 modifier_gdm,
-modified_gdm,
+
 source_system_gdm,
 source_sys_load_date_gdm,
 modifier_2_gdm,
@@ -318,6 +318,7 @@ ils_submit_date,
 ils_status,
 ils_comments,
 priority,
+'sort'
 project_998_list,
 project_998_closed,
 rep_998_comments,
