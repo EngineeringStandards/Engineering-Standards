@@ -1,5 +1,5 @@
 # ============================================================================
-# ENGINEERING STANDARDS DASHBOARD - SIMPLIFIED VERSION
+# ENGINEERING STANDARDS DASHBOARD - SIMPLIFIED VERSION WITH SAVE BUTTON
 # ============================================================================
 import os
 from databricks import sql
@@ -79,6 +79,22 @@ def get_analyst_data(record_ids=None):
     return df
 
 # ============================================================================
+# UPDATE FUNCTION PLACEHOLDER
+# ============================================================================
+def update_records(original_df, edited_df):
+    """Compare original vs edited and push updates to Databricks (placeholder)."""
+    changes = edited_df.compare(original_df, keep_shape=True, keep_equal=False)
+    if not changes.empty:
+        st.write("Detected changes:")
+        st.dataframe(changes)
+        # 👉 Replace with your Databricks UPDATE logic per row
+        # For example:
+        # for idx, row in changes.iterrows():
+        #     sqlQuery(f"UPDATE ... WHERE record_id = '{row['Record ID']}'")
+    else:
+        st.info("No changes detected.")
+
+# ============================================================================
 # STREAMLIT APP CONFIGURATION
 # ============================================================================
 st.set_page_config(layout="wide")
@@ -94,10 +110,14 @@ record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.
 # ============================================================================
 # FETCH DATA
 # ============================================================================
-analyst_data = get_analyst_data(record_ids)
+if "data" not in st.session_state:
+    st.session_state.data = get_analyst_data(record_ids)
+else:
+    # refresh when new search
+    st.session_state.data = get_analyst_data(record_ids)
 
-if not analyst_data.empty:
-    gb = GridOptionsBuilder.from_dataframe(analyst_data)
+if not st.session_state.data.empty:
+    gb = GridOptionsBuilder.from_dataframe(st.session_state.data)
     gb.configure_pagination(paginationAutoPageSize=True)
     gb.configure_side_bar()
     gb.configure_default_column(editable=True, groupable=True, filter=True, sortable=True, resizable=True)
@@ -110,23 +130,28 @@ if not analyst_data.empty:
 
     gridOptions = gb.build()
 
-    custom_css = {
-        ".ag-header-cell-label": {
-            "background-color": "#d9edf7",
-            "color": "black",
-            "font-weight": "bold",
-            "font-size": "16px"
-        }
-    }
-
-    AgGrid(
-        analyst_data,
+    grid_response = AgGrid(
+        st.session_state.data,
         gridOptions=gridOptions,
-        enable_enterprise_modules=False,
-        update_mode=GridUpdateMode.SELECTION_CHANGED,
+        update_mode=GridUpdateMode.VALUE_CHANGED,
         theme="balham",
-        height=600,
-        custom_css=custom_css
+        height=600
     )
+
+    edited_df = pd.DataFrame(grid_response["data"])
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("💾 Save changes"):
+            update_records(st.session_state.data, edited_df)
+            st.session_state.data = edited_df
+            st.success("Changes saved successfully!")
+
+    with col2:
+        if st.button("❌ Cancel changes"):
+            st.session_state.data = get_analyst_data(record_ids)
+            st.warning("Edits discarded.")
+            st.rerun()
+
 else:
     st.warning("No data to display")
