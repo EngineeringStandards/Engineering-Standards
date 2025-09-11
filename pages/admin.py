@@ -227,7 +227,7 @@ ils_ready_to_publish
 from maxis_sandbox.engineering_standards.all_data_cleaned
 WHERE Do_not_include = False AND Duplicates_for_Published_Tab_Only = False
 ORDER BY Record_ID""",
-    "Add Duplicate GMW to WIP": """select 
+    "Add Duplicate GMW to WIP": """SELECT 
 record_id,
 comments_to_retain,
 wip_tab,
@@ -318,7 +318,7 @@ ils_submit_date,
 ils_status,
 ils_comments,
 priority,
-`sort`,
+sort,
 project_998_list,
 project_998_closed,
 rep_998_comments,
