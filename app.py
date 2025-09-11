@@ -122,11 +122,17 @@ else:
      # Fix widths for important columns
     gb.configure_column("Record ID", editable=False, width=500)
     gb.configure_column("WIP Title", width=700)
-    gb.configure_column("Key Contact", width=400)
-    gb.configure_column("Process Step", width=600)
-    gb.configure_column("History", width=400)
+    gb.configure_column("Key Contact", width=600)
+    gb.configure_column("Process Step", width=800)
+    gb.configure_column("History", width=700)
     gb.configure_column("Ownership", width=400)
     gb.configure_column("Analyst", width=600)
+    gb.configure_column("Project", width=500)
+    gb.configure_column("Submit Date", width=500)
+    gb.configure_column("Days in Process", width=500)
+    gb.configure_column("Action", width=600)
+    gb.configure_column("Local Standards Replaced", width=600)
+    gb.configure_column("Replaced By", width=600)
 
 
     grid_options = gb.build()
@@ -138,8 +144,7 @@ else:
         fit_columns_on_grid_load=True,
         allow_unsafe_jscode=True,
         theme="balham",
-        height=600,
-        minwidth = 500
+        height=600
     )
 
     edited_data = pd.DataFrame(grid_response["data"])
