@@ -35,4 +35,17 @@ menu_options = [
     "Custom Query"
 ]
 
-selection = st.sidebar("Select a query:", menu_options)
+st.sidebar.title("Query Menu")
+
+if st.sidebar.button("All Records"):
+    selection = "All Records"
+elif st.sidebar.button("Records by Analyst"):
+    selection = "Records by Analyst"
+elif st.sidebar.button("Pending Updates"):
+    selection = "Pending Updates"
+elif st.sidebar.button("Custom Query"):
+    selection = "Custom Query"
+else:
+    selection = None
+
+st.write(f"You selected: {selection}")
