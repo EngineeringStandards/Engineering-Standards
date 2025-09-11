@@ -95,14 +95,7 @@ def update_records(original_df, edited_df):
         st.warning("Detected changes:")
         st.dataframe(pd.DataFrame(diffs))
 
-        # Example update loop (commented until ready for live updates):
-        # for diff in diffs:
-        #     query = f"""
-        #         UPDATE maxis_sandbox.engineering_standards.all_data_cleaned
-        #         SET {diff['Column']} = '{diff['New Value']}'
-        #         WHERE record_id = '{diff['Record ID']}'
-        #     """
-        #     sqlQuery(query)
+       
     else:
         st.success("No changes detected.")
 
@@ -125,7 +118,6 @@ else:
         data,
         key="standards_editor",
         hide_index=True,
-        num_rows="dynamic",
         use_container_width=True,
         disabled=["Record ID"]  # Lock primary key
     )
