@@ -224,7 +224,8 @@ ils_ready_to_publish
 from maxis_sandbox.engineering_standards.all_data_cleaned
 WHERE Do_not_include = False AND Duplicates_for_Published_Tab_Only = False
 ORDER BY Record_ID""",
-    "Additional Documents": """ SELECT
+"Add Duplicate GMW to WIP": "SELECT * FROM table_all_active_standards LIMIT 100",
+"Additional Documents": """ SELECT
   Record_ID,
   WIP_Title,
   Team_Name,
@@ -252,7 +253,32 @@ WHERE Folder_GDM = 'Additional Documents'
 ORDER BY Record_ID;
 
 """,
-    "All Active Standards": "SELECT * FROM table_all_active_standards LIMIT 100",
+    "All Active Standards": """SELECT 
+    record_id,
+    wip_title,
+    team_name,
+    key_contact,
+    ownership,
+    single_point_contact,
+    distribution_yyyymm,
+    wip_tab,
+    published_tab,
+    engineering_standards_status_gdm,
+    distribution_type_permitted_gdm,
+    analyst,
+    distribution_yyyymm_gdm,
+    comments_to_retain,
+    team_name_gdm,
+    folder_gdm,
+    hyperlink_latest_version_gdm,
+    kc_gmin,
+    kc_email,
+    last_analyst,
+    final_disposition_action,
+    final_date
+FROM maxis_sandbox.engineering_standards.all_data_cleaned
+WHERE engineering_standards_status_gdm = 'Active'
+ORDER BY record_id""",
     "Assign Multiple GMWs": "SELECT * FROM table_assign_multiple_gmws LIMIT 100",
     "Body": "SELECT * FROM table_body LIMIT 100",
     "Body Changes": "SELECT * FROM table_body_changes LIMIT 100",
