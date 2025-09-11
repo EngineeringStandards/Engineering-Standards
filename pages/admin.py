@@ -84,12 +84,91 @@ for q in queries:
 if selection:
     st.write(f"**Selected Query:** {selection}")
     
-    # Example: replace this with actual SQL queries per selection
     sql_map = {
-        "001-CG1594 - WIP TAB": "SELECT * FROM table_wip LIMIT 100",
-        "002-CG1594 - PUBLISHED TAB": "SELECT * FROM table_published LIMIT 100",
-        # add mapping for other queries...
-    }
+    "001-CG1594 - WIP TAB": """SELECT 
+    Record_ID, 
+    WIP_Title, 
+    Project, 
+    Submit_Date, 
+    Days_in_Process, 
+    Key_Contact, 
+    Analyst, 
+    Action, 
+    Local_Standards_Replaced, 
+    Replaced_By, 
+    Checked_for_Regulatory, 
+    CG_Tracking_ID, 
+    WIP_TAB, 
+    PUBLISHED_TAB, 
+    Ownership, 
+    Final_Date, 
+    ILS_Ready_to_Publish, 
+    team_name_gdm, 
+    Distribution_YYYYMM, 
+    Distribution_YYYYMM_GDM, 
+    Single_Point_Contact, 
+    Num_Pages, 
+    Team_Name, 
+    Engineering_Standards_Status_GDM, 
+    History, 
+    Comments_to_Retain, 
+    ILS_Comments, 
+    ILS_Status, 
+    Whats_the_Plan, 
+    ILS_WIP, 
+    Distribution_Type_Permitted_GDM, 
+    Information_Security_Classification_GDM, 
+    wl_2023_transfers, 
+    Judy_Tracking_for_Analyst, 
+    show_on_judy_tracking, 
+    workload_2025_comments,
+    KC_GMIN, 
+    KC_Email
+FROM maxis_sandbox.engineering_standards.all_data_cleaned
+WHERE WIP_TAB = True
+ORDER BY Record_ID, WIP_Title
+""",
+    "002-CG1594 - PUBLISHED TAB": "SELECT * FROM table_published LIMIT 100",
+    "2025 Workload": "SELECT * FROM table_2025_workload LIMIT 100",
+    "Add Duplicate GMW to WIP": "SELECT * FROM table_add_duplicate_gmw LIMIT 100",
+    "Additional Documents": "SELECT * FROM table_additional_documents LIMIT 100",
+    "All Active Standards": "SELECT * FROM table_all_active_standards LIMIT 100",
+    "Assign Multiple GMWs": "SELECT * FROM table_assign_multiple_gmws LIMIT 100",
+    "Body": "SELECT * FROM table_body LIMIT 100",
+    "Body Changes": "SELECT * FROM table_body_changes LIMIT 100",
+    "CSV01 for Accuris - EXTERNAL RESTRICTED": "SELECT * FROM table_csv01 LIMIT 100",
+    "CSV02 for Accuris - HIGHLY RESTRICTED": "SELECT * FROM table_csv02 LIMIT 100",
+    "CSV03 for Accuris - EXTERNAL": "SELECT * FROM table_csv03 LIMIT 100",
+    "CSV04 for CG2569 - All": "SELECT * FROM table_csv04 LIMIT 100",
+    "CSV05 for CG2569 - Eng Stds Pub": "SELECT * FROM table_csv05 LIMIT 100",
+    "DNG": "SELECT * FROM table_dng LIMIT 100",
+    "Editables": "SELECT * FROM table_editables LIMIT 100",
+    "Fix Ownerships": "SELECT * FROM table_fix_ownerships LIMIT 100",
+    "ILS: 001-WIP": "SELECT * FROM table_ils_001_wip LIMIT 100",
+    "ILS: 002-OOPS - Ready to Publish": "SELECT * FROM table_ils_002_oops LIMIT 100",
+    "ILS: 002-Ready to Publish": "SELECT * FROM table_ils_002_ready LIMIT 100",
+    "ILS: 003-Submitted to Publisher": "SELECT * FROM table_ils_003_submitted LIMIT 100",
+    "ILS: 004-Published": "SELECT * FROM table_ils_004_published LIMIT 100",
+    "ILS: Batch Sheet - Additional Documents Folder": "SELECT * FROM table_ils_batch_additional LIMIT 100",
+    "ILS: Batch Sheet - ES Published Folder": "SELECT * FROM table_ils_batch_es_published LIMIT 100",
+    "RECONCILE: Mark Published": "SELECT * FROM table_reconcile_mark_published LIMIT 100",
+    "RECONCILE: Published Documents": "SELECT * FROM table_reconcile_published LIMIT 100",
+    "RECONCILE: TCIMM Notification": "SELECT * FROM table_reconcile_tcimm LIMIT 100",
+    "Regionals": "SELECT * FROM table_regionals LIMIT 100",
+    "Send to ILM folders-Remove from All Data": "SELECT * FROM table_send_to_ilm LIMIT 100",
+    "SPCs": "SELECT * FROM table_spcs LIMIT 100",
+    "Special Collection Honda Electrification (BEV)": "SELECT * FROM table_special_honda LIMIT 100",
+    "Special Collections - Monthly Publishing": "SELECT * FROM table_special_monthly LIMIT 100",
+    "Update from CSV": "SELECT * FROM table_update_csv LIMIT 100",
+    "Year End Cleanup - Remove Duplicates": "SELECT * FROM table_year_end_duplicates LIMIT 100",
+    "Year End Cleanup - Remove Published": "SELECT * FROM table_year_end_published LIMIT 100",
+    "Yearly ILM Review-Inactive": "SELECT * FROM table_yearly_ilm_inactive LIMIT 100",
+    "Yearly ILM Review-LU/SUPER": "SELECT * FROM table_yearly_ilm_lu_super LIMIT 100",
+    "z0-Judy Tracking for Analysts - Status Report": "SELECT * FROM table_judy_tracking_status LIMIT 100",
+    "z0-Judy's Nagging List": "SELECT * FROM table_judy_nagging LIMIT 100",
+    "z1-Judy's Tracking List-WIP": "SELECT * FROM table_judy_tracking_wip LIMIT 100"
+}
+
     
     query_string = sql_map.get(selection, f"SELECT * FROM {selection.replace(' ', '_')} LIMIT 100")
     df = sqlQuery(query_string)
