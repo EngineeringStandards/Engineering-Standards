@@ -116,7 +116,7 @@ else:
     # AgGrid setup
     # =============================
     gb = GridOptionsBuilder.from_dataframe(data)
-    gb.configure_default_column(editable=True, filter="agTextColumnFilter", sortable=True, resizable=True)
+    gb.configure_default_column(editable=True, filter="agTextColumnFilter", sortable=True, resizable=True, minwidth=600)
    
 
      # Fix widths for important columns
