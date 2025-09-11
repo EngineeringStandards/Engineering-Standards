@@ -130,13 +130,27 @@ if not st.session_state.data.empty:
 
     gridOptions = gb.build()
 
+    custom_css = {
+    ".ag-cell-focus": {      # Cell in focus
+        "border": "2px solid #3B82F6 !important",
+        "outline": "none !important",
+        "background-color": "#E0F2FE !important"  # light blue
+    },
+    ".ag-cell-inline-editing": {   # When actively editing a cell
+        "border": "2px solid #2563EB !important",
+        "background-color": "#DBEAFE !important",  # darker blue
+        "box-shadow": "0 0 5px rgba(37,99,235,0.7)"
+    }
+}
+
     grid_response = AgGrid(
-        st.session_state.data,
-        gridOptions=gridOptions,
-        update_mode=GridUpdateMode.VALUE_CHANGED,
-        theme="balham",
-        height=600
-    )
+    st.session_state.data,
+    gridOptions=gridOptions,
+    update_mode=GridUpdateMode.VALUE_CHANGED,
+    theme="balham",
+    height=600,
+    custom_css=custom_css
+)
 
     edited_df = pd.DataFrame(grid_response["data"])
 
