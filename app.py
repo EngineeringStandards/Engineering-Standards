@@ -121,7 +121,7 @@ else:
 
      # Fix widths for important columns
     gb.configure_column("Record ID", editable=False, width=500)
-    gb.configure_column("WIP Title", width=700)
+    gb.configure_column("WIP Title", width=1500)
     gb.configure_column("Key Contact", width=600)
     gb.configure_column("Process Step", width=800)
     gb.configure_column("History", width=700)
