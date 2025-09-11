@@ -26,3 +26,13 @@ def sqlQuery(query: str) -> pd.DataFrame:
         with connection.cursor() as cursor:
             cursor.execute(query)
             return cursor.fetchall_arrow().to_pandas()
+        
+
+menu_options = [
+    "All Records",
+    "Records by Analyst",
+    "Pending Updates",
+    "Custom Query"
+]
+
+selection = st.sidebar("Select a query:", menu_options)
