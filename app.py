@@ -1,22 +1,21 @@
 # ============================================================================
-# ENGINEERING STANDARDS DASHBOARD - WITH SAVE BUTTON
+# ENGINEERING STANDARDS DASHBOARD - with st.data_editor
 # ============================================================================
-import os
-from databricks import sql
 import streamlit as st
 import pandas as pd
-from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
+from databricks import sql
 
 # ============================================================================
-# CONFIGURATION AND CONSTANTS
+# CONFIGURATION
 # ============================================================================
 warehouse_id = "f50df4c3b0b8cb91"
 DATABRICKS_SERVER = "adb-4151713458336319.19.azuredatabricks.net"
-DATABRICKS_TOKEN = "dapi97bfcf4f2625d2d7d1c1982bcee6cf8d-3"  # Don't touch token
+DATABRICKS_TOKEN = "dapi97bfcf4f2625d2d7d1c1982bcee6cf8d-3"
 
 # ============================================================================
-# DATABASE CONNECTION AND QUERY FUNCTIONS
+# HELPER FUNCTIONS
 # ============================================================================
+@st.cache_data
 def sqlQuery(query: str) -> pd.DataFrame:
     with sql.connect(
         server_hostname=DATABRICKS_SERVER,
@@ -27,6 +26,7 @@ def sqlQuery(query: str) -> pd.DataFrame:
             cursor.execute(query)
             return cursor.fetchall_arrow().to_pandas()
 
+@st.cache_data
 def get_analyst_data(record_ids=None):
     if record_ids:
         record_ids_str = ",".join([f"'{rid.upper().strip()}'" for rid in record_ids])
@@ -50,7 +50,7 @@ def get_analyst_data(record_ids=None):
         """
 
     df = sqlQuery(query)
-    df = df.rename(columns={
+    return df.rename(columns={
         "record_id": "Record ID",
         "wip_title": "WIP Title",
         "project": "Project",
@@ -76,19 +76,13 @@ def get_analyst_data(record_ids=None):
         "ils_published": "ILS Published",
         "ils_submit_date": "ILS Submit Date"
     })
-    return df
 
-# ============================================================================
-# UPDATE RECORDS (similar to your CG Dashboard)
-# ============================================================================
 def update_records(original_df, edited_df):
-    # detect diffs (basic example)
-    original_aligned = original_df.reset_index(drop=True)
-    edited_aligned = edited_df.reset_index(drop=True)
+    """Compare original vs edited and push updates."""
     diffs = []
-    for idx, row in edited_aligned.iterrows():
-        orig_row = original_aligned.loc[idx]
-        for col in edited_aligned.columns:
+    for idx, row in edited_df.iterrows():
+        orig_row = original_df.loc[idx]
+        for col in edited_df.columns:
             if pd.notna(row[col]) and row[col] != orig_row[col]:
                 diffs.append({
                     "Record ID": row["Record ID"],
@@ -98,69 +92,50 @@ def update_records(original_df, edited_df):
                 })
 
     if diffs:
-        st.write("Detected changes:")
+        st.warning("Detected changes:")
         st.dataframe(pd.DataFrame(diffs))
 
-        # 👉 Here you’d loop over diffs and execute UPDATE queries in Databricks
-        # Example:
+        # Example update loop (commented until ready for live updates):
         # for diff in diffs:
         #     query = f"""
-        #     UPDATE maxis_sandbox.engineering_standards.all_data_cleaned
-        #     SET {diff['Column']} = '{diff['New Value']}'
-        #     WHERE record_id = '{diff['Record ID']}'
+        #         UPDATE maxis_sandbox.engineering_standards.all_data_cleaned
+        #         SET {diff['Column']} = '{diff['New Value']}'
+        #         WHERE record_id = '{diff['Record ID']}'
         #     """
         #     sqlQuery(query)
     else:
-        st.info("No changes detected.")
+        st.success("No changes detected.")
 
 # ============================================================================
 # STREAMLIT APP
 # ============================================================================
 st.set_page_config(layout="wide")
-st.markdown("<h1 style='color:#1F2937;'>Engineering Standards Dashboard</h1>", unsafe_allow_html=True)
-st.markdown("<hr style='border:2px solid #3B82F6'>", unsafe_allow_html=True)
+st.title("Engineering Standards Dashboard")
 
-# Search bar
 record_ids_input = st.text_input("Search Record IDs (comma separated):")
 record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
 
-# Fetch data
 data = get_analyst_data(record_ids)
 st.session_state.analyst_data = data
 
 if data.empty:
     st.warning("No data to display")
 else:
-    gb = GridOptionsBuilder.from_dataframe(data)
-    gb.configure_pagination(paginationAutoPageSize=True)
-    gb.configure_side_bar()
-    gb.configure_default_column(editable=True, groupable=True, filter=True, sortable=True, resizable=True)
-    gb.configure_selection("single")
-    gb.configure_column("WIP Title", width=700)
-    gb.configure_column("Key Contact", width=400)
-    gb.configure_column("Process Step", width=600)
-    gb.configure_column("History", width=400)
-    gb.configure_column("Record ID", width=300)
-    gridOptions = gb.build()
-
-    grid_response = AgGrid(
+    edited_data = st.data_editor(
         data,
-        gridOptions=gridOptions,
-        update_mode=GridUpdateMode.VALUE_CHANGED,
-        theme="balham",
-        height=600,
+        key="standards_editor",
+        hide_index=True,
+        num_rows="dynamic",
+        use_container_width=True,
+        disabled=["Record ID"]  # Lock primary key
     )
-    edited_data = pd.DataFrame(grid_response["data"])
 
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Save changes"):
-            update_records(data, edited_data)
+    if st.button("💾 Save changes"):
+        update_records(data, edited_data)
 
-            # Refresh data after save
-            if record_ids:
-                st.session_state.analyst_data = get_analyst_data(record_ids)
-            else:
-                st.session_state.analyst_data = get_analyst_data()
-
-            st.rerun()
+        # Refresh after save
+        if record_ids:
+            st.session_state.analyst_data = get_analyst_data(record_ids)
+        else:
+            st.session_state.analyst_data = get_analyst_data()
+        st.rerun()
