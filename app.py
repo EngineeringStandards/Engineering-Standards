@@ -74,7 +74,8 @@ def get_analyst_data(record_ids=None):
         "distribution_year": "Distribution Year",
         "update_csv": "Update CSV",
         "ils_published": "ILS Published",
-        "ils_submit_date": "ILS Submit Date"
+        "ils_submit_date": "ILS Submit Date",
+        "analyst": "Analyst"
     })
 
 def update_records(original_df, edited_df):
@@ -125,6 +126,7 @@ else:
     gb.configure_column("Process Step", width=600)
     gb.configure_column("History", width=400)
     gb.configure_column("Ownership", width=400)
+    gb.configure_column("Analyst", width=600)
 
 
     grid_options = gb.build()
@@ -136,7 +138,8 @@ else:
         fit_columns_on_grid_load=True,
         allow_unsafe_jscode=True,
         theme="balham",
-        height=600
+        height=600,
+        width = 500
     )
 
     edited_data = pd.DataFrame(grid_response["data"])
