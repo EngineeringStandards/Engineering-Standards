@@ -116,8 +116,17 @@ else:
     # =============================
     gb = GridOptionsBuilder.from_dataframe(data)
     gb.configure_default_column(editable=True, filter="agTextColumnFilter", sortable=True, resizable=True)
-    gb.configure_column("Record ID", editable=False)  # Lock primary key
-    gb.configure_grid_options(domLayout='normal')  # prevent auto-height issues
+   
+
+     # Fix widths for important columns
+    gb.configure_column("Record ID", editable=False, width=200)
+    gb.configure_column("WIP Title", width=350)
+    gb.configure_column("Key Contact", width=250)
+    gb.configure_column("Process Step", width=300)
+    gb.configure_column("History", width=250)
+    gb.configure_column("Project", width=200)
+
+
     grid_options = gb.build()
 
     grid_response = AgGrid(
