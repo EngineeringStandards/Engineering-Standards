@@ -1,9 +1,10 @@
 # ============================================================================
-# ENGINEERING STANDARDS DASHBOARD - with st.data_editor
+# ENGINEERING STANDARDS DASHBOARD - with AgGrid
 # ============================================================================
 import streamlit as st
 import pandas as pd
 from databricks import sql
+from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 
 # ============================================================================
 # CONFIGURATION
@@ -48,7 +49,6 @@ def get_analyst_data(record_ids=None):
                    ils_published, ils_submit_date
             FROM maxis_sandbox.engineering_standards.all_data_cleaned
         """
-
     df = sqlQuery(query)
     return df.rename(columns={
         "record_id": "Record ID",
@@ -90,12 +90,9 @@ def update_records(original_df, edited_df):
                     "Old Value": orig_row[col],
                     "New Value": row[col]
                 })
-
     if diffs:
         st.warning("Detected changes:")
         st.dataframe(pd.DataFrame(diffs))
-
-       
     else:
         st.success("No changes detected.")
 
@@ -114,17 +111,29 @@ st.session_state.analyst_data = data
 if data.empty:
     st.warning("No data to display")
 else:
-    edited_data = st.data_editor(
+    # =============================
+    # AgGrid setup
+    # =============================
+    gb = GridOptionsBuilder.from_dataframe(data)
+    gb.configure_default_column(editable=True, filter="agTextColumnFilter", sortable=True, resizable=True)
+    gb.configure_column("Record ID", editable=False)  # Lock primary key
+    gb.configure_grid_options(domLayout='normal')  # prevent auto-height issues
+    grid_options = gb.build()
+
+    grid_response = AgGrid(
         data,
-        key="standards_editor",
-        hide_index=True,
-        use_container_width=True,
-        disabled=["Record ID"]  # Lock primary key
+        gridOptions=grid_options,
+        update_mode=GridUpdateMode.VALUE_CHANGED,
+        fit_columns_on_grid_load=True,
+        allow_unsafe_jscode=True,
+        theme="balham",
+        height=600
     )
+
+    edited_data = pd.DataFrame(grid_response["data"])
 
     if st.button("💾 Save changes"):
         update_records(data, edited_data)
-
         # Refresh after save
         if record_ids:
             st.session_state.analyst_data = get_analyst_data(record_ids)
