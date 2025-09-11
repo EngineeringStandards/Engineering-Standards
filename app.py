@@ -31,7 +31,7 @@ def get_analyst_data(record_ids=None):
     if record_ids:
         record_ids_str = ",".join([f"'{rid.upper().strip()}'" for rid in record_ids])
         query = f"""
-            SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process,
+            SELECT record_id, wip_title, project, submit_date, days_in_process,
                    key_contact, action, local_standards_replaced, replaced_by, ownership, process_step,
                    location, current_step_date, days_in_step, num_pages, history,
                    final_disposition_action, final_date, distribution_year, update_csv,
@@ -41,7 +41,7 @@ def get_analyst_data(record_ids=None):
         """
     else:
         query = """
-            SELECT record_id, wip_title, wip_tab, published_tab, project, submit_date, days_in_process,
+            SELECT record_id, wip_title, project, submit_date, days_in_process,
                    key_contact, action, local_standards_replaced, replaced_by, ownership, process_step,
                    location, current_step_date, days_in_step, num_pages, history,
                    final_disposition_action, final_date, distribution_year, update_csv,
