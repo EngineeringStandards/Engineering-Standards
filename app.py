@@ -1,5 +1,5 @@
 # ============================================================================
-# ENGINEERING STANDARDS DASHBOARD - SIMPLIFIED VERSION WITH SAVE BUTTON
+# ENGINEERING STANDARDS DASHBOARD - WITH SAVE BUTTON
 # ============================================================================
 import os
 from databricks import sql
@@ -79,45 +79,59 @@ def get_analyst_data(record_ids=None):
     return df
 
 # ============================================================================
-# UPDATE FUNCTION PLACEHOLDER
+# UPDATE RECORDS (similar to your CG Dashboard)
 # ============================================================================
 def update_records(original_df, edited_df):
-    """Compare original vs edited and push updates to Databricks (placeholder)."""
-    changes = edited_df.compare(original_df, keep_shape=True, keep_equal=False)
-    if not changes.empty:
+    # detect diffs (basic example)
+    original_aligned = original_df.reset_index(drop=True)
+    edited_aligned = edited_df.reset_index(drop=True)
+    diffs = []
+    for idx, row in edited_aligned.iterrows():
+        orig_row = original_aligned.loc[idx]
+        for col in edited_aligned.columns:
+            if pd.notna(row[col]) and row[col] != orig_row[col]:
+                diffs.append({
+                    "Record ID": row["Record ID"],
+                    "Column": col,
+                    "Old Value": orig_row[col],
+                    "New Value": row[col]
+                })
+
+    if diffs:
         st.write("Detected changes:")
-        st.dataframe(changes)
-        # 👉 Replace with your Databricks UPDATE logic per row
-        # For example:
-        # for idx, row in changes.iterrows():
-        #     sqlQuery(f"UPDATE ... WHERE record_id = '{row['Record ID']}'")
+        st.dataframe(pd.DataFrame(diffs))
+
+        # 👉 Here you’d loop over diffs and execute UPDATE queries in Databricks
+        # Example:
+        # for diff in diffs:
+        #     query = f"""
+        #     UPDATE maxis_sandbox.engineering_standards.all_data_cleaned
+        #     SET {diff['Column']} = '{diff['New Value']}'
+        #     WHERE record_id = '{diff['Record ID']}'
+        #     """
+        #     sqlQuery(query)
     else:
         st.info("No changes detected.")
 
 # ============================================================================
-# STREAMLIT APP CONFIGURATION
+# STREAMLIT APP
 # ============================================================================
 st.set_page_config(layout="wide")
 st.markdown("<h1 style='color:#1F2937;'>Engineering Standards Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<hr style='border:2px solid #3B82F6'>", unsafe_allow_html=True)
 
-# ============================================================================
-# SEARCH BAR ONLY
-# ============================================================================
+# Search bar
 record_ids_input = st.text_input("Search Record IDs (comma separated):")
 record_ids = [rid.strip().upper() for rid in record_ids_input.split(",") if rid.strip()] if record_ids_input else None
 
-# ============================================================================
-# FETCH DATA
-# ============================================================================
-if "data" not in st.session_state:
-    st.session_state.data = get_analyst_data(record_ids)
-else:
-    # refresh when new search
-    st.session_state.data = get_analyst_data(record_ids)
+# Fetch data
+data = get_analyst_data(record_ids)
+st.session_state.analyst_data = data
 
-if not st.session_state.data.empty:
-    gb = GridOptionsBuilder.from_dataframe(st.session_state.data)
+if data.empty:
+    st.warning("No data to display")
+else:
+    gb = GridOptionsBuilder.from_dataframe(data)
     gb.configure_pagination(paginationAutoPageSize=True)
     gb.configure_side_bar()
     gb.configure_default_column(editable=True, groupable=True, filter=True, sortable=True, resizable=True)
@@ -127,45 +141,26 @@ if not st.session_state.data.empty:
     gb.configure_column("Process Step", width=600)
     gb.configure_column("History", width=400)
     gb.configure_column("Record ID", width=300)
-
     gridOptions = gb.build()
 
-    custom_css = {
-    ".ag-cell-focus": {      # Cell in focus
-        "border": "2px solid #3B82F6 !important",
-        "outline": "none !important",
-        "background-color": "#E0F2FE !important"  # light blue
-    },
-    ".ag-cell-inline-editing": {   # When actively editing a cell
-        "border": "2px solid #2563EB !important",
-        "background-color": "#DBEAFE !important",  # darker blue
-        "box-shadow": "0 0 5px rgba(37,99,235,0.7)"
-    }
-}
-
     grid_response = AgGrid(
-    st.session_state.data,
-    gridOptions=gridOptions,
-    update_mode=GridUpdateMode.VALUE_CHANGED,
-    theme="balham",
-    height=600,
-    custom_css=custom_css
-)
-
-    edited_df = pd.DataFrame(grid_response["data"])
+        data,
+        gridOptions=gridOptions,
+        update_mode=GridUpdateMode.VALUE_CHANGED,
+        theme="balham",
+        height=600,
+    )
+    edited_data = pd.DataFrame(grid_response["data"])
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("💾 Save changes"):
-            update_records(st.session_state.data, edited_df)
-            st.session_state.data = edited_df
-            st.success("Changes saved successfully!")
+        if st.button("Save changes"):
+            update_records(data, edited_data)
 
-    with col2:
-        if st.button("❌ Cancel changes"):
-            st.session_state.data = get_analyst_data(record_ids)
-            st.warning("Edits discarded.")
+            # Refresh data after save
+            if record_ids:
+                st.session_state.analyst_data = get_analyst_data(record_ids)
+            else:
+                st.session_state.analyst_data = get_analyst_data()
+
             st.rerun()
-
-else:
-    st.warning("No data to display")
