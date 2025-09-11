@@ -100,7 +100,7 @@ if not analyst_data.empty:
     gb = GridOptionsBuilder.from_dataframe(analyst_data)
     gb.configure_pagination(paginationAutoPageSize=True)
     gb.configure_side_bar()
-    gb.configure_default_column(editable=False, groupable=True, filter=True, sortable=True, resizable=True)
+    gb.configure_default_column(editable=True, groupable=True, filter=True, sortable=True, resizable=True)
     gb.configure_selection("single")
     gb.configure_column("WIP Title", width=700)
     gb.configure_column("Key Contact", width=400)
