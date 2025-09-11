@@ -12,11 +12,16 @@ select_option = st.pills("Select search type", options, selection_mode="single")
 cg_search = st.text_input("CG Tracking ID/CG Number", "Enter CG tracking ID or CG number to search")
 st.write(f"Searching for {select_option}: {cg_search}")
 
+if select_option == "Tracking ID":
+    value_mode = "tracking_id"
+elif select_option == "CG Number":
+    value_mode = "record_id"
+
 # Always refresh data based on search input
 if not cg_search or cg_search == "Enter CG tracking ID or CG number to search":
     data = base_cg_query()
 else:
-    data = find_CG_by_tracking_id_CG_number(select_option,cg_search)
+    data = find_CG_by_tracking_id_CG_number(value_mode, cg_search)
 
 st.session_state.cg_data = data  
 
@@ -44,7 +49,7 @@ else:
             if not cg_search or cg_search == "Enter CG tracking ID or CG number to search":
                 st.session_state.cg_data = base_cg_query()
             else:
-                st.session_state.cg_data = find_CG_by_tracking_id_CG_number(select_option, cg_search)
+                st.session_state.cg_data = find_CG_by_tracking_id_CG_number(value_mode, cg_search)
 
             st.rerun()
 
