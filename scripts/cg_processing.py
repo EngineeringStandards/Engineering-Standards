@@ -84,7 +84,12 @@ Parameters:
 """
 def find_CG_by_tracking_id_CG_number(mode: str,value: str):
     # Prepare and execute SQL query to find the CG record
-    search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE {mode} = '{value}'"
+    if select_option == "Tracking ID":
+        value_mode = "tracking_id"
+    elif select_option == "CG Number":
+        value_mode = "record_id"
+
+    search_query = f"SELECT {base_columns} FROM maxis_sandbox.engineering_standards.cg_cleaned_data WHERE {value_mode} = '{value}'"
     df = sqlQuery(search_query)
     return df
 
