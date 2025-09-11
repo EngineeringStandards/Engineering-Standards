@@ -26,11 +26,15 @@ def sqlQuery(query: str) -> pd.DataFrame:
         with connection.cursor() as cursor:
             cursor.execute(query)
             df = cursor.fetchall_arrow().to_pandas()
-    # Convert problematic date columns to string
-    for col in ["submit_date", "current_step_date", "final_date", "ils_submit_date"]:
+
+    # Convert problematic date columns to string to prevent year errors
+    date_cols = ["submit_date", "current_step_date", "final_date", "ils_submit_date"]
+    for col in date_cols:
         if col in df.columns:
             df[col] = df[col].astype(str)
+    
     return df
+
 
 def get_query_results(query_type):
     if query_type == "All Records":
