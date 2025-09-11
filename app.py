@@ -121,8 +121,8 @@ else:
 
      # Fix widths for important columns
     gb.configure_column("Record ID", editable=False, width=500)
-    gb.configure_column("WIP Title", width=1500)
-    gb.configure_column("Key Contact", width=600)
+    gb.configure_column("WIP Title", width=2000)
+    gb.configure_column("Key Contact", width=1000)
     gb.configure_column("Process Step", width=800)
     gb.configure_column("History", width=700)
     gb.configure_column("Ownership", width=400)
@@ -133,6 +133,9 @@ else:
     gb.configure_column("Action", width=600)
     gb.configure_column("Local Standards Replaced", width=600)
     gb.configure_column("Replaced By", width=600)
+    gb.configure_column("Current Step Date", width=600)
+    gb.configure_column("Location", width=600)
+    gb.configure_column("Days in Step", width=600)
 
 
     grid_options = gb.build()
