@@ -139,7 +139,7 @@ else:
         allow_unsafe_jscode=True,
         theme="balham",
         height=600,
-        width = 500
+        minwidth = 500
     )
 
     edited_data = pd.DataFrame(grid_response["data"])
