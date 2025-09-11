@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id, update_records, create_new_cg_record, delete_cg_record
+from scripts.cg_processing import base_cg_query, find_CG_by_tracking_id_CG_number, update_records, create_new_cg_record, delete_cg_record
 
 st.title("CG Dashboard")
 st.sidebar.success("You are currently viewing the CG Dashboard")
@@ -16,7 +16,7 @@ st.write(f"Searching for {select_option}: {cg_search}")
 if not cg_search or cg_search == "Enter CG tracking ID or CG number to search":
     data = base_cg_query()
 else:
-    data = find_CG_by_tracking_id(cg_search)
+    data = find_CG_by_tracking_id_CG_number(select_option,cg_search)
 
 st.session_state.cg_data = data  
 
@@ -44,7 +44,7 @@ else:
             if not cg_search or cg_search == "Enter CG tracking ID or CG number to search":
                 st.session_state.cg_data = base_cg_query()
             else:
-                st.session_state.cg_data = find_CG_by_tracking_id(cg_search)
+                st.session_state.cg_data = find_CG_by_tracking_id_CG_number(select_option, cg_search)
 
             st.rerun()
 
