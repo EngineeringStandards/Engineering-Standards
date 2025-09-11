@@ -116,22 +116,22 @@ else:
     # AgGrid setup
     # =============================
     gb = GridOptionsBuilder.from_dataframe(data)
-    gb.configure_default_column(editable=True, filter="agTextColumnFilter", sortable=True, resizable=True, minWidth=600,width=600)
+    gb.configure_default_column(editable=True, filter="agTextColumnFilter", sortable=True, resizable=True, minWidth=300,width=600)
    
 
      # Fix widths for important columns
-    gb.configure_column("Record ID", editable=False, width=500)
+    gb.configure_column("Record ID", editable=False, width=200)
     gb.configure_column("WIP Title", width=2000)
-    gb.configure_column("Key Contact", width=1000)
+    gb.configure_column("Key Contact", width=400)
     gb.configure_column("Process Step", width=800)
     gb.configure_column("History", width=700)
     gb.configure_column("Ownership", width=400)
-    gb.configure_column("Analyst", width=600)
-    gb.configure_column("Project", width=500)
-    gb.configure_column("Submit Date", width=500)
-    gb.configure_column("Days in Process", width=500)
-    gb.configure_column("Action", width=600)
-    gb.configure_column("Local Standards Replaced", width=600)
+    gb.configure_column("Analyst", width=300)
+    gb.configure_column("Project", width=300)
+    gb.configure_column("Submit Date", width=300)
+    gb.configure_column("Days in Process", width=300)
+    gb.configure_column("Action", width=300)
+    gb.configure_column("Local Standards Replaced", width=300)
     gb.configure_column("Replaced By", width=600)
     gb.configure_column("Current Step Date", width=600)
     gb.configure_column("Location", width=600)
