@@ -814,7 +814,7 @@ ORDER BY Record_ID, Record_ID_GDM
 "CSV05 for CG2569 - Eng Stds Pub" : """ SELECT
   Record_ID,
   Record_ID_GDM,
-  Hyperlink_to_Latest_Version_in_GDM_GDM,
+  hyperlink_latest_version_gdm,
   Name_GDM,
   Title_GDM,
   Engineering_Standards_Status_GDM,
@@ -824,7 +824,7 @@ ORDER BY Record_ID, Record_ID_GDM
   Information_Security_Classification_GDM,
   Record_SubType_GDM,
   Standards_Validation_Area_GDM,
-  Team_Name_in_GDM_GDM,
+  team_name_gdm,
   Stakeholders_GDM,
   Authors_GDM,
   VPPS_VIA_Level_1_GDM,
@@ -885,7 +885,7 @@ ORDER BY Record_ID, Record_ID_GDM
 FROM maxis_sandbox.engineering_standards.all_data_cleaned
 WHERE
   Record_ID_GDM IS NOT NULL
-  AND Hyperlink_to_Latest_Version_in_GDM_GDM IS NOT NULL
+  AND hyperlink_latest_version_gdm IS NOT NULL
   AND Folder_GDM = 'Engineering Standards Published'
 ORDER BY Record_ID, Record_ID_GDM """
 
