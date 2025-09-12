@@ -72,7 +72,7 @@ def create_new_cg_record(data: dict):
         """
 
     # Tuple of values to insert into the database
-    values = (data["form_tracking_id"],data["form_record_id"], data["for_record_id_num"], data["form_title"], data["form_author"], data["form_status"], data["form_notes"])
+    values = (data["form_tracking_id"],data["form_record_id"], data["form_record_id_num"], data["form_title"], data["form_author"], data["form_status"], data["form_notes"])
     sqlQuery(create_query, values)
 
 
