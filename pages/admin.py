@@ -86,11 +86,12 @@ for q in queries:
 # DISPLAY DATA
 # ====================================================================
 st.set_page_config(layout="wide")
-# This must be outside the conditional block to prevent ID conflicts
-search_query = st.text_input("Search (case-insensitive):")
 
 if st.session_state.selection:
     st.write(f"**Selected Query:** {st.session_state.selection}")
+
+  
+    search_query = st.text_input("Search (case-insensitive):")
 
     sql_map = {
 "001-CG1594 - WIP TAB": """SELECT 
@@ -392,6 +393,7 @@ distribution_date,
 workload_2025_comments
 from maxis_sandbox.engineering_standards.all_data_cleaned
 order by record_id
+
 """,
 "Additional Documents": """ SELECT
   Record_ID,
