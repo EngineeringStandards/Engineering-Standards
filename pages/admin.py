@@ -71,18 +71,19 @@ queries = [
 ]
 
 
+if 'selection' not in st.session_state:
+    st.session_state.selection = None
+
 st.sidebar.title("Queries")
-selection = None
 for q in queries:
     if st.sidebar.button(q):
-        selection = q
-        break
+        st.session_state.selection = q
 
 # ====================================================================
 # DISPLAY DATA
 # ====================================================================
-if selection:
-    st.write(f"**Selected Query:** {selection}")
+if st.session_state.selection:
+    st.write(f"**Selected Query:** {st.session_state.selection}")
     
     sql_map = {
 "001-CG1594 - WIP TAB": """SELECT 
@@ -2004,7 +2005,7 @@ ORDER BY Record_ID, WIP_Title"""
 }
 
     
-    query_string = sql_map.get(selection, f"SELECT * FROM {selection.replace(' ', '_')} LIMIT 100")
+    query_string = sql_map.get(st.session_state.selection, f"SELECT * FROM {st.session_state.selection.replace(' ', '_')} LIMIT 100")
     df = sqlQuery(query_string)
     
     gb = GridOptionsBuilder.from_dataframe(df)
