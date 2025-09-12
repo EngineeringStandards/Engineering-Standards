@@ -468,7 +468,7 @@ ORDER BY record_id""",
     action,
     submit_date
 FROM maxis_sandbox.engineering_standards.all_data_cleaned
-ORDER BY record_id""",
+ORDER BY record_id"""
 
 }
 
