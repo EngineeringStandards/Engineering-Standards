@@ -1994,7 +1994,7 @@ ORDER BY Record_ID, WIP_Title"""
 }
 
    
-      query_string = sql_map.get(st.session_state.selection, f"SELECT * FROM {st.session_state.selection.replace(' ', '_')} LIMIT 100")
+    query_string = sql_map.get(st.session_state.selection, f"SELECT * FROM {st.session_state.selection.replace(' ', '_')} LIMIT 100")
     df = sqlQuery(query_string)
     
     # Filter the DataFrame based on the search query
