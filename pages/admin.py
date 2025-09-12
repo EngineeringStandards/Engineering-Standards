@@ -468,7 +468,35 @@ ORDER BY record_id""",
     action,
     submit_date
 FROM maxis_sandbox.engineering_standards.all_data_cleaned
-ORDER BY record_id"""
+ORDER BY record_id""",
+"Body":"""SELECT
+  Record_ID,
+  WIP_Title,
+  Team_Name,
+  Key_Contact,
+  Ownership,
+  Single_Point_Contact,
+  Distribution_YYYYMM,
+  WIP_TAB,
+  PUBLISHED_TAB,
+  Engineering_Standards_Status_GDM,
+  Distribution_Type_Permitted_GDM,
+  Analyst,
+  Distribution_YYYYMM_GDM,
+  Comments_to_Retain,
+  Team_Name_in_GDM_GDM,
+  Folder_GDM,
+  Hyperlink_to_Latest_Version_in_GDM_GDM,
+  KC_GMIN,
+  KC_Email,
+  Last_Analyst,
+  Final_Disposition_Action,
+  Final_Date,
+  Once,
+  Duplicates_for_Published_Tab_Only
+FROM All_Data
+WHERE Once = True AND Duplicates_for_Published_Tab_Only = False
+ORDER BY Record_ID"""
 
 }
 
