@@ -73,29 +73,11 @@ queries = [
 if 'selection' not in st.session_state:
     st.session_state.selection = None
 
-# Inject CSS to style the selected button
-st.markdown("""
-<style>
-.st-emotion-cache-1r7021s {
-    background-color: #008CBA; /* A nice blue color */
-    color: white; /* White text for contrast */
-}
-</style>
-""", unsafe_allow_html=True)
-
-
 st.sidebar.title("Queries")
 for q in queries:
-    # Check if this button is the selected one
-    is_selected = (q == st.session_state.selection)
-
-    # Use a container to apply styling based on selection
-    if is_selected:
-        with st.sidebar.container():
-            st.markdown(f'<div class="highlighted_button">', unsafe_allow_html=True)
-            if st.button(q, key=q):
-                st.session_state.selection = q
-            st.markdown('</div>', unsafe_allow_html=True)
+    if q == st.session_state.selection:
+        # For the selected query, display bold text instead of a button
+        st.sidebar.markdown(f"**- {q}**")
     else:
         if st.sidebar.button(q, key=q):
             st.session_state.selection = q
@@ -103,9 +85,13 @@ for q in queries:
 # ====================================================================
 # DISPLAY DATA
 # ====================================================================
+
+# This must be outside the conditional block to prevent ID conflicts
+search_query = st.text_input("Search (case-insensitive):")
+
 if st.session_state.selection:
     st.write(f"**Selected Query:** {st.session_state.selection}")
-    
+
     sql_map = {
 "001-CG1594 - WIP TAB": """SELECT 
     Record_ID, 
@@ -2008,7 +1994,7 @@ ORDER BY Record_ID, WIP_Title"""
 }
 
    
-    query_string = sql_map.get(st.session_state.selection, f"SELECT * FROM {st.session_state.selection.replace(' ', '_')} LIMIT 100")
+      query_string = sql_map.get(st.session_state.selection, f"SELECT * FROM {st.session_state.selection.replace(' ', '_')} LIMIT 100")
     df = sqlQuery(query_string)
     
     # Filter the DataFrame based on the search query
