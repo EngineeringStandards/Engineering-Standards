@@ -916,7 +916,149 @@ SELECT
 FROM maxis_sandbox.engineering_standards.all_data_cleaned
 WHERE DNG = True
 ORDER BY Record_ID
- """
+ """,
+ "Editables": """ SELECT
+  Record_ID,
+  WIP_Title,
+  Key_Contact,
+  Team_Name,
+  Ownership,
+  WIP_TAB,
+  Requestor_of_Editable,
+  Date_Editable_Requested,
+  Distribution_YYYYMM_GDM,
+  Comments_to_Retain,
+  PUBLISHED_TAB,
+  Final_Date
+FROM maxis_sandbox.engineering_standards.all_data_cleaned""",
+"Fix Ownerships": """ SELECT
+  Record_ID,
+  WIP_Title,
+  Team_Name,
+  Key_Contact,
+  Ownership,
+  Single_Point_Contact,
+  Distribution_YYYYMM,
+  WIP_TAB,
+  PUBLISHED_TAB,
+  Engineering_Standards_Status_GDM,
+  Distribution_Type_Permitted_GDM,
+  Analyst,
+  Distribution_YYYYMM_GDM,
+  Comments_to_Retain
+FROM maxis_sandbox.engineering_standards.all_data_cleaned
+WHERE
+  Ownership IN (
+    'Powertrain-Electrification Verification or Research and Development - Battery Cell Systems Research',
+    'TIPIE-Fuels',
+    'Not Powertrain-Controls (not Powertrain-Electrification Verification)',
+    'Materials-Ferrous (incl. Sheet Metal)',
+    'Body-Structures',
+    'Mfg Eng-Paint & Seal Materials'
+  )
+  AND Engineering_Standards_Status_GDM = 'Active'""",
+"ILS: 001-WIP": """ SELECT
+  Record_ID,
+  ILS_Action,
+  Action_2,
+  Action,
+  Replaced_by,
+  ILS_Submit_Date,
+  key_contact,
+  Team_Name,
+  Analyst,
+  ILS_WIP,
+  ILS_Ready_to_Publish,
+  total_num_pgs_pubd,
+  Submit_Date,
+  ILS_Status,
+  ILS_Comments,
+  Confirmed_No_Supplements,
+  Description_GDM,
+  Project,
+  Standards_Validation_Area_GDM,
+  Follow_Up_Comments,
+  Next_Follow_Up,
+  Information_Security_Classification_GDM,
+  Distribution_Type_Permitted_GDM,
+  WIP_TAB
+FROM maxis_sandbox.engineering_standards.all_data_cleaned
+WHERE
+  ILS_WIP = True AND ILS_Ready_to_Publish = False
+ORDER BY Record_ID, ILS_Action, Action_2""",
+"ILS: 002-OOPS - Ready to Publish":"""SELECT
+  Action,
+  ILS_Action,
+  Action_2,
+  Standards_Validation_Area_GDM,
+  Record_SubType_GDM,
+  Replaced_by,
+  Record_ID,
+  ILS_Submit_Date,
+  key_contact,
+  Team_Name,
+  Analyst,
+  ILS_Comments,
+  ILS_Ready_to_Publish,
+  Distribution_YYYYMM,
+  Record_ID_GDM,
+  hyperlink_latest_version_gdm,
+  Name_GDM,
+  Title_GDM,
+  Engineering_Standards_Status_GDM,
+  Native_Language_Title_GDM,
+  Distribution_YYYYMM_GDM,
+  Distribution_Type_Permitted_GDM,
+  Information_Security_Classification_GDM,
+team_name_gdm,
+  Stakeholders_GDM,
+  Authors_GDM,
+  VPPS_VIA_Level_1_GDM,
+  VPPS_VIA_Level_2_GDM,
+  VPPS_VIA_Level_3_GDM,
+  VPPS_VIA_Level_4_GDM,
+  Standards_Category_GDM,
+  Standards_Subcategory_GDM,
+  Version_GDM,
+  User_Comments_GDM,
+  Description_GDM,
+  Keyword_GDM,
+  Alias_GDM,
+  Region_GDM,
+  Language_GDM,
+  Electronic_Collection_GDM,
+  Regulatory_Date_GDM,
+  Regulatory_Standards_GDM,
+  Record_ID_Issue_Date_GDM,
+  Owner_GDM,
+  Content_Date_GDM,
+  Modifier_GDM,
+  Modified_GDM,
+  Source_System_GDM,
+  Source_Sys_Load_Date_GDM,
+  Modifier_2_GDM,
+  Object_ID_GDM,
+  Record_Type_GDM,
+  Global_Process_Area_GDM,
+  RIM_Category_GDM,
+  Applicable_Business_Processes_GDM,
+  Folder_GDM,
+  ILS_Submitted_to_Publisher,
+  ILS_Status,
+  total_num_pgs_pubd,
+  Submit_Date,
+  Confirmed_No_Supplements
+FROM maxis_sandbox.engineering_standards.all_data_cleaned
+WHERE
+  ILS_Ready_to_Publish = True
+  AND Confirmed_No_Supplements = False
+ORDER BY
+  ILS_Action,
+  Action_2,
+  Standards_Validation_Area_GDM,
+  Record_SubType_GDM,
+  Record_ID"""
+
 
 }
 
