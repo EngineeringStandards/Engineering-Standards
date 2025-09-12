@@ -2014,15 +2014,33 @@ ORDER BY Record_ID, WIP_Title"""
     search_query = st.text_input("Search (case-insensitive):")
 
     # Filter the DataFrame based on the search query
-    if search_query:
-        search_term = search_query.lower()
-        # Find all string columns to search in
-        string_columns = df.select_dtypes(include='object').columns
-        
-        # Create a boolean mask where at least one string column contains the search term
-        mask = df[string_columns].apply(lambda col: col.str.contains(search_term, case=False, na=False)).any(axis=1)
-        
-        df = df[mask]
+  # Create the search bar
+search_query = st.text_input("Search (case-insensitive):")
+
+# Filter the DataFrame based on the search query
+if search_query:
+    search_term = search_query.lower()
+    
+    # Get a list of all columns that can potentially be searched
+    searchable_columns = df.columns
+    
+    # Initialize an empty list to store the search masks for each column
+    masks = []
+    
+    # Iterate through each column to create a search mask
+    for col in searchable_columns:
+        try:
+            # Safely convert the column to a string type and then check for the search term
+            # This handles mixed data types and non-string columns without an error
+            masks.append(df[col].astype(str).str.contains(search_term, case=False, na=False))
+        except Exception as e:
+            # In case of any other unexpected error, we just ignore this column
+            continue
+            
+    # Combine all masks with a logical OR to find rows that match in any column
+    if masks:
+        combined_mask = pd.concat(masks, axis=1).any(axis=1)
+        df = df[combined_mask]
     
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_pagination()
