@@ -734,9 +734,85 @@ WHERE hyperlink_latest_version_gdm IS NOT NULL
   AND Engineering_Standards_Status_GDM = 'Active'
   AND Distribution_Type_Permitted_GDM = 'External'
 ORDER BY Record_ID, Record_ID_GDM
+  """,
+   "CSV04 for CG2569 - All" : """ 
+SELECT
+  Record_ID,
+  Record_ID_GDM,
+  hyperlink_latest_version_gdm,
+  Name_GDM,
+  Title_GDM,
+  Engineering_Standards_Status_GDM,
+  Native_Language_Title_GDM,
+  Distribution_YYYYMM_GDM,
+  Distribution_Type_Permitted_GDM,
+  Information_Security_Classification_GDM,
+  Record_SubType_GDM,
+  Standards_Validation_Area_GDM,
+  team_name_gdm,
+  Stakeholders_GDM,
+  Authors_GDM,
+  VPPS_VIA_Level_1_GDM,
+  VPPS_VIA_Level_2_GDM,
+  VPPS_VIA_Level_3_GDM,
+  VPPS_VIA_Level_4_GDM,
+  Standards_Category_GDM,
+  Standards_Subcategory_GDM,
+  Version_GDM,
+  User_Comments_GDM,
+  Description_GDM,
+  Keyword_GDM,
+  Alias_GDM,
+  Region_GDM,
+  Language_GDM,
+  Electronic_Collection_GDM,
+  Regulatory_Date_GDM,
+  Regulatory_Standards_GDM,
+  Record_ID_Issue_Date_GDM,
+  Owner_GDM,
+  Content_Date_GDM,
+  Modifier_GDM,
+  Modified_GDM,
+  Source_System_GDM,
+  Source_Sys_Load_Date_GDM,
+  Modifier_2_GDM,
+  Object_ID_GDM,
+  Record_Type_GDM,
+  Global_Process_Area_GDM,
+  RIM_Category_GDM,
+  Applicable_Business_Processes_GDM,
+  Folder_GDM,
+  Update_CSV,
+  Duplicates_for_Published_Tab_Only,
+  Team_Name,
+  Single_Point_Contact,
+  Key_Contact,
+  Comments_to_Retain,
+  WIP_TAB,
+  WIP_Title,
+  Analyst,
+  Ownership,
+  VPPS_VIA_Version,
+  Country,
+  Referenced_Records,
+  Personal_Information_Included,
+  Non_Disclosure_Agreement_Applies,
+  Export_Control_Number,
+  Source_Rec_ID,
+  Source_Rec_Info,
+  Source_Rec_URL,
+  Record_Status,
+  Distribution_Date,
+  Format,
+  Project,
+  KC_GMIN,
+  KC_Email
+FROM maxis_sandbox.engineering_standards.all_data_cleaned
+WHERE hyperlink_latest_version_gdm IS NOT NULL
+ORDER BY Record_ID, Record_ID_GDM
 
 
-  """
+"""
 
 }
 
