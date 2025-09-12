@@ -67,12 +67,12 @@ def create_new_cg_record(data: dict):
     # Query to insert a new CG record into the database with base columns needed
     create_query = """
         INSERT INTO maxis_sandbox.engineering_standards.cg_cleaned_data 
-        (tracking_id, title, author, status, notes)
-        VALUES (?,?,?,?,?)  
+        (tracking_id, record_id, record_id_num, title, author, status, notes)
+        VALUES (?,?,?,?,?,?,?)  
         """
 
     # Tuple of values to insert into the database
-    values = (data["form_tracking_id"], data["form_title"], data["form_author"], data["form_status"], data["form_notes"])
+    values = (data["form_tracking_id"],data["form_record_id"], data["for_record_id_num"], data["form_title"], data["form_author"], data["form_status"], data["form_notes"])
     sqlQuery(create_query, values)
 
 

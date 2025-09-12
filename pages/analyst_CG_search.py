@@ -63,6 +63,8 @@ if st.session_state.show_creation_form:
 
         # Form fields for CG record creation
         tracking_id = st.text_input("Tracking ID", key="form_tracking_id")
+        record_id = st.text_input("CG Number", key="form_record_id")
+        record_id_num = st.text_input("CG Number (numeric only)", key="form_record_id_num")
         title = st.text_input("Title", key="form_title")
         author = st.text_input("Author", key="form_author")
         status = st.selectbox("Status", ["Active", "Inactive", "Draft"], key="form_status")
