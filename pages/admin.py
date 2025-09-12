@@ -1570,24 +1570,6 @@ FROM maxis_sandbox.engineering_standards.all_data_cleaned""",
   Technical_Leader
 FROM maxis_sandbox.engineering_standards.spcs_with_ownership
 ORDER BY Team_Name, Ownership""",
-    "Special Collection Honda Electrification (BEV)": """  SELECT
-  Honda_Electrification_BEV_Special_Collection,
-  Record_ID_GDM,
-  Key_Contact,
-  WIP_Title,
-  Team_Name,
-  WIP_TAB,
-  Analyst,
-  Engineering_Standards_Status_GDM,
-  Distribution_Type_Permitted_GDM,
-  Distribution_YYYYMM_GDM,
-  Comments_Honda_Electrification_BEV_Special_Collection,
-  Honda_Electrification_BEV_Most_Current_Version_Approved,
-  Description_GDM
-FROM maxis_sandbox.engineering_standards.all_data_cleaned
-WHERE
-  Honda_Electrification_BEV_Special_Collection = True
-ORDER BY Record_ID_GDM""",
     "Special Collections - Monthly Publishing": """SELECT
   Distribution_YYYYMM_GDM,
   Record_ID,
