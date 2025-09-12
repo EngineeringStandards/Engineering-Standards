@@ -70,14 +70,35 @@ queries = [
     "z1-Judy's Tracking List-WIP"
 ]
 
-
 if 'selection' not in st.session_state:
     st.session_state.selection = None
 
+# Inject CSS to style the selected button
+st.markdown("""
+<style>
+.st-emotion-cache-1r7021s {
+    background-color: #008CBA; /* A nice blue color */
+    color: white; /* White text for contrast */
+}
+</style>
+""", unsafe_allow_html=True)
+
+
 st.sidebar.title("Queries")
 for q in queries:
-    if st.sidebar.button(q):
-        st.session_state.selection = q
+    # Check if this button is the selected one
+    is_selected = (q == st.session_state.selection)
+
+    # Use a container to apply styling based on selection
+    if is_selected:
+        with st.sidebar.container():
+            st.markdown(f'<div class="highlighted_button">', unsafe_allow_html=True)
+            if st.button(q, key=q):
+                st.session_state.selection = q
+            st.markdown('</div>', unsafe_allow_html=True)
+    else:
+        if st.sidebar.button(q, key=q):
+            st.session_state.selection = q
 
 # ====================================================================
 # DISPLAY DATA
@@ -1986,9 +2007,22 @@ ORDER BY Record_ID, WIP_Title"""
 
 }
 
-    
     query_string = sql_map.get(st.session_state.selection, f"SELECT * FROM {st.session_state.selection.replace(' ', '_')} LIMIT 100")
     df = sqlQuery(query_string)
+
+    # Create the search bar
+    search_query = st.text_input("Search (case-insensitive):")
+
+    # Filter the DataFrame based on the search query
+    if search_query:
+        search_term = search_query.lower()
+        # Find all string columns to search in
+        string_columns = df.select_dtypes(include='object').columns
+        
+        # Create a boolean mask where at least one string column contains the search term
+        mask = df[string_columns].apply(lambda col: col.str.contains(search_term, case=False, na=False)).any(axis=1)
+        
+        df = df[mask]
     
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_pagination()
