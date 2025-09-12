@@ -887,7 +887,36 @@ WHERE
   Record_ID_GDM IS NOT NULL
   AND hyperlink_latest_version_gdm IS NOT NULL
   AND Folder_GDM = 'Engineering Standards Published'
-ORDER BY Record_ID, Record_ID_GDM """
+ORDER BY Record_ID, Record_ID_GDM """,
+"DNG" : """
+SELECT
+  Record_ID,
+  Final_Date,
+  WIP_Title,
+  Team_Name,
+  Key_Contact,
+  Ownership,
+  Single_Point_Contact,
+  Distribution_YYYYMM,
+  WIP_TAB,
+  PUBLISHED_TAB,
+  Engineering_Standards_Status_GDM,
+  Distribution_Type_Permitted_GDM,
+  Analyst,
+  Distribution_YYYYMM_GDM,
+  team_name_gdm,
+  Folder_GDM,
+  hyperlink_latest_version_gdm,
+  KC_GMIN,
+  KC_Email,
+  DNG,
+  Num_CGs_in_DNG_Document,
+  DNG_Link,
+  Version_GDM
+FROM maxis_sandbox.engineering_standards.all_data_cleaned
+WHERE DNG = True
+ORDER BY Record_ID
+ """
 
 }
 
