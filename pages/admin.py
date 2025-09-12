@@ -85,7 +85,7 @@ if selection:
     st.write(f"**Selected Query:** {selection}")
     
     sql_map = {
-    "001-CG1594 - WIP TAB": """SELECT 
+"001-CG1594 - WIP TAB": """SELECT 
     Record_ID, 
     WIP_Title, 
     Project, 
@@ -128,7 +128,7 @@ FROM maxis_sandbox.engineering_standards.all_data_cleaned
 WHERE WIP_TAB = True
 ORDER BY Record_ID, WIP_Title
 """,
-    "002-CG1594 - PUBLISHED TAB": """select record_id,
+"002-CG1594 - PUBLISHED TAB": """select record_id,
 wip_title,
 project,
 submit_date,
@@ -414,7 +414,7 @@ WHERE Folder_GDM = 'Additional Documents'
 ORDER BY Record_ID;
 
 """,
-    "All Active Standards": """SELECT 
+"All Active Standards": """SELECT 
     record_id,
     wip_title,
     team_name,
@@ -735,7 +735,7 @@ WHERE hyperlink_latest_version_gdm IS NOT NULL
   AND Distribution_Type_Permitted_GDM = 'External'
 ORDER BY Record_ID, Record_ID_GDM
   """,
-   "CSV04 for CG2569 - All" : """ 
+"CSV04 for CG2569 - All" : """ 
 SELECT
   Record_ID,
   Record_ID_GDM,
